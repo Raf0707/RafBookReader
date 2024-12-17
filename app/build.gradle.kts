@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "ua.acclorite.book_story"
+    namespace = "com.byteflipper.book_story"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ua.acclorite.book_story"
+        applicationId = "com.byteflipper.book_story"
         minSdk = 26
         targetSdk = 35
         versionCode = 9
