@@ -1,5 +1,6 @@
 package com.byteflipper.book_story.presentation.screens.about
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,6 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -101,13 +103,14 @@ private fun AboutScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        painterResource(id = R.drawable.app_icon),
+                    Image(
+                        painterResource(id = R.drawable.ebook),
                         contentDescription = stringResource(id = R.string.app_icon_content_desc),
                         modifier = Modifier
                             .padding(14.dp)
-                            .size(120.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            .size(120.dp)
+                            .scale(1.5f)
+                        //tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

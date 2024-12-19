@@ -11,14 +11,14 @@ fun Constants.provideAboutBadges() = listOf(
         drawable = R.drawable.x_logo,
         imageVector = null,
         contentDescription = R.string.x_content_desc,
-        url = "https://www.x.com/acclorite"
+        url = "https://www.x.com/byteflipper"
     ),
     Badge(
-        id = "reddit",
-        drawable = R.drawable.reddit,
+        id = "vk",
+        drawable = R.drawable.vk_24,
         imageVector = null,
         contentDescription = R.string.reddit_content_desc,
-        url = "https://www.reddit.com/user/Acclorite/"
+        url = "https://vk.com/byteflipper/"
     ),
     Badge(
         id = "tryzub",
@@ -28,17 +28,17 @@ fun Constants.provideAboutBadges() = listOf(
         url = null
     ),
     Badge(
-        id = "patreon",
-        drawable = R.drawable.patreon,
+        id = "telegram",
+        drawable = R.drawable.telegram_24,
         imageVector = null,
         contentDescription = R.string.patreon_content_desc,
-        url = "https://www.patreon.com/Acclorite"
+        url = "https://t.me/ByteFlipper"
     ),
     Badge(
         id = "github_profile",
         drawable = null,
         imageVector = Icons.Default.Person,
         contentDescription = R.string.github_profile_content_desc,
-        url = "https://www.github.com/Acclorite"
+        url = "https://www.github.com/ByteFlipper-58"
     ),
 )
