@@ -43,10 +43,11 @@ fun AboutBadges(verticalPadding: Dp = 18.dp) {
             items(Constants.provideAboutBadges(), key = { it.id }) { badge ->
                 AboutBadgeItem(badge = badge) {
                     when (badge.id) {
-                        "tryzub" -> {
-                            context.getString(R.string.slava_ukraini)
+                        /*"byteflipper" -> {
+                            context.getString(R.string.app_name)
                                 .showToast(context = context, longToast = false)
-                        }
+                            
+                        }*/
 
                         else -> {
                             badge.url?.let {

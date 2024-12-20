@@ -49,4 +49,5 @@ fun Constants.provideCredits() = listOf(
         ),
         website = "https://hosted.weblate.org/projects/book-story"
     ),
+
 )

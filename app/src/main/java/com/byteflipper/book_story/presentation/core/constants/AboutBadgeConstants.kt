@@ -21,11 +21,11 @@ fun Constants.provideAboutBadges() = listOf(
         url = "https://vk.com/byteflipper/"
     ),
     Badge(
-        id = "tryzub",
-        drawable = R.drawable.tryzub,
+        id = "byteflipper",
+        drawable = R.drawable.byteflipper_logo,
         imageVector = null,
         contentDescription = R.string.tryzub_content_desc,
-        url = null
+        url = "https://byteflipper.web.app"
     ),
     Badge(
         id = "telegram",
