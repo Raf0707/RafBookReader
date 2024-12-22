@@ -2,10 +2,10 @@
 
 <div align="center">
 
-  <img src="https://github.com/ByteFlipper-58/book-story/blob/master/assets/readme/app_icon.png" width="120" />
+  <img src="https://github.com/ByteFlipper-58/book-story/blob/master/app/src/main/ic_launcher_monochrome-playstore.png?raw=true" width="120" />
 </div>
 
-# <p align="center">Book's Story</p>
+# <p align="center">EverBook</p>
 ### <p align="center">Material3 Book Reader for Android</p>
 <p align="center">Dive into the world of adventure as you discover your favorite book's story!</p>
 
@@ -14,11 +14,7 @@
 <div align="center">
 
 
-<a href="">[![Latest Stable Release](https://img.shields.io/github/release/Acclorite/book-story.svg?labelColor=27303D&color=3f719b&label=Release&logo=GitHub)](https://github.com/Acclorite/book-story/releases)</a>
-<a href="">[![Downloads](https://img.shields.io/github/downloads/ByteFlipper-58/book-story/total?color=3f8f9b&labelColor=27303D&label=Downloads&logo=GitHub)]()</a>
-<a href="">[![Matrix](https://img.shields.io/badge/Join%20Chat!-9b3f90?label=Matrix&logo=matrix&color=539b3f&labelColor=27303D)](https://matrix.to/#/#book-story:matrix.org)</a>
 <a href="">[![Stars](https://img.shields.io/github/stars/ByteFlipper-58/book-story?style=flat&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIC05NjAgOTYwIDk2MCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Im0zNTQtMjQ3IDEyNi03NiAxMjYgNzctMzMtMTQ0IDExMS05Ni0xNDYtMTMtNTgtMTM2LTU4IDEzNS0xNDYgMTMgMTExIDk3LTMzIDE0M1pNMjMzLTgwbDY1LTI4MUw4MC01NTBsMjg4LTI1IDExMi0yNjUgMTEyIDI2NSAyODggMjUtMjE4IDE4OSA2NSAyODEtMjQ3LTE0OUwyMzMtODBabTI0Ny0zNTBaIiBzdHlsZT0iZmlsbDogcmdiKDI0NSwgMjI3LCA2Nik7Ii8%2BCjwvc3ZnPg%3D%3D&color=949b3f&labelColor=27303D&label=Stars)](https://github.com/Acclorite/book-story/stargazers)</a>
-<a href="">[![Translation Status](https://img.shields.io/weblate/progress/book-story?label=Translated&logo=weblate&labelColor=27303D&color=3f9b86)](https://hosted.weblate.org/engage/book-story/)</a>
 <a href="">[![Development Stage](https://img.shields.io/badge/Active-9b3f90?label=Development%20stage&labelColor=27303D)](https://github.com/ByteFlipper-58/book-story/commits/)</a>
 <a href="">[![Last Commit](https://img.shields.io/github/last-commit/ByteFlipper-58/book-story?label=Last%20commit&labelColor=27303D&color=749b3f)](https://github.com/Acclorite/book-story/commits/)</a>
 <a href="">[![License: GPL-3.0](https://img.shields.io/github/license/ByteFlipper-58/book-story?label=License&labelColor=27303D&color=3f9b75)](/LICENSE)</a>
@@ -52,7 +48,7 @@ _You can find more screenshots in [assets](https://github.com/ByteFlipper-58/boo
 
 <!------------ Download guide ------------>
 
-## ✈️ Download
+## ✈️ Download (Coming soon)
 - _Please note, that the app supports Android versions only from Android 8.0_
 
 <div align="left">
@@ -60,10 +56,10 @@ _You can find more screenshots in [assets](https://github.com/ByteFlipper-58/boo
 [<img src="https://raw.githubusercontent.com/ismartcoding/plain-app/main/assets/get-it-on-github.png" alt='Get it on GitHub' height="80">](https://github.com/ByteFlipper-58/book-story/releases/latest)
 </div>
 
-_Don't see your favorite app store? Create an [Issue](https://github.com/Acclorite/book-story/issues)! (Except Play Store, this app won't be there)_
+Don't see your favorite app store? Create an [Issue](https://github.com/ByteFlipper-58/book-story/issues)!
 
 ### 📲 How to download and install
-- _**Install from Github**_: Click on the "Get it on GitHub" badge above, scroll down and download **book-story.apk** or download the last apk from GitHub [here](https://github.com/Acclorite/book-story/releases/latest/download/book-story.apk). After that, find downloaded APK and install it.
+- _**Install from Github**_: Click on the "Get it on GitHub" badge above, scroll down and download **book-story.apk** or download the last apk from GitHub [here](https://github.com/ByteFlipper-58/book-story/releases/latest/download/book-story.apk). After that, find downloaded APK and install it.
 - _**Install from F-Droid**_: Click on the "Get it on F-Droid" badge above, scroll down and click "Download APK" under desired Release Version to download the APK file. After that, find downloaded APK and install it.
 - _**Install from IzzyOnDroid**_: Click on the "Get it on IzzyOnDroid" badge above, scroll down and click "Download" to download the last APK from IzzyOnDroid. After that, find downloaded APK and install it.
 - If you don't know how to install APK file, follow [this guide](https://www.lifewire.com/install-apk-on-android-4177185).
@@ -71,7 +67,7 @@ _Don't see your favorite app store? Create an [Issue](https://github.com/Acclori
 ### 🧭 Afterwards
 - Open the app and follow basic instructions.
 - If you don't understand how to use the app, please read everything in the app's Help Screen. (You can find it in: Library, History, Browse → Three Dots → Help)
-- If you still have questions, please feel free to ask in [Discussions](https://github.com/Acclorite/book-story/discussions/categories/q-a), or create an [Issue](https://github.com/Acclorite/book-story/issues) if you feel like some area should be documented better.
+- If you still have questions, please create an [Issue](https://github.com/ByteFlipper-58/book-story/issues) if you feel like some area should be documented better.
 
 <!------------ Features ------------>
 
@@ -88,40 +84,23 @@ _Don't see your favorite app store? Create an [Issue](https://github.com/Acclori
 - Tablet UI support
 - More..
 
-<!------------ Roadmap ------------>
-
-## 😵‍💫 Upcoming features / Roadmap
-- _You can track project's progress, see what's coming and what is already implemented in [Book's Story: Development Roadmap](https://github.com/users/Acclorite/projects/1)._
-- Some features may not be in Roadmap due to small size or other factors.
-
-<!------------ Translation ------------>
-
-## 🌐 Translation
-
-[<img src="https://hosted.weblate.org/widget/book-story/book-story-translation/multi-blue.svg" alt="Translation progress" width=70%>](https://hosted.weblate.org/engage/book-story/)
-<br/>
-
-_You can help translating the app on [Hosted Weblate](https://hosted.weblate.org/engage/book-story/)._
-
 <!------------ Contribution ------------>
 
 ## 🤝 How to contribute
 - **The most improtant thing is I do not want someone's code.** This project is maintaining only by me and I want it to be this way. Creating Pull Requests will not have much sense as they will probably be closed.
 - **Place your suggestions on Issues
-  with [Suggestion Needed](https://github.com/Acclorite/book-story/labels/%F0%9F%93%9D%20Suggestion%20needed)
+  with [Suggestion Needed](https://github.com/ByteFlipper-58/book-story/labels/%F0%9F%93%9D%20Suggestion%20needed)
   label.** When the issue has this label that means I seek new ideas on how to improve what I
   already propose. Feel free to tell me what's on your mind!
-- **Join Matrix server**. You can share your ideas, make bug reports and just chat with me on my [Matrix](https://matrix.to/#/#book-story:matrix.org) server!
-- **Share your ideas and suggestions.** Your ideas and suggestions are always welcome, if you miss some feature or got an interesting idea, feel free to create a new [Issue](https://github.com/Acclorite/book-story/issues).
-- **Report bugs**. Had a crash or something went wrong? Create a new [Issue](https://github.com/Acclorite/book-story/issues), the more information you can give the better it is.
-- **Translate the app**. You can do what I physically cannot - translate the app on multiple languages. For this you can use [Hosted Weblate](https://hosted.weblate.org/engage/book-story/).
+- **Share your ideas and suggestions.** Your ideas and suggestions are always welcome, if you miss some feature or got an interesting idea, feel free to create a new [Issue](https://github.com/ByteFlipper-58/book-story/issues).
+- **Report bugs**. Had a crash or something went wrong? Create a new [Issue](https://github.com/ByteFlipper-58/book-story/issues), the more information you can give the better it is.
 - **Enjoy the app**. Your best contribution is using my app and enjoying it!
 
 <!------------ Credits and License ------------>
 
 ## 🤗 Credits
-- [Tachiyomi (Mihon)](https://github.com/mihonapp/mihon) (Github)
-- [Kitsune](https://github.com/Drumber/Kitsune) (Github)
+- [Tachiyomi (Mihon)](https://github.com/mihonapp/mihon) (Github, The original creator of the application)
+- [Kitsune](https://github.com/Drumber/Kitsune) (Github, The original creator of the application)
 - [Material Design Icons](https://fonts.google.com/icons) (Google Fonts)
 - [Material Design Fonts](https://fonts.google.com) (Google Fonts)
 - [Weblate Translators](https://hosted.weblate.org/projects/book-story) (Hosted Weblate)
