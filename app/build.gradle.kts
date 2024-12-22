@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "com.byteflipper.book_story"
+    namespace = "com.byteflipper.everbook"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.byteflipper.book_story"
+        applicationId = "com.byteflipper.everbook"
         minSdk = 26
         targetSdk = 35
         versionCode = 9
