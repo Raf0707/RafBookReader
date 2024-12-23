@@ -156,6 +156,11 @@ fun StartSettings(
                     }
                 )
             }
+            StartNavigationScreenItem(
+                screen = StartNavigationScreen.SOURCE_CODE_INFO
+            ) {
+                startSourceCodeScreen()
+            }
         }
     }
 }

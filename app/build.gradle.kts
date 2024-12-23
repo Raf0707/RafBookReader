@@ -9,6 +9,8 @@ plugins {
     id("kotlin-parcelize")
     id("com.mikepenz.aboutlibraries.plugin")
     id("androidx.room")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -111,6 +113,10 @@ dependencies {
 
     // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.52")
+    implementation("com.google.firebase:firebase-analytics:22.1.2")
+    implementation("com.google.firebase:firebase-crashlytics:19.3.0")
+    implementation("com.google.firebase:firebase-messaging:24.1.0")
+    implementation("com.google.firebase:firebase-inappmessaging-display:21.0.1")
     ksp("com.google.dagger:hilt-android-compiler:2.52")
     implementation("com.google.dagger:hilt-compiler:2.52")
     ksp("androidx.hilt:hilt-compiler:1.2.0")

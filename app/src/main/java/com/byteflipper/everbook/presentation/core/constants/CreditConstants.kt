@@ -1,10 +1,18 @@
 package com.byteflipper.everbook.presentation.core.constants
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.byteflipper.everbook.R
 import com.byteflipper.everbook.domain.model.Credit
 import com.byteflipper.everbook.domain.util.UIText
 
 fun Constants.provideCredits() = listOf(
+    Credit(
+        name = "Acclorite/book-story",
+        source = "This app is based on a fork of the Acclorite/book-story project. The original project is available under the GPL-3.0 license.",
+        credits = listOf(),
+        website = "https://www.github.com/Acclorite/story-book"
+    ),
     Credit(
         name = "Tachiyomi (Mihon)",
         source = "GitHub",

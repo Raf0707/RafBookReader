@@ -6,5 +6,6 @@ import androidx.compose.runtime.Immutable
 enum class StartNavigationScreen {
     LANGUAGE_FIRST,
     APPEARANCE_SECOND,
-    PERMISSIONS_THIRD
+    PERMISSIONS_THIRD,
+    SOURCE_CODE_INFO
 }
