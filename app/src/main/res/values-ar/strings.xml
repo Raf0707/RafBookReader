@@ -1,268 +1,645 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="history_screen">التاريخ</string>
-    <string name="add_books_description">يمكنك اختيار أي الكتب تريد إضافتها. يمكنك تعديل العنوان و صورة غلاف الكتاب لاحقا. عملية التحميل يمكن أن تستغرق حتى بضع دقائق.</string>
-    <string name="storage_permission_description">نحتاج إذن التخزين لفحص جهازك من أجل الكتب. من دون هذا الإذن، لن تكون قادرا على إضافة كتاب.</string>
-    <string name="updates_notification_desc">التحديث %1$s تم نشره للتو! انقر للذهاب الى صفحة الإصدار.</string>
-    <string name="move_book_description">اختر الفئة التي تريد نقل هذا الكتاب إليها. سيتم نقل هذا الكتاب إلى الفئة المختارة.</string>
-    <string name="confirm_update_description">تحديث نص و فصول هذا الكتاب. ينبغي ان يظل التقدم كما هو ما لم يتم تغيير الفقرات.</string>
-    <string name="update_app_description">تم العثور على إصدار جديد من Book\'s Story. هل تريد الإنتقال الى صفحة الاصدار ؟</string>
-    <string name="updates_notification_channel">التحديثات الجديدة</string>
-    <string name="updates_notification_title">تحديث جديد ل Book\'s Story!</string>
-    <string name="updates_notification_action">تحميل</string>
+    <string name="default_string">افتراضي</string>
+    <string name="random_string">عشوائي</string>
+    <!-- Notifications -->
+    <string name="updates_notification_channel">تحديثات جديدة</string>
+    <string name="updates_notification_title">تحديث جديد لـ EverBook!</string>
+    <string name="updates_notification_desc">
+    تم إصدار التحديث %1$s للتو!
+    انقر للانتقال إلى صفحة الإصدار.
+</string>
+    <string name="updates_notification_action">
+    تنزيل
+</string>
+
+    <!-- Screens -->
     <string name="library_screen">المكتبة</string>
+    <string name="history_screen">السجل</string>
     <string name="browse_screen">تصفح</string>
     <string name="settings_screen">الإعدادات</string>
-    <string name="about_screen">عن التطبيق</string>
-    <string name="help_screen">مساعدة</string>
+    <string name="about_screen">حول التطبيق</string>
+    <string name="help_screen">المساعدة</string>
+
+    <!-- Dialog Labels -->
     <string name="storage_permission">منح الإذن؟</string>
-    <string name="add_books">إضافة الكتب؟</string>
-    <string name="move_books">نقل الكتب؟</string>
-    <string name="delete_books">حذف الكتب؟</string>
-    <string name="delete_book">حذف الكتاب؟</string>
-    <string name="move_book">نقل الكتاب؟</string>
+    <string name="add_books">إضافة كتب؟</string>
+    <string name="move_books">نقل كتب؟</string>
+    <string name="delete_books">حذف كتب؟</string>
+    <string name="delete_book">حذف كتاب؟</string>
+    <string name="move_book">نقل كتاب؟</string>
     <string name="delete_history">حذف سجل القراءة؟</string>
     <string name="confirm_update">تأكيد التحديث؟</string>
-    <string name="enable_check_for_updates">تفعيل التحقق من التنبيهات؟</string>
-    <string name="move_books_description">اختر الفئة التي تريد نقل جميع الكتب%1$s المختارة إليها. جميع الكتب المختارة سيتم نقلها إلى الفئة المختارة.</string>
-    <string name="delete_books_description">هذا سيحذف جميع الكتب%1$sالمختارة من قاعدة البيانات. هذا لن يحذف الكتب المختارة من جهازك.</string>
-    <string name="delete_book_description">هذا سيحذف هذا الكتاب من قاعدة البيانات. هذا لن يحذف الكتاب من جهازك.</string>
-    <string name="delete_history_description">هذا سيحذف سجل التصفح بأكمله من قاعدة البيانات. بعد حذف سجل التصفح بأكمله ، سيتم إعادة ضبط ترتيب الكتب.</string>
-    <string name="enable_check_for_updates_description">بتفعيل «البحث عن التحديثات» سيستخرج التطبيق معلومات اخر اصدار من «api.github.com» في كل مرة عند تشغيل التطبيق. هل تريد المضي قدما و تفعيل «البحث عن تحديثات»؟</string>
-    <string name="error_something_went_wrong">حدث خطأ ما.</string>
-    <string name="error_wrong_file_format">صيغة ملف خاطئة.</string>
-    <string name="error_query">خطأ%1$s</string>
-    <string name="error_file_empty">هذا ااملف فارغ أو تالف.</string>
-    <string name="error_no_translator">لم يتم العثور على تطبيق ترجمة.</string>
-    <string name="error_no_browser">لم يتم العثور على متصفح.</string>
-    <string name="error_no_text">محتوى الكتاب فارغ. من فضلك، تأكد أن محتوى الكتاب ليس فارغا و قم بتحديثه.</string>
-    <string name="error_check_internet">حدث خطأ ما. حاول مرة أخرى لاحقا.</string>
-    <string name="error_closed_source">مغلق المصدر</string>
-    <string name="library_empty">اقرأ كتبك المفضلة و رتبهم باستخدام الفئات</string>
-    <string name="history_empty">دع آخر كتاب قرأته يفتح صفحات قصة جديدة عظيمة من رحلة قرائتك</string>
-    <string name="error_could_not_reset_cover">غير قادر على إعادة ضبط صورة الغلاف.</string>
+    <string name="enable_check_for_updates">تمكين التحقق من وجود تحديثات؟</string>
+    <string name="update_book">تحديث كتاب؟</string>
+
+    <!-- Dialog Descriptions -->
+    <string name="storage_permission_description">
+    نحن بحاجة إلى إذن الوصول إلى التخزين لفحص جهازك بحثًا عن الكتب.
+    بدون هذا الإذن، لن تتمكن من إضافة كتاب.
+</string>
+    <string name="add_books_description">
+    يمكنك اختيار الكتب التي تريد إضافتها.
+    يمكنك تعديل العنوان وصورة الغلاف للكتاب لاحقًا.
+    قد تستغرق عملية التحميل عدة دقائق.
+</string>
+    <string name="move_books_description">
+    اختر الفئة التي تريد نقل جميع الكتب المحددة إليها (%1$s).
+    سيتم نقل جميع الكتب المحددة إلى الفئة المحددة.
+</string>
+    <string name="delete_books_description">
+    سيؤدي ذلك إلى حذف جميع الكتب المحددة (%1$s) من قاعدة البيانات.
+    لن يؤدي ذلك إلى حذف الكتب المحددة من جهازك.
+</string>
+    <string name="delete_book_description">
+    سيؤدي ذلك إلى حذف هذا الكتاب من قاعدة البيانات.
+    لن يؤدي ذلك إلى حذف هذا الكتاب من جهازك.
+</string>
+    <string name="move_book_description">
+    اختر الفئة التي تريد نقل هذا الكتاب إليها.
+    سيتم نقل هذا الكتاب إلى الفئة المحددة.
+</string>
+    <string name="delete_history_description">
+    سيؤدي ذلك إلى حذف السجل بأكمله من قاعدة البيانات.
+    بعد حذف السجل بأكمله، ستتم إعادة ترتيب الكتب.
+</string>
+    <string name="confirm_update_description">
+    تحديث نص وفصول هذا الكتاب.
+    يجب أن يظل التقدم دون تغيير ما لم يتم تغيير ترتيب الفقرات.
+</string>
+    <string name="update_app_description">
+    تم العثور على إصدار جديد من التطبيق.
+    هل تريد المتابعة والانتقال إلى صفحة الإصدار؟
+</string>
+    <string name="enable_check_for_updates_description">
+    عن طريق تمكين "التحقق من وجود تحديثات"
+    سيقوم التطبيق باسترجاع أحدث معلومات الإصدار من "api.github.com" في كل مرة
+    عند بدء تشغيل التطبيق.
+    هل تريد المتابعة وتمكين "التحقق من وجود تحديثات"؟
+</string>
+    <string name="update_book_description">
+    تم العثور على تحديث للنص.
+    التحديث ضروري لضمان استخدام أحدث طرق التحليل.
+    هذه عملية غير متصلة بالإنترنت.
+    لن يتأثر تقدمك ما لم تحدث تغييرات كبيرة.
+    هل تريد المتابعة في التحديث؟
+</string>
+
+    <!-- Errors -->
+    <string name="error_permission">
+    نحن بحاجة إلى إذن الوصول إلى التخزين لفحص جهازك بحثًا عن الكتب
+</string>
+    <string name="error_no_description">
+    لا يوجد وصف.
+</string>
+    <string name="error_something_went_wrong">
+    حدث خطأ ما.
+</string>
+    <string name="error_something_went_wrong_with_file">
+    حدث خطأ ما. يرجى التحقق مما إذا كان ملف هذا الكتاب غير تالف.
+</string>
+    <string name="error_wrong_file_format">تنسيق ملف خاطئ.</string>
+    <string name="error_query">خطأ: %1$s</string>
+    <string name="error_file_empty">هذا الملف فارغ أو تالف.</string>
+    <string name="error_no_translator">لم يتم العثور على تطبيق مترجم.</string>
+    <string name="error_no_dictionary">لم يتم العثور على تطبيق قاموس.</string>
+    <string name="error_no_browser">لم يتم العثور على تطبيق متصفح.</string>
+    <string name="error_no_share_app">لم يتم العثور على تطبيق للمشاركة.</string>
+    <string name="error_no_text">
+    محتوى الكتاب فارغ. يرجى التأكد من أن محتوى الكتاب ليس فارغًا وتحديثه.
+</string>
+    <string name="error_check_internet">
+    حدث خطأ ما.
+    حاول مرة أخرى لاحقًا.
+</string>
+    <string name="error_could_not_reset_cover">تعذر إعادة تعيين صورة الغلاف.</string>
+    <string name="error_closed_source">مصدر مغلق</string>
+
+    <!-- Is Empty messages -->
+    <string name="search_field_empty">
+    بحث...
+</string>
+    <string name="browse_empty">
+    قم بتوسيع مجموعة كتب المكتبة الخاصة بك من خلال التنزيلات الخاصة بك
+</string>
+    <string name="library_empty">
+    اقرأ كتبك المفضلة وقم بترتيبها بين الفئات
+</string>
+    <string name="history_empty">
+    دع آخر كتاب قرأته يفتح صفحات قصة عظيمة جديدة في رحلة القراءة الخاصة بك
+</string>
+
+    <!-- Query strings -->
+    <string name="selected_items_count_query">تم تحديد %1$s</string>
+    <string name="file_path_query">مسار الملف: %1$s</string>
     <string name="update_query">تحديث %1$s</string>
-    <string name="file_path_query">مسار الملف:%1$s</string>
+    <string name="color_preset_query">مسبق %1$s</string>
+    <string name="color_preset_selected_query">تم تحديد «%1$s»</string>
+
+    <!-- Action Texts -->
     <string name="cancel">إلغاء</string>
-    <string name="grant">امنح</string>
-    <string name="grant_permission">امنح الإذن</string>
-    <string name="get_help">أحتاج المساعدة</string>
-    <string name="add">أضف</string>
-    <string name="add_book">أضف كتابا˝</string>
+    <string name="grant">منح</string>
+    <string name="grant_permission">منح الإذن</string>
+    <string name="get_help">أحتاج مساعدة</string>
+    <string name="add">إضافة</string>
+    <string name="add_book">إضافة كتاب</string>
+    <string name="move">نقل</string>
+    <string name="delete">حذف</string>
     <string name="start">ابدأ</string>
-    <string name="continue_read">استمرار</string>
-    <string name="never">أبدا˝</string>
-    <string name="go_back">عودة</string>
+    <string name="continue_read">متابعة</string>
+    <string name="never">أبدًا</string>
+    <string name="go_back">رجوع</string>
     <string name="undo">تراجع</string>
-    <string name="read_more">يجب أن تقرأ المزيد!</string>
-    <string name="read_keep">استمر!</string>
-    <string name="read_done">عمل جيد، لقد قرأت الكتاب بأكمله!</string>
-    <string name="reset_cover">إعادة ضبط صورة الغلاف</string>
-    <string name="appearance_settings">المظهر</string>
-    <string name="reader_settings">قارئ</string>
-    <string name="reader_settings_desc">الخط، النص، المترجم</string>
-    <string name="translator_reader_settings">مترجم</string>
-    <string name="theme_appearance_settings">تفضيلات السمة</string>
-    <string name="language_option">لغة التطبيق</string>
-    <string name="dark_theme_option">الوضع المظلم</string>
-    <string name="help_desc_how_to_manage_history_2">تاريخ</string>
-    <string name="error_permission">نحتاج إذن التخزين لفحص جهازك من أجل الكتب</string>
-    <string name="error_no_description">لا يوجد وصف.</string>
-    <string name="error_something_went_wrong_with_file">حدث خطأ ما. من فضلك تحقق إن كان ملف الكتاب ليس تالف.</string>
-    <string name="browse_empty">قم بتوسيع مجموعة كتب مكتبتك باستخدام تنزيلاتك</string>
-    <string name="selected_items_count_query">تم اختيار %1$s</string>
-    <string name="general_settings_desc">لغة التطبيق</string>
-    <string name="appearance_settings_desc">السمات، الألوان</string>
-    <string name="font_reader_settings">خط</string>
     <string name="copy">نسخ</string>
     <string name="translate">ترجمة</string>
-    <string name="dictionary">القاموس</string>
-    <string name="retry">أعد المحاولة</string>
-    <string name="next">التالي</string>
-    <string name="text_reader_settings">نص</string>
-    <string name="yes_go_to_help">نعم، اذهب إلى المساعدة</string>
-    <string name="colors_appearance_settings">الألوان</string>
-    <string name="done">تم</string>
-    <string name="enable">تفعيل</string>
-    <string name="no">لا</string>
-    <string name="color_preset_selected_query">تم اختيار «%1$s»</string>
-    <string name="unknown_author">غير معروف</string>
-    <string name="delete">حذف</string>
-    <string name="move">نقل</string>
+    <string name="dictionary">قاموس</string>
+    <string name="retry">إعادة المحاولة</string>
     <string name="confirm">تأكيد</string>
-    <string name="reset_cover_desc">إعادة ضبط صورة غلاف الكتاب الى الافتراضي</string>
+    <string name="next">التالي</string>
+    <string name="yes_go_to_help">نعم، اذهب إلى المساعدة</string>
+    <string name="no">لا</string>
+    <string name="done">تم</string>
+    <string name="enable">تمكين</string>
+    <string name="web_search">بحث الويب</string>
+    <string name="share">مشاركة</string>
+    <string name="proceed">متابعة</string>
+
+    <!-- Book -->
+    <string name="unknown_author">مؤلف غير معروف</string>
+    <string name="read_more">أنت بحاجة إلى قراءة المزيد!</string>
+    <string name="read_keep">استمر هكذا!</string>
+    <string name="read_done">أحسنت، لقد قرأت الكتاب بأكمله!</string>
+    <string name="reset_cover">إعادة تعيين صورة الغلاف</string>
+    <string name="reset_cover_desc">إعادة تعيين صورة غلاف الكتاب إلى الوضع الافتراضي</string>
     <string name="change_cover">تغيير صورة الغلاف</string>
-    <string name="change_cover_desc">اختر غلاف جديد من صورك</string>
+    <string name="change_cover_desc">اختر غلافًا جديدًا من صورك</string>
     <string name="delete_cover">حذف صورة الغلاف</string>
-    <string name="delete_cover_desc">حذف صورة غلاف الكتاب الحالية</string>
+    <string name="delete_cover_desc">حذف صورة الغلاف الحالية للكتاب</string>
     <string name="author">المؤلف</string>
-    <string name="reading_tab">يقرأ</string>
-    <string name="already_read_tab">يقرأ بالفعل</string>
+
+    <!-- Tabs -->
+    <string name="reading_tab">قراءة</string>
+    <string name="already_read_tab">تمت القراءة</string>
+    <string name="planning_tab">تخطيط</string>
+    <string name="dropped_tab">تم الإسقاط</string>
     <string name="general_tab">عام</string>
-    <string name="color_tab">الألوان</string>
-    <string name="pure_dark_option">أسود نقي (أوليد)</string>
+    <string name="color_tab">ألوان</string>
+    <string name="filter_tab">تصفية</string>
+    <string name="sort_tab">ترتيب</string>
+    <string name="reader_tab">قارئ</string>
+
+    <!-- Settings categories -->
+    <string name="general_settings">عام</string>
+    <string name="general_settings_desc">لغة التطبيق</string>
+    <string name="appearance_settings">المظهر</string>
+    <string name="appearance_settings_desc">السمة، الألوان</string>
+    <string name="reader_settings">القارئ</string>
+    <string name="reader_settings_desc">الخط، النص، المترجم</string>
+    <string name="browse_settings">تصفح</string>
+    <string name="browse_settings_desc">عام، تصفية، ترتيب</string>
+
+    <!-- Settings subcategories -->
+    <string name="font_reader_settings">الخط</string>
+    <string name="text_reader_settings">النص</string>
+    <string name="translator_reader_settings">المترجم</string>
+    <string name="padding_reader_settings">الحشو</string>
+    <string name="misc_reader_settings">متفرقات</string>
+    <string name="reading_speed_reader_settings">سرعة القراءة</string>
+    <string name="system_reader_settings">النظام</string>
+    <string name="theme_appearance_settings">تفضيلات السمة</string>
+    <string name="colors_appearance_settings">ألوان</string>
+    <string name="general_browse_settings">عام</string>
+    <string name="filter_browse_settings">تصفية</string>
+    <string name="sort_browse_settings">ترتيب</string>
+
+    <!-- Settings options -->
+    <!-- General -->
+    <string name="language_option">لغة التطبيق</string>
+    <string name="dark_theme_option">السمة الداكنة</string>
+    <string name="pure_dark_option">داكن خالص (OLED)</string>
+    <string name="absolute_dark_option">داكن مطلق</string>
+    <string name="absolute_dark_option_desc">تغيير لون الخلفية ليصبح أسود بالكامل</string>
     <string name="theme_contrast_option">تباين السمة</string>
     <string name="app_theme_option">سمة التطبيق</string>
-    <string name="font_family_option">نوع الخط</string>
+    <string name="check_for_updates_option">التحقق من وجود تحديثات</string>
+    <string name="check_for_updates_option_desc">التحقق من وجود إصدار أحدث من التطبيق عند بدء التشغيل</string>
+    <string name="double_press_exit_option">الضغط المزدوج على الرجوع للخروج</string>
+    <string name="double_press_exit_option_desc">اضغط على الرجوع مرتين للخروج من التطبيق</string>
+
+    <!-- Reader -->
+    <string name="font_family_option">عائلة الخط</string>
+    <string name="font_style_option">نمط الخط</string>
     <string name="font_size_option">حجم الخط</string>
+    <string name="line_height_option">ارتفاع السطر</string>
     <string name="paragraph_height_option">ارتفاع الفقرة</string>
-    <string name="check_for_updates_option_desc">التحقق من التحديثات الجديدة للتطبيق عند بدء التطبيق</string>
-    <string name="general_settings">عام</string>
     <string name="paragraph_indentation_option">إزاحة الفقرة</string>
-    <string name="pure_dark_on">مفعل</string>
+    <string name="color_preset_option">مسبق الألوان</string>
+    <string name="background_color_option">لون الخلفية</string>
+    <string name="font_color_option">لون الخط</string>
+    <string name="side_padding_option">الحشو الجانبي</string>
+    <string name="vertical_padding_option">الحشو الرأسي</string>
+    <string name="double_click_translation_option">الترجمة بالضغط المزدوج</string>
+    <string name="double_click_translation_option_desc">انقر نقرًا مزدوجًا على الفقرة لترجمتها</string>
+    <string name="fast_color_preset_change_option">تغيير مسبق الألوان السريع</string>
+    <string name="fast_color_preset_change_option_desc">اسحب الشريط العلوي إلى اليسار أو اليمين لتغيير مسبق الألوان</string>
+    <string name="text_alignment_option">محاذاة النص</string>
+    <string name="letter_spacing_option">تباعد الأحرف</string>
+    <string name="cutout_padding_option">حشو الجزء المقطوع</string>
+    <string name="cutout_padding_option_desc">تطبيق الحشو على منطقة الجزء المقطوع</string>
+    <string name="fullscreen_option">ملء الشاشة</string>
+    <string name="fullscreen_option_desc">إخفاء أشرطة النظام وإزالة الحشو</string>
+    <string name="keep_screen_on_option">إبقاء الشاشة قيد التشغيل</string>
+    <string name="hide_bars_on_fast_scroll_option">إخفاء الأشرطة عند التمرير السريع</string>
+    <string name="perception_expander_option">موسع الإدراك</string>
+    <string name="perception_expander_option_desc">
+    زيادة سرعة القراءة عن طريق التركيز على المركز
+</string>
+    <string name="perception_expander_padding_option">حشو خط موسع الإدراك</string>
+    <string name="perception_expander_thickness_option">سمك خط موسع الإدراك</string>
+    <string name="check_for_text_update_option">التحقق من تحديث النص</string>
+    <string name="check_for_text_update_option_desc">التحقق تلقائيًا مما إذا كان هناك تحديث للنص</string>
+    <string name="check_for_text_update_toast_option">إظهار رسالة "النص محدث"</string>
+    <string name="screen_orientation_option">اتجاه الشاشة</string>
+    <string name="custom_screen_brightness_option">سطوع مخصص</string>
+    <string name="screen_brightness_option">السطوع</string>
+
+    <!-- Browse -->
+    <string name="browse_files_structure_option">هيكل الملفات</string>
+    <string name="browse_layout_option">وضع العرض</string>
+    <string name="browse_grid_size_option">حجم الشبكة</string>
+    <string name="browse_pin_favorite_directories_option">تثبيت الدلائل المفضلة</string>
+    <string name="browse_pin_favorite_directories_option_desc">
+    تثبيت الدلائل المفضلة لديك في أعلى الشاشة
+</string>
+
+    <!-- Color presets -->
+    <string name="red_color">أحمر</string>
+    <string name="green_color">أخضر</string>
+    <string name="blue_color">أزرق</string>
+    <string name="color_preset_placeholder">اسم مسبق...</string>
+
+    <!-- Dark Theme properties -->
     <string name="dark_theme_off">معطل</string>
     <string name="dark_theme_on">مفعل</string>
     <string name="dark_theme_follow_system">النظام</string>
+
+    <!-- Pure Dark properties -->
+    <string name="pure_dark_off">معطل</string>
+    <string name="pure_dark_on">مفعل</string>
+    <string name="pure_dark_power_saver">موفر</string>
+
+    <!-- Theme Contrast properties -->
+    <string name="theme_contrast_standard">قياسي</string>
     <string name="theme_contrast_medium">متوسط</string>
-    <string name="web_search">بحث على الويب</string>
-    <string name="share">مشاركة</string>
-    <string name="planning_tab">أخطط</string>
-    <string name="filter_tab">مرشح</string>
-    <string name="sort_tab">ترتيب</string>
-    <string name="browse_settings_desc">عام،مرشح،ترتيب</string>
-    <string name="general_browse_settings">عام</string>
-    <string name="filter_browse_settings">مرشح</string>
-    <string name="font_style_option">نمط الخط</string>
-    <string name="line_height_option">ارتفاع الخط</string>
-    <string name="background_color_option">لون الخلفية</string>
-    <string name="font_color_option">لون الخط</string>
-    <string name="check_for_updates_option">التحقق من وجود تحديثات</string>
-    <string name="double_click_translation_option">النقر المزدوج للترجمة</string>
-    <string name="double_click_translation_option_desc">النقر المزدوج على فقرة لترجمتها</string>
+    <string name="theme_contrast_high">عالي</string>
+
+    <!-- Font Style properties -->
+    <string name="font_style_italic">مائل</string>
+    <string name="font_style_normal">عادي</string>
+
+    <!-- Files Structure properties -->
+    <string name="files_structure_all">جميع الملفات</string>
+    <string name="files_structure_directory">الدلائل</string>
+
+    <!-- Browse Layout properties -->
     <string name="browse_layout_list">قائمة</string>
     <string name="browse_layout_grid">شبكة</string>
-    <string name="browse_settings">تصفح</string>
-    <string name="sort_browse_settings">ترتيب</string>
-    <string name="error_no_dictionary">لم يتم العثور على تطبيق قاموس.</string>
-    <string name="error_no_share_app">لم يتم العثور على تطبيق للمشاركة.</string>
-    <string name="font_style_italic">مائل</string>
-    <string name="files_structure_all">كل الملفات</string>
-    <string name="files_structure_directory">المجلدات</string>
-    <string name="browse_pin_favorite_directories_option_desc">تثبيت مجلداتك المفضلة في أعلى الشاشة</string>
-    <string name="green_color">أخضر</string>
-    <string name="red_color">أحمر</string>
-    <string name="blue_color">أزرق</string>
-    <string name="browse_pin_favorite_directories_option">تثبيت المجلدات المفضلة</string>
-    <string name="pure_dark_off">معطل</string>
-    <string name="dynamic_theme">عطارد</string>
-    <string name="pink_theme">زحل</string>
-    <string name="aqua_theme">أورانوس</string>
-    <string name="yellow_theme">الزهرة</string>
-    <string name="cover_image_changed">تم تغيير صورة الغلاف بنجاح.</string>
-    <string name="books_deleted">تم حذف جميع الكتب المختارة بنجاح.</string>
-    <string name="copied">تم النسخ</string>
-    <string name="cover_image_deleted">تم حذف صورة الغلاف بنجاح.</string>
-    <string name="no_updates">أحدث إصدار من التطبيق مثبت بالفعل.</string>
-    <string name="history_deleted">تم حذف السجل بنجاح.</string>
-    <string name="cover_reset">تم إعادة تعيين صورة الغلاف بنجاح.</string>
-    <string name="theme_contrast_high">عالي</string>
-    <string name="browse_grid_size_auto">اوتوماتيكي</string>
-    <string name="browse_grid_size_per_row">بالسطر</string>
-    <string name="browse_sort_order_name">أبجديا</string>
+
+    <!-- Browse Grid Size properties -->
+    <string name="browse_grid_size_auto">تلقائي</string>
+    <string name="browse_grid_size_per_row">لكل صف</string>
+
+    <!-- Browse Sort Order properties -->
+    <string name="browse_sort_order_name">أبجديًا</string>
+    <string name="browse_sort_order_file_format">تنسيق الملف</string>
     <string name="browse_sort_order_file_type">نوع الملف</string>
+    <string name="browse_sort_order_last_modified">آخر تعديل</string>
+    <string name="browse_sort_order_file_size">حجم الملف</string>
+
+    <!-- Text Alignment properties -->
+    <string name="text_alignment_start">بداية</string>
+    <string name="text_alignment_justify">ضبط</string>
+    <string name="text_alignment_center">توسيط</string>
+    <string name="text_alignment_end">نهاية</string>
+
+    <!-- Screen Orientation properties -->
+    <string name="screen_orientation_free">حر</string>
+    <string name="screen_orientation_portrait">عمودي</string>
+    <string name="screen_orientation_landscape">أفقي</string>
+    <string name="screen_orientation_locked_portrait">عمودي مقفل</string>
+    <string name="screen_orientation_locked_landscape">أفقي مقفل</string>
+
+    <!-- Themes -->
+    <string name="dynamic_theme">عطارد</string>
     <string name="blue_theme">نبتون</string>
+    <string name="green_theme">الأرض</string>
     <string name="red_theme">المريخ</string>
+    <string name="gray_theme">كاليستو</string>
     <string name="purple_theme">المشتري</string>
+    <string name="pink_theme">زحل</string>
+    <string name="pink2_theme">جانيميد</string>
+    <string name="lavender_theme">إيريس</string>
+    <string name="marsh_theme">بلوتو</string>
+    <string name="yellow_theme">الزهرة</string>
+    <string name="aqua_theme">أورانوس</string>
+
+    <!-- Toast messages -->
+    <string name="press_again_toast">اضغط على الرجوع مرة أخرى للخروج</string>
+    <string name="books_added">تمت إضافة جميع الكتب المحددة بنجاح.</string>
+    <string name="books_moved">تم نقل جميع الكتب المحددة بنجاح.</string>
+    <string name="books_deleted">تم حذف جميع الكتب المحددة بنجاح.</string>
+    <string name="cover_image_changed">تم تغيير صورة الغلاف بنجاح.</string>
+    <string name="cover_image_deleted">تم حذف صورة الغلاف بنجاح.</string>
     <string name="book_deleted">تم حذف هذا الكتاب بنجاح.</string>
     <string name="book_moved">تم نقل هذا الكتاب بنجاح.</string>
-    <string name="browse_sort_order_file_format">صيغة الملف</string>
-    <string name="browse_sort_order_file_size">حجم الملف</string>
-    <string name="green_theme">الارض</string>
-    <string name="books_moved">تم نقل جميع الكتب المختارة بنجاح.</string>
-    <string name="books_added">تم اضافة جميع الكتب المختارة بنجاح.</string>
-    <string name="font_style_normal">عادي</string>
-    <string name="history_element_deleted">تم محو عناصر السجل بنجاح.</string>
+    <string name="copied">تم النسخ</string>
+    <string name="history_deleted">تم حذف السجل بنجاح.</string>
+    <string name="no_updates">أحدث إصدار من التطبيق مثبت بالفعل.</string>
+    <string name="cover_reset">تمت إعادة تعيين صورة الغلاف بنجاح.</string>
+
+    <!-- Snackbar messages -->
+    <string name="history_element_deleted">تم حذف عنصر السجل بنجاح.</string>
+    <string name="file_not_found">لم يتم العثور على الملف "%1$s".</string>
     <string name="book_updated">تم تحديث نص الكتاب بنجاح.</string>
-    <string name="file_size">حجم الملف</string>
-    <string name="unknown">غير معروف</string>
-    <string name="browse_grid_size_option">حجم الشبكة</string>
     <string name="nothing_changed">النص محدث.</string>
-    <string name="app_version_option">إصدار التطبيق</string>
-    <string name="app_version_option_desc_1">قصة كتاب الإصدار%1$s</string>
-    <string name="licenses_option">رخص مفتوحة المصدر</string>
-    <string name="credits_icon">الأيقونات</string>
-    <string name="credits_updates">إدارة التحديثات الجديدة</string>
-    <string name="text_alignment_start">ابدأ</string>
-    <string name="text_alignment_center">المركز</string>
-    <string name="file_not_found">لم يتم العثور على الملف \"%1$s\"</string>
+
+    <!-- DropDown properties -->
     <string name="move_this_book">نقل</string>
     <string name="delete_this_book">حذف</string>
     <string name="details_book">التفاصيل</string>
+
+    <!-- BookInfo details -->
     <string name="file_name">اسم الملف</string>
     <string name="file_path">مسار الملف</string>
+    <string name="file_last_opened">آخر فتح للملف</string>
+    <string name="file_size">حجم الملف</string>
+    <string name="unknown">غير معروف</string>
+
+    <!-- Browse -->
+    <string name="internal_storage">وحدة التخزين الداخلية</string>
+
+    <!-- Reader -->
+    <string name="no_chapters">لا توجد فصول</string>
+    <string name="chapters">الفصول</string>
+
+    <!-- About -->
+    <string name="app_version_option">إصدار التطبيق</string>
+    <string name="app_version_option_desc_1">قصة الكتاب v%1$s</string>
     <string name="app_version_option_desc_2">انقر للتحقق من وجود تحديثات</string>
     <string name="report_bug_option">الإبلاغ عن خطأ</string>
     <string name="whats_new_option">ما الجديد</string>
-    <string name="text_alignment_end">النهاية</string>
-    <string name="marsh_theme">بلوتو</string>
-    <string name="credits_ideas">أفكار</string>
-    <string name="credits_fonts">الخطوط</string>
-    <string name="credits_contribution">المساهمة</string>
-    <string name="help_translate_option">المساعدة بالترجمة</string>
-    <string name="credits_translation">الترجمة</string>
-    <string name="color_preset_query">المحدد مسبقا %1$s</string>
-    <string name="press_again_toast">الضغط مرة أخرى لإغلاق التطبيق</string>
-    <string name="fast_color_preset_change_option">تغيير اللون السريع</string>
-    <string name="fast_color_preset_change_option_desc">مرر الشريط العلوي لليسار أو اليمين لتغيير اللون</string>
-    <string name="color_preset_placeholder">تسمية إعداد محدد مسبقا…</string>
-    <string name="pure_dark_power_saver">توفير</string>
-    <string name="browse_sort_order_last_modified">آخر تعديل</string>
-    <string name="text_alignment_option">مواءمة النص</string>
-    <string name="browse_files_structure_option">هيكل الملفات</string>
-    <string name="double_press_exit_option">اضغط مرة أخرى مزدوجة للخروج</string>
-    <string name="double_press_exit_option_desc">اضغط مرتين للخروج من التطبيق</string>
-    <string name="letter_spacing_option">تباعد الحروف</string>
-    <string name="help_title_how_to_customize_app">كيف أقوم بتخصيص التطبيق ؟</string>
-    <string name="help_desc_how_to_customize_app_1">اذهب إلى</string>
-    <string name="help_desc_how_to_customize_app_2">الإعدادات</string>
-    <string name="help_title_how_to_move_or_delete_books">كيف أقوم بنقل أو حذف الكتب ؟</string>
-    <string name="help_desc_how_to_move_or_delete_books_1">اذهب إلى</string>
-    <string name="help_desc_how_to_move_or_delete_books_2">المكتبة</string>
-    <string name="help_title_how_to_edit_book">كيف أقوم بالتعديل على كتاب ؟</string>
-    <string name="help_desc_how_to_edit_book_1">اذهب إلى</string>
-    <string name="help_desc_how_to_edit_book_2">المكتبة</string>
+    <string name="licenses_option">تراخيص المصادر المفتوحة</string>
+    <string name="credits_option">اعتمادات</string>
+    <string name="help_translate_option">المساعدة في الترجمة</string>
+    <string name="contributors_option">المساهمون</string>
+    <string name="slava_ukraini">المجد لأوكرانيا!</string>
+
+    <!-- Credits -->
     <string name="credits_design">التصميم</string>
+    <string name="credits_icon">الرموز</string>
+    <string name="credits_updates">إدارة التحديثات الجديدة</string>
+    <string name="credits_fonts">الخطوط</string>
+    <string name="credits_translation">الترجمة</string>
+    <string name="credits_contribution">المساهمة</string>
+    <string name="credits_ideas">الأفكار</string>
+
+    <!-- Help -->
     <string name="help_clickable_note_1">يرجى ملاحظة أن</string>
-    <string name="help_desc_how_to_customize_app_3">يمكنك فعل هذا من قسم المكتبة ، السجل و تصفح عبر النقر على النقاط الثلاث في الزاوية العلوية اليمنى و اختيار «الإعدادات» من القائمة المنسدلة ، ثم سيمكنك ان ترى جميع الاعدادات المتوفرة لهذا التطبيق. لا تتردد في تجربة هذا !</string>
-    <string name="help_clickable_note_3">يمكن النقر عليه. يمكنك ايضا إخفاء هذه الملاحظة عبر الضغط على الأيقونة،جربها!</string>
-    <string name="help_clickable_note_action">يمكنك النقر علي!</string>
-    <string name="help_title_how_to_add_books">كيف أضيف كتاب الى المكتبة؟</string>
+    <string name="help_clickable_note_2">مثل هذا النص المميز</string>
+    <string name="help_clickable_note_3">
+    يمكن النقر عليه.
+    يمكنك أيضًا إخفاء هذه الملاحظة بالنقر على الرمز، جرب ذلك!
+</string>
+    <string name="help_clickable_note_action">أنا قابل للنقر!</string>
+
+    <string name="help_title_how_to_add_books">كيف يمكنني إضافة كتب إلى المكتبة؟</string>
     <string name="help_desc_how_to_add_books_1">اذهب إلى</string>
     <string name="help_desc_how_to_add_books_2">تصفح</string>
+    <string name="help_desc_how_to_add_books_3">
+    إذا لم ترَ الكتب التي تم تنزيلها، فحاول تحديث القائمة عن طريق سحبها لأسفل.
+    تأكد من أن كتبك لها تنسيق ملف مدعوم.
+    ثم انقر على الكتاب لتحديده أو استمر في الضغط لإظهار موقعه.
+    بعد تحديد جميع الكتب التي تريدها، انقر على رمز علامة الاختيار في الزاوية العلوية اليمنى،
+    انتظر حتى يتم تحميل جميع الكتب وانقر على «إضافة».
+    الآن يجب أن ترى جميع الكتب التي أضفتها في
+</string>
     <string name="help_desc_how_to_add_books_4">المكتبة</string>
-    <string name="help_desc_how_to_add_books_3">إذاكنت لا ترى الكتب التي قمت بتحميلها ، حاول تحديث القائمة عبر سحبها. تأكد ان كتبك تدعم صيغة الملف ثم انقر على الكتاب لاختياره او انقر مطولا لعرض موقعه. بعد أ تختار كل الكتب التي تريدها ، انقر على أيقونة ✔️ في الزاوية العلوية اليمنى ، انتظر حتى تحمل كل الكتب ثم انقر على \"إضافة\". الآن يجب ان ترى كل الكتب التي اضفتها في</string>
-    <string name="keep_screen_on_option">ابقي الشاشة</string>
-    <string name="color_preset_option">اللون المحدد مسبقا</string>
-    <string name="absolute_dark_option">مظلم بالكامل</string>
-    <string name="absolute_dark_option_desc">تغيير لون الخلفية لتصبح سوداء بالكامل</string>
-    <string name="dropped_tab">مهمل</string>
-    <string name="reader_tab">قارئ</string>
-    <string name="misc_reader_settings">متنوع</string>
-    <string name="padding_reader_settings">مسافة اضافية</string>
-    <string name="vertical_padding_option">الحشو العمودي</string>
-    <string name="reading_speed_reader_settings">سرعة القراءة</string>
-    <string name="default_string">الافتراضي</string>
-    <string name="update_book">تحديث الكتاب؟</string>
-    <string name="update_book_description">تم ايجاد تحديث للنص ، التحديث مطلوب لضمان ان احدث اساليب الفرز يتم استخدامها ، لا تحتاج الى اتصال انترنت ، لن تفقد تقدمك ما لم تحدث تغييرات كبيرة . هل تريد المضي قدما بالتحديث؟</string>
-    <string name="proceed">المضي قدما</string>
-    <string name="system_reader_settings">النظام</string>
-    <string name="random_string">عشوائي</string>
-    <string name="search_field_empty">بحث…</string>
-    <string name="check_for_text_update_option">التحقق من تحديث النص</string>
-    <string name="check_for_text_update_option_desc">تحقق تلقائيا ان كان هناك تحديث للنص</string>
-    <string name="screen_orientation_option">اتجاه الشاشة</string>
-    <string name="screen_orientation_free">حر</string>
-    <string name="contributors_option">المساهمون</string>
-    <string name="browse_layout_option">وضع الشاشة</string>
-    <string name="perception_expander_option_desc">زد من سرعة قرائتك بالتركيز على الوسط</string>
-    <string name="fullscreen_option">الشاشة كاملة</string>
-    <string name="theme_contrast_standard">الافتراضي</string>
-    <string name="screen_brightness_option">السطوع</string>
-    <string name="pink2_theme">غانيميد</string>
-    <string name="internal_storage">التخزين الداخلي</string>
-    <string name="file_last_opened">اخر مرة تم فيها فتح الملف</string>
-    <string name="chapters">فصول</string>
-    <string name="gray_theme">كاليستو</string>
-    <string name="lavender_theme">ايريس</string>
-    <string name="no_chapters">لا يوجد فصول</string>
+
+    <string name="help_title_how_to_customize_app">كيف يمكنني تخصيص التطبيق؟</string>
+    <string name="help_desc_how_to_customize_app_1">اذهب إلى</string>
+    <string name="help_desc_how_to_customize_app_2">الإعدادات</string>
+    <string name="help_desc_how_to_customize_app_3">
+    يمكنك القيام بذلك من شاشات المكتبة والسجل والتصفح
+    بالنقر على ثلاث نقاط في الزاوية العلوية اليمنى
+    وتحديد «الإعدادات» من القائمة المنسدلة.
+    ثم سترى جميع الإعدادات المتاحة لهذا التطبيق.
+    لا تتردد في تجربة هذه الإعدادات!
+</string>
+
+    <string name="help_title_how_to_move_or_delete_books">كيف يمكنني نقل أو حذف الكتب؟</string>
+    <string name="help_desc_how_to_move_or_delete_books_1">اذهب إلى</string>
+    <string name="help_desc_how_to_move_or_delete_books_2">المكتبة</string>
+    <string name="help_desc_how_to_move_or_delete_books_3">
+    استمر في الضغط على صورة غلاف الكتاب الأول حتى يتم تحديده،
+    الآن يمكنك ببساطة النقر على جميع صور أغلفة الكتب التي تريد تحديدها.
+    يمكنك أيضًا تحديد الكتب في فئات متعددة.
+    بعد اختيار جميع الكتب المرغوبة، يمكنك النقر على رمز السهم للنقل
+    ورمز سلة المهملات لحذف الكتب.
+</string>
+
+    <string name="help_title_how_to_edit_book">كيف يمكنني تعديل كتاب؟</string>
+    <string name="help_desc_how_to_edit_book_1">اذهب إلى</string>
+    <string name="help_desc_how_to_edit_book_2">المكتبة</string>
+    <string name="help_desc_how_to_edit_book_3">
+    وانقر على صورة غلاف الكتاب لرؤية تفاصيل الكتاب.
+    الآن يمكنك الاستمرار في الضغط على عنوان الكتاب أو المؤلف أو الوصف لتعديله
+    أو صورة الغلاف لتغييرها أو إعادة تعيينها أو حذفها.
+</string>
+
+    <string name="help_title_how_to_read_book">كيف يمكنني قراءة كتاب؟</string>
+    <string name="help_desc_how_to_read_book_1">اذهب إلى</string>
+    <string name="help_desc_how_to_read_book_2">المكتبة</string>
+    <string name="help_desc_how_to_read_book_3">
+    لبدء قراءة الكتاب، انقر على الزر الموجود في الزاوية السفلية اليمنى من الكتاب الذي تريد قراءته.
+    يمكنك أيضًا البدء في قراءة الكتاب بالنقر على صورة غلافه
+    لرؤية تفاصيل الكتاب ثم النقر على الزر الموجود في الزاوية السفلية اليمنى.
+    سيتم حفظ التقدم واستعادته تلقائيًا.
+    يمكنك إظهار الشريطين العلوي والسفلي بالنقر في أي مكان على الشاشة.
+    بالنقر على عنوان الكتاب، سيتم نقلك إلى تفاصيل الكتاب.
+    بالنقر على رمز الترس، سترى إعدادات القارئ.
+    يمكنك استخدام شريط التمرير السفلي لتغيير التقدم.
+</string>
+
+    <string name="help_title_how_to_customize_reader">كيف يمكنني تخصيص القارئ؟</string>
+    <string name="help_desc_how_to_customize_reader_1">
+    ابدأ في قراءة الكتاب (انظر: كيف يمكنني قراءة كتاب؟)،
+    بعد ذلك، قم بإظهار الشريطين العلوي والسفلي بالنقر في أي مكان على الشاشة.
+    ثم انقر على رمز الترس في الزاوية العلوية اليمنى.
+    سيؤدي ذلك إلى إظهار جميع إعدادات القارئ.
+    الطريقة الثانية هي الانتقال إلى
+</string>
+    <string name="help_desc_how_to_customize_reader_2">
+    الإعدادات
+</string>
+    <string name="help_desc_how_to_customize_reader_3">
+    وحدد فئة القارئ لتخصيص الإعدادات العامة،
+    أو فئة المظهر لتخصيص إعدادات الألوان.
+</string>
+
+    <string name="help_title_how_to_update_book">كيف يمكنني تحديث كتاب؟</string>
+    <string name="help_desc_how_to_update_book_1">اذهب إلى</string>
+    <string name="help_desc_how_to_update_book_2">المكتبة</string>
+    <string name="help_desc_how_to_update_book_3">
+    وانقر على صورة غلاف الكتاب لرؤية تفاصيل الكتاب.
+    اسحب الشاشة لأسفل أو انقر على رمز التحديث في الزاوية العلوية اليمنى لتحديث الكتاب.
+    إذا تغير ملف الكتاب، فيمكنك تأكيد الكتاب وتحديثه أو إلغاء التحديث.
+</string>
+
+    <string name="help_title_how_to_manage_history">كيف يمكنني إدارة السجل؟</string>
+    <string name="help_desc_how_to_manage_history_1">اذهب إلى</string>
+    <string name="help_desc_how_to_manage_history_2">السجل</string>
+    <string name="help_desc_how_to_manage_history_3">
+    بالنقر على زر الحذف الموجود على يمين عنصر السجل، سيتم حذفه.
+    يؤثر السجل على ترتيب الكتب في المكتبة،
+    عن طريق حذف عنصر السجل، سيتم إعادة ترتيب الكتاب أيضًا.
+    الكتاب الأخير الذي تم فتحه هو دائمًا الأول في المكتبة والسجل.
+</string>
+
+    <string name="help_title_how_to_use_tooltip">كيف يمكنني استخدام تلميحات الأدوات؟</string>
+    <string name="help_desc_how_to_use_tooltip_1">
+    تحتوي معظم أزرار الرموز على تلميحات أدوات، يمكن أن تساعدك إذا كنت لا تعرف ما يفعله زر الرمز.
+    لإظهار تلميح الأداة، يمكنك الاستمرار في الضغط على زر الرمز.
+</string>
+
+    <string name="help_title_how_to_use_double_click_translation">
+    كيف يمكنني استخدام الترجمة بالضغط المزدوج؟
+</string>
+    <string name="help_desc_how_to_use_double_click_translation_1">
+    أولاً، انتقل إلى إعدادات القارئ (انظر: كيف يمكنني تخصيص القارئ؟)،
+    ثم قم بتشغيل الإعداد المناسب. بعد ذلك،
+    ابدأ في قراءة الكتاب (انظر: كيف يمكنني قراءة كتاب؟).
+    الآن إذا نقرت نقرًا مزدوجًا على الفقرة المطلوبة،
+    فسيتم فتح مترجم خارجي بنص الفقرة.
+</string>
+
+    <string name="help_title_how_to_create_color_presets">
+    كيف يمكنني إنشاء وتعديل إعدادات الألوان المسبقة؟
+</string>
+    <string name="help_desc_how_to_create_color_presets_1">
+    انتقل إلى إعدادات المظهر (انظر: كيف يمكنني تخصيص القارئ؟).
+    يمكنك تعديل جميع إعدادات الألوان المسبقة في المربع الموجود أسفل «مسبق الألوان» في الفئة الفرعية «الألوان».
+    لإنشاء مسبق ألوان جديد، انقر على زر الرمز «إضافة».
+    هناك طرق متعددة لتعديل مسبق الألوان:
+بالنقر على حقل النص، يمكنك تغيير اسم مسبق الألوان،
+عن طريق تحريك أشرطة التمرير، يمكنك تغيير ألوان مسبق الألوان،
+بالنقر على زر الرمز «خلط»، يمكنك خلط جميع الألوان.
+إذا كنت تريد حذف مسبق ألوان، فانقر على زر الرمز «حذف».
+</string>
+    <string name="help_title_how_to_use_color_presets">
+    كيف يمكنني استخدام إعدادات الألوان المسبقة؟
+</string>
+    <string name="help_desc_how_to_use_color_presets_1">
+    انتقل إلى إعدادات المظهر (انظر: كيف يمكنني تخصيص القارئ؟).
+    يمكنك اختيار أي مسبق ألوان لاستخدامه في إعداد «مسبق الألوان».
+    انقر على مسبق الألوان المطلوب لتحديده، سيؤدي ذلك أيضًا إلى تغيير ألوانك في القارئ.
+    إذا كنت تريد إعادة ترتيب مسبق الألوان، فحدده واستمر في الضغط على زر الرمز «مقبض»،
+    ثم حركه إلى الموضع المطلوب.
+    يمكنك تغيير إعدادات الألوان المسبقة بسرعة عن طريق تمكين الإعداد المناسب
+    في الفئة الفرعية «الألوان» في إعدادات المظهر، ثم التمرير سريعًا في الشريط العلوي إلى اليسار أو اليمين في القارئ،
+    لتغيير مسبق الألوان بسرعة.
+</string>
+
+    <string name="help_title_how_to_use_perception_expander">
+    ما هو موسع الإدراك وكيف يمكنني استخدامه؟
+</string>
+    <string name="help_title_how_to_use_perception_expander_1">
+    قد يساعدك موسع الإدراك على القراءة بشكل أسرع.
+    أولاً، قم بتمكينه في إعدادات القارئ (انظر: كيف يمكنني تخصيص القارئ؟).
+    بمجرد التمكين، سيظهر خطان عموديان على جانبي القارئ.
+    لتحسين سرعة القراءة بشكل أكبر،
+    اضبط الحشو لإنشاء مساحة أقل حول المركز.
+    لاستخدامه، ركز على مركز الشاشة بينما
+    تسمح لرؤيتك المحيطية بالتقاط النص الموجود على الجانبين.
+    أثناء القراءة، حافظ على تركيزك على المركز دون النظر مباشرة
+    إلى الجانبين بعد كل سطر.
+</string>
+
+    <!-- Start -->
+    <string name="start_welcome">مرحبًا بك في قصة الكتاب!</string>
+    <string name="start_welcome_desc">
+    إلى عالم تسحر فيه الكلمات،
+    وتعلم وتقود إلى مغامرات لا تصدق!
+    دعنا نجهز بعض الأمور!
+</string>
+    <string name="start_language_preferences">تفضيلات اللغة</string>
+    <string name="start_theme_preferences">تفضيلات السمة</string>
+    <string name="start_permissions_preferences">الأذونات</string>
+    <string name="start_permissions_granted">ممنوح</string>
+    <string name="start_permissions_storage">إذن التخزين</string>
+    <string name="start_permissions_storage_desc">مطلوب لفحص جهازك والعثور على الكتب</string>
+    <string name="start_permissions_notifications">إذن الإشعارات</string>
+    <string name="start_permissions_notifications_desc">مطلوب للتحقق من وجود إصدار أحدث من التطبيق</string>
+    <string name="start_fork_info_title" translatable="false">Acclorite/book-story</string>
+    <string name="start_fork_info_desc">يعتمد هذا التطبيق على نسخة من مشروع Acclorite/book-story. المشروع الأصلي متاح بموجب ترخيص GPL-3.0.</string>
+    <string name="start_done">تم كل شيء!</string>
+    <string name="start_done_desc">
+    لقد أتممت بنجاح الإعداد الأساسي للتطبيق.
+    هل ترغب في تعلم كيفية استخدام التطبيق من خلال قراءة شاشة المساعدة؟
+</string>
+
+    <!-- History -->
+    <string name="today">اليوم</string>
+    <string name="yesterday">الأمس</string>
+
+    <!-- Content description -->
+    <string name="refresh_book_content_desc">تحديث الكتاب</string>
+    <string name="continue_reading_content_desc">متابعة القراءة</string>
+    <string name="go_back_content_desc">رجوع</string>
+    <string name="cover_image_content_desc">صورة الغلاف</string>
+    <string name="open_reader_settings_content_desc">إعدادات القارئ</string>
+    <string name="file_icon_content_desc">ملف</string>
+    <string name="directory_icon_content_desc">دليل</string>
+    <string name="favorite_directory_content_desc">الدليل المفضل</string>
+    <string name="sort_order_content_desc">ترتيب الفرز</string>
+    <string name="path_arrow_icon_content_desc">سهم المسار</string>
+    <string name="checkbox_content_desc">مربع الاختيار</string>
+    <string name="cover_image_not_found_content_desc">صورة الغلاف غير موجودة</string>
+    <string name="apply_changes_content_desc">تطبيق التغييرات</string>
+    <string name="error_content_desc">خطأ</string>
+    <string name="search_content_desc">بحث</string>
+    <string name="clear_selected_items_content_desc">مسح العناصر المحددة</string>
+    <string name="add_files_content_desc">إضافة ملفات</string>
+    <string name="select_all_files_content_desc">تحديد جميع الملفات</string>
+    <string name="exit_search_content_desc">الخروج من البحث</string>
+    <string name="delete_whole_history_content_desc">حذف السجل بأكمله</string>
+    <string name="move_books_content_desc">نقل الكتب المحددة</string>
+    <string name="delete_books_content_desc">حذف الكتب المحددة</string>
+    <string name="revert_content_desc">إرجاع</string>
+    <string name="selected_content_desc">محدد</string>
+    <string name="app_icon_content_desc">رمز التطبيق</string>
+    <string name="note_content_desc">ملاحظة</string>
+    <string name="delete_history_element_content_desc">حذف عنصر السجل</string>
+    <string name="library_content_desc">مكتبتك</string>
+    <string name="history_content_desc">سجل القراءة</string>
+    <string name="browse_content_desc">إضافة كتب</string>
+    <string name="arrow_content_desc">سهم</string>
+    <string name="required_content_desc">مطلوب</string>
+    <string name="reset_start_content_desc">إعادة تعيين دليل البدء</string>
+    <string name="exit_editing_content_desc">الخروج من وضع التحرير</string>
+    <string name="open_in_web_content_desc">فتح في الويب</string>
+    <string name="delete_color_preset_content_desc">حذف مسبق الألوان</string>
+    <string name="create_color_preset_content_desc">إنشاء مسبق ألوان جديد</string>
+    <string name="shuffle_color_preset_content_desc">خلط الألوان</string>
+    <string name="x_content_desc" translatable="false">X</string>
+    <string name="reddit_content_desc" translatable="false">Reddit</string>
+    <string name="patreon_content_desc" translatable="false">Patreon</string>
+    <string name="tryzub_content_desc">تريزوب</string>
+    <string name="github_profile_content_desc">ملف تعريف GitHub</string>
+    <string name="drag_content_desc">سحب</string>
+    <string name="filter_content_desc">تصفية</string>
+    <string name="checkpoint_back_content_desc">نقطة تفتيش للخلف</string>
+    <string name="checkpoint_forward_content_desc">نقطة تفتيش للأمام</string>
+    <string name="chapters_content_desc">الفصول</string>
+    <string name="update_text_content_desc">تحديث النص</string>
+    <string name="more_content_desc">المزيد</string>
 </resources>
