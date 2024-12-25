@@ -386,7 +386,7 @@
 
     <!-- About -->
     <string name="app_version_option">应用版本</string>
-    <string name="app_version_option_desc_1">书籍的故事 v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">点击检查更新</string>
     <string name="report_bug_option">报告错误</string>
     <string name="whats_new_option">新功能</string>

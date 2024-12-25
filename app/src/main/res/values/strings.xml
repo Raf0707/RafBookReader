@@ -387,7 +387,7 @@
 
     <!-- About -->
     <string name="app_version_option">App version</string>
-    <string name="app_version_option_desc_1">Book\'s Story v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">Click to check for updates</string>
     <string name="report_bug_option">Report a bug</string>
     <string name="whats_new_option">What\'s new</string>
@@ -570,7 +570,7 @@
 
 
     <!-- Start -->
-    <string name="start_welcome">Welcome to Book\'s Story!</string>
+    <string name="start_welcome">Welcome to EverBook!</string>
     <string name="start_welcome_desc">
         To a world where words charm,
         teach and lead on incredible adventures!

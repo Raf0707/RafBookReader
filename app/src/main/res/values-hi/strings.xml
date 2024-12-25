@@ -387,7 +387,7 @@
 
     <!-- About -->
     <string name="app_version_option">ऐप संस्करण</string>
-    <string name="app_version_option_desc_1">पुस्तक की कहानी v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">अपडेट के लिए जांच करने के लिए क्लिक करें</string>
     <string name="report_bug_option">बग की रिपोर्ट करें</string>
     <string name="whats_new_option">नया क्या है</string>

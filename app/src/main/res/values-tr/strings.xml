@@ -386,7 +386,7 @@
 
     <!-- About -->
     <string name="app_version_option">Uygulama sürümü</string>
-    <string name="app_version_option_desc_1">Kitabın Hikayesi v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">Güncellemeleri kontrol etmek için tıklayın</string>
     <string name="report_bug_option">Hata bildir</string>
     <string name="whats_new_option">Yenilikler</string>
@@ -563,7 +563,7 @@
 </string>
 
     <!-- Start -->
-    <string name="start_welcome">Kitabın Hikayesi\'ne hoş geldiniz!</string>
+    <string name="start_welcome">EverBook hoş geldiniz!</string>
     <string name="start_welcome_desc">
     Kelimelerin büyülediği,
     öğrettiği ve inanılmaz maceralara yönlendirdiği bir dünyaya!

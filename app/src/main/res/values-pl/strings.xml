@@ -387,7 +387,7 @@
 
     <!-- About -->
     <string name="app_version_option">Wersja aplikacji</string>
-    <string name="app_version_option_desc_1">Historia książki v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">Kliknij, aby sprawdzić aktualizacje</string>
     <string name="report_bug_option">Zgłoś błąd</string>
     <string name="whats_new_option">Co nowego</string>
@@ -568,7 +568,7 @@
 </string>
 
     <!-- Start -->
-    <string name="start_welcome">Witamy w Historii książek!</string>
+    <string name="start_welcome">Witamy w EverBook!</string>
     <string name="start_welcome_desc">
      Do świata, w którym słowa czarują,
     uczą i prowadzą na niesamowite przygody!

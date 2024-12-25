@@ -386,7 +386,7 @@
 
     <!-- About -->
     <string name="app_version_option">Version de l\'application</string>
-    <string name="app_version_option_desc_1">L\'histoire du livre v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">Cliquer pour rechercher les mises à jour</string>
     <string name="report_bug_option">Signaler un bug</string>
     <string name="whats_new_option">Nouveautés</string>

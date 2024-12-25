@@ -384,7 +384,7 @@
 
     <!-- About -->
     <string name="app_version_option">إصدار التطبيق</string>
-    <string name="app_version_option_desc_1">قصة الكتاب v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">انقر للتحقق من وجود تحديثات</string>
     <string name="report_bug_option">الإبلاغ عن خطأ</string>
     <string name="whats_new_option">ما الجديد</string>

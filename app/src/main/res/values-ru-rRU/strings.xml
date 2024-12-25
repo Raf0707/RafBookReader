@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <!-- Основные строки -->
-    <string name="app_version" translatable="false">1.4.0</string>
-    <string name="app_name" translatable="false">Book\'s Story</string>
+    <string name="app_version" translatable="false">1.0.0</string>
+    <string name="app_name" translatable="false">EverBook</string>
     <string name="default_string">По умолчанию</string>
     <string name="random_string">Случайно</string>
     <!-- Уведомления -->
     <string name="updates_notification_channel">Новые обновления</string>
-    <string name="updates_notification_title">Новое обновление для Book\'s Story!</string>
+    <string name="updates_notification_title">Новое обновление для EverBook!</string>
     <string name="updates_notification_desc">Выпущено обновление %1$s!
         Нажмите, чтобы перейти на страницу релиза.</string>
     <string name="updates_notification_action">Скачать</string>
@@ -303,7 +303,7 @@
     <string name="chapters">Главы</string>
     <!-- О приложении -->
     <string name="app_version_option">Версия приложения</string>
-    <string name="app_version_option_desc_1">Book\'s Story v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">Нажмите, чтобы проверить обновления</string>
     <string name="report_bug_option">Сообщить об ошибке</string>
     <string name="whats_new_option">Что нового</string>
@@ -427,7 +427,7 @@
     позволяя периферийному зрению воспринимать текст по краям.
     Во время чтения держите взгляд на центре, не перемещая его в стороны после каждой строки.</string>
     <!-- Start -->
-    <string name="start_welcome">Добро пожаловать в Book\'s Story!</string>
+    <string name="start_welcome">Добро пожаловать в EverBook!</string>
     <string name="start_welcome_desc">В мир, где слова очаровывают,
     учат и ведут в невероятные приключения!
     Давайте настроим приложение!</string>

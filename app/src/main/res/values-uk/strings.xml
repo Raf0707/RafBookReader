@@ -354,7 +354,7 @@
     <string name="chapters">Розділи</string>
 
     <string name="app_version_option">Версія програми</string>
-    <string name="app_version_option_desc_1">Історія книги v%1$s</string>
+    <string name="app_version_option_desc_1">EverBook v%1$s</string>
     <string name="app_version_option_desc_2">Натисніть, щоб перевірити наявність оновлень</string>
     <string name="report_bug_option">Повідомити про помилку</string>
     <string name="whats_new_option">Що нового</string>
@@ -523,7 +523,7 @@
     </string>
 
     <!-- Start -->
-    <string name="start_welcome">Ласкаво просимо в Story of Book!</string>
+    <string name="start_welcome">Ласкаво просимо в EverBook!</string>
     <string name="start_welcome_desc">
         В світ, де слова чарують,
         навчають та ведуть на неймовірні пригоди!
