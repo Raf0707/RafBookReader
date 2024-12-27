@@ -1,13 +1,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">EverBook</string>
+    <string name="app_name" translatable="false">Читалка</string>
     <string name="default_string">默认</string>
     <string name="random_string">随机</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">新更新</string>
-    <string name="updates_notification_title">EverBook 的新更新！</string>
+    <string name="updates_notification_title">Читалка 的新更新！</string>
     <string name="updates_notification_desc">
         更新 %1$s 刚刚发布！
         点击前往发布页面。
@@ -386,7 +386,7 @@
 
     <!-- About -->
     <string name="app_version_option">应用版本</string>
-    <string name="app_version_option_desc_1">EverBook v%1$s</string>
+    <string name="app_version_option_desc_1">Читалка v%1$s</string>
     <string name="app_version_option_desc_2">点击检查更新</string>
     <string name="report_bug_option">报告错误</string>
     <string name="whats_new_option">新功能</string>

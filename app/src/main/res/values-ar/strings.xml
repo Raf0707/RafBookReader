@@ -4,7 +4,7 @@
     <string name="random_string">عشوائي</string>
     <!-- Notifications -->
     <string name="updates_notification_channel">تحديثات جديدة</string>
-    <string name="updates_notification_title">تحديث جديد لـ EverBook!</string>
+    <string name="updates_notification_title">تحديث جديد لـ Читалка!</string>
     <string name="updates_notification_desc">
     تم إصدار التحديث %1$s للتو!
     انقر للانتقال إلى صفحة الإصدار.
@@ -384,7 +384,7 @@
 
     <!-- About -->
     <string name="app_version_option">إصدار التطبيق</string>
-    <string name="app_version_option_desc_1">EverBook v%1$s</string>
+    <string name="app_version_option_desc_1">Читалка v%1$s</string>
     <string name="app_version_option_desc_2">انقر للتحقق من وجود تحديثات</string>
     <string name="report_bug_option">الإبلاغ عن خطأ</string>
     <string name="whats_new_option">ما الجديد</string>

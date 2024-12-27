@@ -52,14 +52,14 @@ fun LazyListScope.startSourceCodeScreen() {
                 onClick = {
                     onEvent(
                         raf.console.chitalka.presentation.screens.about.data.AboutEvent.OnNavigateToBrowserPage(
-                            page = "https://github.com/ByteFlipper-58/book-story",
+                            page = "https://github.com/Raf0707/Chitalka",
                             context = context,
                             noAppsFound = {}
                         )
                     )
                 }
             ) {
-                Text(text = "Acclorite/book-story")
+                Text("Raf0707/Читалка")
             }
         }
     }

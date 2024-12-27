@@ -1,13 +1,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">EverBook</string>
+    <string name="app_name" translatable="false">Читалка</string>
     <string name="default_string">Predeterminado</string>
     <string name="random_string">Aleatorio</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">Nuevas actualizaciones</string>
-    <string name="updates_notification_title">¡Nueva actualización de EverBook!</string>
+    <string name="updates_notification_title">¡Nueva actualización de Читалка!</string>
     <string name="updates_notification_desc">
         ¡La actualización %1$s acaba de ser lanzada!
         Haz clic para ir a la página de lanzamiento.
@@ -388,7 +388,7 @@
 
     <!-- About -->
     <string name="app_version_option">Versión de la app</string>
-    <string name="app_version_option_desc_1">EverBook v%1$s</string>
+    <string name="app_version_option_desc_1">Читалка v%1$s</string>
     <string name="app_version_option_desc_2">Haz clic para verificar si hay actualizaciones</string>
     <string name="report_bug_option">Informar de un error</string>
     <string name="whats_new_option">Novedades</string>
@@ -568,7 +568,7 @@
 </string>
 
     <!-- Start -->
-    <string name="start_welcome">¡Bienvenido a EverBook!</string>
+    <string name="start_welcome">¡Bienvenido a Читалка!</string>
     <string name="start_welcome_desc">
     ¡A un mundo donde las palabras encantan,
     enseñan y conducen a increíbles aventuras!

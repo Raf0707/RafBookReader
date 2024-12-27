@@ -1,13 +1,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">EverBook</string>
+    <string name="app_name" translatable="false">Читалка</string>
     <string name="default_string">Varsayılan</string>
     <string name="random_string">Rastgele</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">Yeni güncellemeler</string>
-    <string name="updates_notification_title">EverBook\'un yeni güncellemesi!</string>
+    <string name="updates_notification_title">Читалка\'un yeni güncellemesi!</string>
     <string name="updates_notification_desc">
         %1$s güncellemesi yayınlandı!
         Sürüm sayfasına gitmek için tıklayın.
@@ -386,7 +386,7 @@
 
     <!-- About -->
     <string name="app_version_option">Uygulama sürümü</string>
-    <string name="app_version_option_desc_1">EverBook v%1$s</string>
+    <string name="app_version_option_desc_1">Читалка v%1$s</string>
     <string name="app_version_option_desc_2">Güncellemeleri kontrol etmek için tıklayın</string>
     <string name="report_bug_option">Hata bildir</string>
     <string name="whats_new_option">Yenilikler</string>
@@ -562,7 +562,7 @@
 </string>
 
     <!-- Start -->
-    <string name="start_welcome">EverBook hoş geldiniz!</string>
+    <string name="start_welcome">Читалка hoş geldiniz!</string>
     <string name="start_welcome_desc">
     Kelimelerin büyülediği,
     öğrettiği ve inanılmaz maceralara yönlendirdiği bir dünyaya!

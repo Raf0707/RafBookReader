@@ -3,16 +3,16 @@
 package raf.console.chitalka.presentation.core.constants
 
 fun Constants.provideDownloadLatestReleasePage() =
-    "https://www.github.com/ByteFlipper-58/book-story/releases/latest/download/book-story.apk"
+    "https://github.com/Raf0707/Chitalka/releases/latest/download/book-story.apk"
 
 fun Constants.provideReleasesPage() =
-    "https://www.github.com/ByteFlipper-58/book-story/releases/latest"
+    "https://github.com/Raf0707/Chitalka/releases/latest"
 
 fun Constants.provideIssuesPage() =
-    "https://www.github.com/ByteFlipper-58/book-story/issues"
+    "https://github.com/Raf0707/Chitalka/issues"
 
 fun Constants.provideContributorsPage() =
-    "https://github.com/ByteFlipper-58/book-story/graphs/contributors"
+    "https://github.com/Raf0707/Chitalka/graphs/contributors"
 
 fun Constants.provideTranslationPage() =
     "https://hosted.weblate.org/projects/book-story"

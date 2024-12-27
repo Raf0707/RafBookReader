@@ -9,7 +9,7 @@ fun Constants.provideCredits() = listOf(
         name = "Acclorite/book-story",
         source = "This app is based on a fork of the Acclorite/book-story project. The original project is available under the GPL-3.0 license.",
         credits = listOf(),
-        website = "https://github.com/ByteFlipper-58/book-story"
+        website = "https://github.com/Raf0707/Chitalka"
     ),
     Credit(
         name = "Tachiyomi (Mihon)",
