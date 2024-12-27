@@ -3,7 +3,7 @@
 package raf.console.chitalka.presentation.core.constants
 
 fun Constants.provideDownloadLatestReleasePage() =
-    "https://github.com/Raf0707/Chitalka/releases/latest/download/book-story.apk"
+    "https://github.com/Raf0707/Chitalka/releases/latest/download/chitalka.apk"
 
 fun Constants.provideReleasesPage() =
     "https://github.com/Raf0707/Chitalka/releases/latest"
