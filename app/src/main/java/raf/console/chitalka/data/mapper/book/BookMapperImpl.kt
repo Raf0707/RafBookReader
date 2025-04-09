@@ -1,10 +1,17 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.mapper.book
 
-import android.net.Uri
+import androidx.core.net.toUri
 import raf.console.chitalka.R
 import raf.console.chitalka.data.local.dto.BookEntity
-import raf.console.chitalka.domain.model.Book
-import raf.console.chitalka.domain.util.UIText
+import raf.console.chitalka.domain.library.book.Book
+import raf.console.chitalka.domain.ui.UIText
 import javax.inject.Inject
 
 class BookMapperImpl @Inject constructor() : BookMapper {
@@ -17,11 +24,9 @@ class BookMapperImpl @Inject constructor() : BookMapper {
             scrollOffset = book.scrollOffset,
             progress = book.progress,
             author = book.author.getAsString(),
-            textPath = book.textPath,
             description = book.description,
             image = book.coverImage?.toString(),
-            category = book.category,
-            chapters = book.chapters
+            category = book.category
         )
     }
 
@@ -36,12 +41,10 @@ class BookMapperImpl @Inject constructor() : BookMapper {
             scrollIndex = bookEntity.scrollIndex,
             scrollOffset = bookEntity.scrollOffset,
             progress = bookEntity.progress,
-            textPath = bookEntity.textPath,
             filePath = bookEntity.filePath,
             lastOpened = null,
             category = bookEntity.category,
-            coverImage = if (bookEntity.image != null) Uri.parse(bookEntity.image) else null,
-            chapters = bookEntity.chapters
+            coverImage = if (bookEntity.image != null) bookEntity.image.toUri() else null
         )
     }
 }

@@ -1,23 +1,22 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.local.dto
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import raf.console.chitalka.data.local.converter.ChapterConverter
-import raf.console.chitalka.domain.model.Category
-import raf.console.chitalka.domain.model.Chapter
+import raf.console.chitalka.domain.library.category.Category
 
 @Entity
-@TypeConverters(ChapterConverter::class)
 data class BookEntity(
     @PrimaryKey(true) val id: Int = 0,
     val title: String,
     val author: String?,
     val description: String?,
-    val textPath: String,
-    @ColumnInfo(defaultValue = "[]")
-    val chapters: List<Chapter>,
     val filePath: String,
     val scrollIndex: Int,
     val scrollOffset: Int,

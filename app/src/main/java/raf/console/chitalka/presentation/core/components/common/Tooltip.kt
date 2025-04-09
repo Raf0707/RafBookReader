@@ -1,8 +1,14 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.common
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PlainTooltip
-import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -33,7 +39,7 @@ fun Tooltip(
         enableUserInput = enabled,
         tooltip = {
             PlainTooltip {
-                Text(text = text)
+                StyledText(text = text)
             }
         },
         state = rememberTooltipState()

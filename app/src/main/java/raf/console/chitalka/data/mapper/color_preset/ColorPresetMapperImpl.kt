@@ -1,8 +1,15 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.mapper.color_preset
 
 import androidx.compose.ui.graphics.Color
 import raf.console.chitalka.data.local.dto.ColorPresetEntity
-import raf.console.chitalka.domain.model.ColorPreset
+import raf.console.chitalka.domain.reader.ColorPreset
 import javax.inject.Inject
 
 class ColorPresetMapperImpl @Inject constructor() : ColorPresetMapper {

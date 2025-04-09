@@ -2,12 +2,12 @@
 <resources>
     <!-- Основные строки -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">Читалка</string>
+    <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">По умолчанию</string>
     <string name="random_string">Случайно</string>
     <!-- Уведомления -->
     <string name="updates_notification_channel">Новые обновления</string>
-    <string name="updates_notification_title">Новое обновление для Читалка!</string>
+    <string name="updates_notification_title">Новое обновление для RafBook!</string>
     <string name="updates_notification_desc">Выпущено обновление %1$s!
         Нажмите, чтобы перейти на страницу релиза.</string>
     <string name="updates_notification_action">Скачать</string>
@@ -133,13 +133,13 @@
     <string name="color_tab">Цвета</string>
     <string name="filter_tab">Фильтр</string>
     <string name="sort_tab">Сортировка</string>
-    <string name="reader_tab">Читалка</string>
+    <string name="reader_tab">RafBook</string>
     <!-- Категории настроек -->
     <string name="general_settings">Общие</string>
     <string name="general_settings_desc">Язык приложения</string>
     <string name="appearance_settings">Внешний вид</string>
     <string name="appearance_settings_desc">Тема, цвета</string>
-    <string name="reader_settings">Читалка</string>
+    <string name="reader_settings">RafBook</string>
     <string name="reader_settings_desc">Шрифт, текст, переводчик</string>
     <string name="browse_settings">Обзор</string>
     <string name="browse_settings_desc">Общие, фильтр, сортировка</string>
@@ -169,7 +169,7 @@
     <string name="check_for_updates_option_desc">Проверять наличие новой версии при запуске</string>
     <string name="double_press_exit_option">Двойное нажатие для выхода</string>
     <string name="double_press_exit_option_desc">Нажмите «Назад» дважды, чтобы выйти</string>
-    <!-- Читалка -->
+    <!-- RafBook -->
     <string name="font_family_option">Семейство шрифтов</string>
     <string name="font_style_option">Стиль шрифта</string>
     <string name="font_size_option">Размер шрифта</string>
@@ -303,7 +303,7 @@
     <string name="chapters">Главы</string>
     <!-- О приложении -->
     <string name="app_version_option">Версия приложения</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">Нажмите, чтобы проверить обновления</string>
     <string name="report_bug_option">Сообщить об ошибке</string>
     <string name="whats_new_option">Что нового</string>
@@ -376,7 +376,7 @@
     Это откроет все настройки Читалки.
     Второй способ — перейти в</string>
     <string name="help_desc_how_to_customize_reader_2">Настройки</string>
-    <string name="help_desc_how_to_customize_reader_3">и выбрать категорию «Читалка» для настройки общих параметров
+    <string name="help_desc_how_to_customize_reader_3">и выбрать категорию «RafBook» для настройки общих параметров
     или категорию «Внешний вид» для настройки цветов.</string>
     <string name="help_title_how_to_update_book">Как обновить книгу?</string>
     <string name="help_desc_how_to_update_book_1">Перейдите в</string>
@@ -427,7 +427,7 @@
     позволяя периферийному зрению воспринимать текст по краям.
     Во время чтения держите взгляд на центре, не перемещая его в стороны после каждой строки.</string>
     <!-- Start -->
-    <string name="start_welcome">Добро пожаловать в Читалку!</string>
+    <string name="start_welcome">Добро пожаловать в RafBook!</string>
     <string name="start_welcome_desc">В мир, где слова очаровывают,
     учат и ведут в невероятные приключения!
     Давайте настроим приложение!</string>
@@ -496,4 +496,16 @@
     <string name="chapters_content_desc">Главы</string>
     <string name="update_text_content_desc">Обновить текст</string>
     <string name="more_content_desc">Ещё</string>
+    <string name="shareapp">Поделиться приложением</string>
+    <string name="tg">Телеграм</string>
+    <string name="rateapp">Оценить приложение</string>
+    <string name="otherapps">Другие приложения</string>
+    <string name="vk">ВК</string>
+    <string name="donate">Пожертвовать</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">Поддержать автора</string>
 </resources>

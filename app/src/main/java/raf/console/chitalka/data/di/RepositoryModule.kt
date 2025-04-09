@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.di
 
 import dagger.Binds
@@ -6,8 +13,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import raf.console.chitalka.data.local.data_store.DataStore
 import raf.console.chitalka.data.local.data_store.DataStoreImpl
-import raf.console.chitalka.data.local.notification.UpdatesNotificationService
-import raf.console.chitalka.data.local.notification.UpdatesNotificationServiceImpl
 import raf.console.chitalka.data.mapper.book.BookMapper
 import raf.console.chitalka.data.mapper.book.BookMapperImpl
 import raf.console.chitalka.data.mapper.color_preset.ColorPresetMapper
@@ -21,17 +26,15 @@ import raf.console.chitalka.data.parser.TextParserImpl
 import raf.console.chitalka.data.repository.BookRepositoryImpl
 import raf.console.chitalka.data.repository.ColorPresetRepositoryImpl
 import raf.console.chitalka.data.repository.DataStoreRepositoryImpl
-import raf.console.chitalka.data.repository.FavoriteDirectoryRepositoryImpl
 import raf.console.chitalka.data.repository.FileSystemRepositoryImpl
 import raf.console.chitalka.data.repository.HistoryRepositoryImpl
-import raf.console.chitalka.data.repository.RemoteRepositoryImpl
+import raf.console.chitalka.data.repository.PermissionRepositoryImpl
 import raf.console.chitalka.domain.repository.BookRepository
 import raf.console.chitalka.domain.repository.ColorPresetRepository
 import raf.console.chitalka.domain.repository.DataStoreRepository
-import raf.console.chitalka.domain.repository.FavoriteDirectoryRepository
 import raf.console.chitalka.domain.repository.FileSystemRepository
 import raf.console.chitalka.domain.repository.HistoryRepository
-import raf.console.chitalka.domain.repository.RemoteRepository
+import raf.console.chitalka.domain.repository.PermissionRepository
 import javax.inject.Singleton
 
 @Module
@@ -75,15 +78,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindRemoteRepository(
-        remoteRepositoryImpl: RemoteRepositoryImpl
-    ): RemoteRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindFavoriteDirectoryRepository(
-        favoriteDirectoryRepositoryImpl: FavoriteDirectoryRepositoryImpl
-    ): FavoriteDirectoryRepository
+    abstract fun bindPermissionRepository(
+        permissionRepositoryImpl: PermissionRepositoryImpl
+    ): PermissionRepository
 
     @Binds
     @Singleton
@@ -114,10 +111,4 @@ abstract class RepositoryModule {
     abstract fun bindTextParser(
         textParserImpl: TextParserImpl
     ): TextParser
-
-    @Binds
-    @Singleton
-    abstract fun bindNotificationService(
-        updatesNotificationServiceImpl: UpdatesNotificationServiceImpl
-    ): UpdatesNotificationService
 }

@@ -2,10 +2,10 @@
 
 <div align="center">
 
-  <img src="https://github.com/Raf0707/Chitalka/blob/master/app/src/main/res/drawable/chitalka.png?raw=true" width="120" />
+  <img src="https://github.com/Raf0707/Chitalka/blob/master/app/src/main/res/drawable/raf_book.png?raw=true" width="120" />
 </div>
 
-# <p align="center">Читалка</p>
+# <p align="center">RafBook</p>
 ### <p align="center">Material3 Book Reader for Android</p>
 <p align="center">Dive into the world of adventure as you discover your favorite book's story!</p>
 

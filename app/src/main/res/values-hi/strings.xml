@@ -1,7 +1,7 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">Читалка</string>
+    <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">डिफ़ॉल्ट</string>
     <string name="random_string">रैंडम</string>
 
@@ -387,7 +387,7 @@
 
     <!-- About -->
     <string name="app_version_option">ऐप संस्करण</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">अपडेट के लिए जांच करने के लिए क्लिक करें</string>
     <string name="report_bug_option">बग की रिपोर्ट करें</string>
     <string name="whats_new_option">नया क्या है</string>
@@ -564,7 +564,7 @@
 </string>
 
     <!-- Start -->
-    <string name="start_welcome">पुस्तक की कहानी में आपका स्वागत है!</string>
+    <string name="start_welcome">आपका स्वागत है RafBook!</string>
     <string name="start_welcome_desc">
     एक ऐसी दुनिया में जहाँ शब्द मोहक हैं,
     सिखाते हैं और अविश्वसनीय रोमांच पर ले जाते हैं!
@@ -641,4 +641,16 @@
     <string name="chapters_content_desc">अध्याय</string>
     <string name="update_text_content_desc">टेक्स्ट अपडेट करें</string>
     <string name="more_content_desc">अधिक</string>
+    <string name="shareapp">ऐप शेयर करें</string>
+    <string name="tg">टेलीग्राम</string>
+    <string name="rateapp">एप्लिकेशन की श्रेणी बताओ</string>
+    <string name="otherapps">अन्य अनुप्रयोग</string>
+    <string name="vk">वीके</string>
+    <string name="donate">दान करें</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">विकास का समर्थन करें</string>
 </resources>

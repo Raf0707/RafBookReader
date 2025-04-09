@@ -35,6 +35,10 @@
 -dontwarn org.slf4j.Logger
 -dontwarn org.slf4j.LoggerFactory
 -dontwarn org.xmlpull.v1.XmlPullParserFactory
+-dontwarn android.support.annotation.NonNull
+-dontwarn android.support.annotation.Nullable
+-dontwarn android.support.annotation.RequiresApi
+-dontwarn android.support.annotation.VisibleForTesting
 
 # Fixes issue with displaying .xml files, but may produce reproducibility issues
 #-keep class org.xmlpull.** { *; }

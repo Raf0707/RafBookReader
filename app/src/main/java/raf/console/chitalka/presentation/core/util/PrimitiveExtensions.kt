@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.util
 
 fun String.removeTrailingZero(): String {
@@ -18,7 +25,8 @@ fun Float.calculateProgress(digits: Int): String {
         .dropWhile { it == '-' }
 }
 
-fun Float.coerceAndPreventNaN(): Float {
+fun Float?.coerceAndPreventNaN(): Float {
+    if (this == null) return 0f
     if (isNaN()) return 0f
     return this.coerceIn(0f, 1f)
 }

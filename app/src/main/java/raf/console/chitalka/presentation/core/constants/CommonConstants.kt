@@ -1,23 +1,29 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 @file:Suppress("SameReturnValue")
 
 package raf.console.chitalka.presentation.core.constants
 
 import androidx.compose.ui.graphics.Color
-import raf.console.chitalka.domain.model.Book
-import raf.console.chitalka.domain.model.Category
-import raf.console.chitalka.domain.model.ColorPreset
-import raf.console.chitalka.domain.util.UIText
+import raf.console.chitalka.domain.library.book.Book
+import raf.console.chitalka.domain.library.category.Category
+import raf.console.chitalka.domain.reader.ColorPreset
+import raf.console.chitalka.domain.ui.UIText
 
 // Main State
-fun Constants.provideMainState() = "main_state"
+fun provideMainState() = "main_state"
 
 // Empty Book
-fun Constants.provideEmptyBook() = Book(
+fun provideEmptyBook() = Book(
     id = -1,
     title = "",
     author = UIText.StringValue(""),
     description = null,
-    textPath = "",
     filePath = "",
     coverImage = null,
     scrollIndex = 0,
@@ -28,7 +34,7 @@ fun Constants.provideEmptyBook() = Book(
 )
 
 // Default Color Preset
-fun Constants.provideDefaultColorPreset() = ColorPreset(
+fun provideDefaultColorPreset() = ColorPreset(
     id = -1,
     name = null,
     backgroundColor = Color(0xFFFAF8FF), // Blue Light Surface (hardcoded)

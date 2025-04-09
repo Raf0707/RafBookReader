@@ -4,7 +4,7 @@
     <string name="random_string">عشوائي</string>
     <!-- Notifications -->
     <string name="updates_notification_channel">تحديثات جديدة</string>
-    <string name="updates_notification_title">تحديث جديد لـ Читалка!</string>
+    <string name="updates_notification_title">تحديث جديد لـ RafBook!</string>
     <string name="updates_notification_desc">
     تم إصدار التحديث %1$s للتو!
     انقر للانتقال إلى صفحة الإصدار.
@@ -384,7 +384,7 @@
 
     <!-- About -->
     <string name="app_version_option">إصدار التطبيق</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">انقر للتحقق من وجود تحديثات</string>
     <string name="report_bug_option">الإبلاغ عن خطأ</string>
     <string name="whats_new_option">ما الجديد</string>
@@ -641,4 +641,16 @@
     <string name="chapters_content_desc">الفصول</string>
     <string name="update_text_content_desc">تحديث النص</string>
     <string name="more_content_desc">المزيد</string>
+    <string name="shareapp">مشاركة التطبيق</string>
+    <string name="tg">برقية</string>
+    <string name="rateapp">تقييم التطبيق</string>
+    <string name="otherapps">تطبيقات أخرى</string>
+    <string name="vk">VK</string>
+    <string name="donate">الصدقات</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">دعم التطوير</string>
 </resources>

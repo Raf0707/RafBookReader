@@ -1,16 +1,19 @@
 package raf.console.chitalka.presentation.core.navigation
 
+import android.content.Context
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import raf.console.chitalka.R
 import raf.console.chitalka.domain.util.Position
 import raf.console.chitalka.presentation.core.components.modal_bottom_sheet.ModalBottomSheet
+import raf.console.chitalka.util.vk_ad_mob.loadAndShowInterstitialAd
 
 /**
  * Navigation Bottom Sheet.
@@ -22,6 +25,7 @@ import raf.console.chitalka.presentation.core.components.modal_bottom_sheet.Moda
 @Composable
 fun NavigationBottomSheet(onDismissRequest: () -> Unit) {
     val onNavigate = LocalNavigator.current
+    val context: Context = LocalContext.current
 
     ModalBottomSheet(
         modifier = Modifier.fillMaxWidth(),
@@ -35,6 +39,7 @@ fun NavigationBottomSheet(onDismissRequest: () -> Unit) {
                     primary = false,
                     position = Position.TOP
                 ) {
+                    loadAndShowInterstitialAd(context, 1772675)
                     onNavigate {
                         navigate(screen = Screen.About)
                         hideNavigationBottomSheet()
@@ -48,6 +53,7 @@ fun NavigationBottomSheet(onDismissRequest: () -> Unit) {
                     primary = false,
                     position = Position.BOTTOM
                 ) {
+                    loadAndShowInterstitialAd(context, 1772675)
                     onNavigate {
                         navigate(screen = Screen.Help(fromStart = false))
                         hideNavigationBottomSheet()
@@ -65,6 +71,7 @@ fun NavigationBottomSheet(onDismissRequest: () -> Unit) {
                     primary = true,
                     position = Position.SOLO
                 ) {
+                    loadAndShowInterstitialAd(context, 1772675)
                     onNavigate {
                         navigate(screen = Screen.Settings)
                         hideNavigationBottomSheet()

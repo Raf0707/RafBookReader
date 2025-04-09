@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.modal_bottom_sheet
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -5,11 +12,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
+import raf.console.chitalka.presentation.core.components.common.StyledText
 
 /**
  * Primary Tab Row. Used in BottomSheet in pair with HorizontalPager.
@@ -41,11 +47,10 @@ fun ModalBottomSheetTabRow(
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 text = {
-                    Text(
-                        tabItem,
+                    StyledText(
+                        text = tabItem,
                         style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        maxLines = 1
                     )
                 }
             )

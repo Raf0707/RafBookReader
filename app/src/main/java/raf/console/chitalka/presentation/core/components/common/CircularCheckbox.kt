@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.common
 
 import androidx.compose.foundation.background
@@ -42,7 +49,7 @@ fun CircularCheckbox(
                 CircleShape
             )
             .background(
-                if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                if (selected) MaterialTheme.colorScheme.secondary else Color.Transparent,
                 shape = CircleShape
             )
             .padding(4.dp)

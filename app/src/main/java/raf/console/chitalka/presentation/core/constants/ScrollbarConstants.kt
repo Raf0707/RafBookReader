@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.constants
 
 import androidx.compose.material3.MaterialTheme
@@ -8,18 +15,18 @@ import my.nanihadesuka.compose.ScrollbarSelectionMode
 import my.nanihadesuka.compose.ScrollbarSettings
 
 @Composable
-fun Constants.providePrimaryScrollbar() = ScrollbarSettings(
-    thumbUnselectedColor = MaterialTheme.colorScheme.primary,
-    thumbSelectedColor = MaterialTheme.colorScheme.primary.copy(0.8f),
+fun providePrimaryScrollbar(canSelect: Boolean = true) = ScrollbarSettings(
+    thumbUnselectedColor = MaterialTheme.colorScheme.secondary,
+    thumbSelectedColor = MaterialTheme.colorScheme.secondary.copy(0.8f),
     hideDelayMillis = 2000,
     durationAnimationMillis = 300,
-    selectionMode = ScrollbarSelectionMode.Thumb,
+    selectionMode = if (canSelect) ScrollbarSelectionMode.Thumb else ScrollbarSelectionMode.Disabled,
     thumbThickness = 8.dp,
     scrollbarPadding = 4.dp
 )
 
 @Composable
-fun Constants.provideSecondaryScrollbar() = ScrollbarSettings(
+fun provideSecondaryScrollbar() = ScrollbarSettings(
     thumbUnselectedColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.5f),
     hideDelayMillis = 500,
     durationAnimationMillis = 200,

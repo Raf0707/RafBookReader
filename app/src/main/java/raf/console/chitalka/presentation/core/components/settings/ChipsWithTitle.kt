@@ -1,26 +1,31 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import raf.console.chitalka.domain.model.ButtonItem
-import raf.console.chitalka.presentation.screens.settings.components.SettingsCategoryTitle
+import raf.console.chitalka.domain.ui.ButtonItem
+import raf.console.chitalka.presentation.core.components.common.StyledText
+import raf.console.chitalka.presentation.settings.components.SettingsSubcategoryTitle
 
 /**
  * Chips with title. Use list of [ButtonItem]s to display chips.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ChipsWithTitle(
     modifier: Modifier = Modifier,
@@ -35,7 +40,7 @@ fun ChipsWithTitle(
             .fillMaxWidth()
             .padding(horizontal = horizontalPadding, vertical = verticalPadding)
     ) {
-        SettingsCategoryTitle(title = title, padding = 0.dp)
+        SettingsSubcategoryTitle(title = title, padding = 0.dp)
         Spacer(modifier = Modifier.height(8.dp))
 
         FlowRow(
@@ -47,8 +52,8 @@ fun ChipsWithTitle(
                         modifier = Modifier.height(36.dp),
                         selected = item.selected,
                         label = {
-                            Text(
-                                item.title,
+                            StyledText(
+                                text = item.title,
                                 style = item.textStyle,
                                 maxLines = 1
                             )

@@ -1,13 +1,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">Читалка</string>
+    <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">默认</string>
     <string name="random_string">随机</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">新更新</string>
-    <string name="updates_notification_title">Читалка 的新更新！</string>
+    <string name="updates_notification_title">RafBook 的新更新！</string>
     <string name="updates_notification_desc">
         更新 %1$s 刚刚发布！
         点击前往发布页面。
@@ -386,7 +386,7 @@
 
     <!-- About -->
     <string name="app_version_option">应用版本</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">点击检查更新</string>
     <string name="report_bug_option">报告错误</string>
     <string name="whats_new_option">新功能</string>
@@ -568,7 +568,7 @@
 
 
     <!-- Start -->
-    <string name="start_welcome">欢迎来到书籍的故事！</string>
+    <string name="start_welcome">欢迎来到 RafBook！</string>
     <string name="start_welcome_desc">
         进入一个文字充满魅力、
         教导和引领开启不可思议的冒险的世界！
@@ -645,4 +645,16 @@
     <string name="chapters_content_desc">章节</string>
     <string name="update_text_content_desc">更新文本</string>
     <string name="more_content_desc">更多</string>
+    <string name="shareapp">分享應用程式</string>
+    <string name="tg">電報</string>
+    <string name="rateapp">評價該應用程式</string>
+    <string name="otherapps">其他應用</string>
+    <string name="vk">聯繫中</string>
+    <string name="donate">捐</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">支持开发</string>
 </resources>

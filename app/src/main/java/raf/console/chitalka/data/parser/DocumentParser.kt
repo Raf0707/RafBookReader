@@ -1,12 +1,29 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.parser
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
 import kotlinx.coroutines.yield
 import org.jsoup.nodes.Document
+import raf.console.chitalka.domain.reader.ReaderText
+import raf.console.chitalka.presentation.core.util.clearAllMarkdown
 import raf.console.chitalka.presentation.core.util.clearMarkdown
 import raf.console.chitalka.presentation.core.util.containsVisibleText
+import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
 import javax.inject.Inject
 
-class DocumentParser @Inject constructor() {
+class DocumentParser @Inject constructor(
+    private val markdownParser: MarkdownParser
+) {
     /**
      * Parses document to get it's text.
      * Fixes issues such as manual line breaking in <p>.
@@ -14,55 +31,194 @@ class DocumentParser @Inject constructor() {
      *
      * @return Parsed text line by line with Markdown(all lines are not blank).
      */
-    suspend fun Document.parseDocument(): List<String> {
-        val lines = mutableListOf<String>()
+    suspend fun parseDocument(
+        document: Document,
+        zipFile: ZipFile? = null,
+        imageEntries: List<ZipEntry>? = null,
+        includeChapter: Boolean = true
+    ): List<ReaderText> {
+        yield()
+
+        val readerText = mutableListOf<ReaderText>()
+        var chapterAdded = false
+
+        document.selectFirst("body")
+            .run { this ?: document.body() }
+            .apply {
+                // Remove manual line breaks from all <p>, <a>
+                select("p").forEach { element ->
+                    yield()
+                    element.html(element.html().replace(Regex("\\n+"), " "))
+                    element.append("\n")
+                }
+                select("a").forEach { element ->
+                    yield()
+                    element.html(element.html().replace(Regex("\\n+"), ""))
+                }
+
+                // Remove <head>'s title
+                select("title").remove()
+
+                // Markdown
+                select("hr").append("\n---\n")
+                select("b").append("**").prepend("**")
+                select("h1").append("**").prepend("**")
+                select("h2").append("**").prepend("**")
+                select("h3").append("**").prepend("**")
+                select("strong").append("**").prepend("**")
+                select("em").append("_").prepend("_")
+                select("a").forEach { element ->
+                    var link = element.attr("href")
+                    if (!link.startsWith("http") || element.wholeText().isBlank()) return@forEach
+
+                    if (link.startsWith("http://")) {
+                        link = link.replace("http://", "https://")
+                    }
+
+                    element.prepend("[")
+                    element.append("]($link)")
+                }
+
+                // Image (<img>)
+                select("img").forEach { element ->
+                    val src = element.attr("src")
+                        .trim()
+                        .substringAfterLast(File.separator)
+                        .lowercase()
+                        .takeIf {
+                            it.containsVisibleText() && imageEntries?.any { image ->
+                                it == image.name.substringAfterLast(File.separator).lowercase()
+                            } == true
+                        } ?: return@forEach
+
+                    val alt = element.attr("alt").trim().takeIf {
+                        it.clearMarkdown().containsVisibleText()
+                    } ?: src.substringBeforeLast(".")
+
+                    element.append("\n[[$src|$alt]]\n")
+                }
+
+                // Image (<image>)
+                select("image").forEach { element ->
+                    val src = element.attr("xlink:href")
+                        .trim()
+                        .substringAfterLast(File.separator)
+                        .lowercase()
+                        .takeIf {
+                            it.containsVisibleText() && imageEntries?.any { image ->
+                                it == image.name.substringAfterLast(File.separator).lowercase()
+                            } == true
+                        } ?: return@forEach
+
+                    val alt = src.substringBeforeLast(".")
+
+                    element.append("\n[[$src|$alt]]\n")
+                }
+            }.wholeText().lines().forEach { line ->
+                yield()
+
+                val formattedLine = line.replace(
+                    Regex("""\*\*\*\s*(.*?)\s*\*\*\*"""), "_**$1**_"
+                ).replace(
+                    Regex("""\*\*\s*(.*?)\s*\*\*"""), "**$1**"
+                ).replace(
+                    Regex("""_\s*(.*?)\s*_"""), "_$1_"
+                ).trim()
+
+                val imageRegex = Regex("""\[\[(.*?)\|(.*?)]]""")
+
+                if (line.containsVisibleText()) {
+                    when {
+                        imageRegex.matches(line) -> {
+                            val trimmedLine = line.removeSurrounding("[[", "]]")
+                            val src = trimmedLine.substringBefore("|")
+                            val alt = "_${trimmedLine.substringAfter("|")}_"
+
+                            val image = try {
+                                val imageEntry = imageEntries?.find { image ->
+                                    src == image.name.substringAfterLast(File.separator).lowercase()
+                                } ?: return@forEach
+
+                                zipFile?.getImage(imageEntry)?.asImageBitmap()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                null
+                            } ?: return@forEach
+
+                            image.prepareToDraw()
+                            readerText.add( // Adding image
+                                ReaderText.Image(
+                                    imageBitmap = image
+                                )
+                            )
+                            readerText.add( // Adding alternative text (caption) for image
+                                ReaderText.Text(
+                                    markdownParser.parse(alt)
+                                )
+                            )
+                        }
+
+                        line == "---" || line == "***" -> readerText.add(ReaderText.Separator)
+
+                        else -> {
+                            if (
+                                !chapterAdded &&
+                                formattedLine.clearAllMarkdown().containsVisibleText() &&
+                                includeChapter
+                            ) {
+                                readerText.add(
+                                    0, ReaderText.Chapter(
+                                        title = formattedLine.clearAllMarkdown(),
+                                        nested = false
+                                    )
+                                )
+                                chapterAdded = true
+                            } else if (
+                                formattedLine.clearMarkdown().containsVisibleText()
+                            ) {
+                                readerText.add(
+                                    ReaderText.Text(
+                                        line = markdownParser.parse(formattedLine)
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
 
         yield()
 
-        body().apply {
-            // Remove manual line breaks from all <p>
-            select("p").forEach { element ->
-                yield()
-                element.html(element.html().replace(Regex("\\n+"), " "))
-                element.append("\n")
-            }
+        if (
+            readerText.filterIsInstance<ReaderText.Text>().isEmpty() ||
+            (includeChapter && readerText.filterIsInstance<ReaderText.Chapter>().isEmpty())
+        ) {
+            return emptyList()
+        }
 
-            // Remove <head>'s title
-            select("title").remove()
+        return readerText
+    }
 
-            // Markdown
-            select("hr").append("\n---\n")
-            select("b").append("**").prepend("**")
-            select("h1").append("**").prepend("**")
-            select("h2").append("**").prepend("**")
-            select("h3").append("**").prepend("**")
-            select("strong").append("**").prepend("**")
-            select("em").append("_").prepend("_")
-            select("a").forEach { element ->
-                val link = element.attr("href")
-                if (!link.startsWith("http") || element.wholeText().isBlank()) return@forEach
-
-                element.prepend("[")
-                element.append("](${element.attr("href")})")
-            }
-        }.wholeText().lines().forEach { line ->
-            yield()
-
-            val formattedLine = line.replace(
-                Regex("""\*\*\*\s*(.*?)\s*\*\*\*"""), "_**$1**_"
-            ).replace(
-                Regex("""\*\*\s*(.*?)\s*\*\*"""), "**$1**"
-            ).replace(
-                Regex("""_\s*(.*?)\s*_"""), "_$1_"
-            ).trim()
-
-            if (formattedLine.clearMarkdown().containsVisibleText()) {
-                lines.add(formattedLine)
+    /**
+     * Getting bitmap from [ZipFile] with compression
+     * that depends on the [imageEntry] size.
+     */
+    private fun ZipFile.getImage(imageEntry: ZipEntry): Bitmap? {
+        fun getBitmapFromInputStream(compressionLevel: Int = 1): Bitmap? {
+            return getInputStream(imageEntry).use { inputStream ->
+                BitmapFactory.decodeStream(
+                    inputStream,
+                    null,
+                    BitmapFactory.Options().apply {
+                        inPreferredConfig = Bitmap.Config.RGB_565
+                        inSampleSize = compressionLevel
+                    }
+                )
             }
         }
 
-        yield()
 
-        return lines
+        val uncompressedBitmap = getBitmapFromInputStream() ?: return null
+        return uncompressedBitmap
     }
 }

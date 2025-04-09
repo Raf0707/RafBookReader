@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.parser.pdf
 
 import android.app.Application
@@ -6,24 +13,22 @@ import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
 import kotlinx.coroutines.yield
-import raf.console.chitalka.R
+import raf.console.chitalka.data.parser.MarkdownParser
 import raf.console.chitalka.data.parser.TextParser
-import raf.console.chitalka.domain.model.Chapter
-import raf.console.chitalka.domain.model.ChapterWithText
-import raf.console.chitalka.domain.util.Resource
-import raf.console.chitalka.domain.util.UIText
+import raf.console.chitalka.domain.file.CachedFile
+import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.presentation.core.util.clearAllMarkdown
-import java.io.File
 import javax.inject.Inject
 
 private const val PDF_TAG = "PDF Parser"
 
 class PdfTextParser @Inject constructor(
+    private val markdownParser: MarkdownParser,
     private val application: Application
 ) : TextParser {
 
-    override suspend fun parse(file: File): Resource<List<ChapterWithText>> {
-        Log.i(PDF_TAG, "Started PDF parsing: ${file.name}.")
+    override suspend fun parse(cachedFile: CachedFile): List<ReaderText> {
+        Log.i(PDF_TAG, "Started PDF parsing: ${cachedFile.name}.")
 
         return try {
             yield()
@@ -37,14 +42,14 @@ class PdfTextParser @Inject constructor(
             val pdfStripper = PDFTextStripper()
             pdfStripper.paragraphStart = "</br>"
 
-            PDDocument.load(file).use {
+            PDDocument.load(cachedFile.openInputStream()).use {
                 oldText = pdfStripper.getText(it)
                     .replace("\r", "")
             }
 
             yield()
 
-            val strings = mutableListOf<String>()
+            val readerText = mutableListOf<ReaderText>()
             val text = oldText.filterIndexed { index, c ->
                 yield()
 
@@ -110,61 +115,50 @@ class PdfTextParser @Inject constructor(
 
             yield()
 
+            var chapterAdded = false
             lines.forEach { line ->
                 yield()
-                strings.add(line.trim())
+
+                if (line.isNotBlank()) {
+                    when (line) {
+                        "***", "---" -> readerText.add(
+                            ReaderText.Separator
+                        )
+
+                        else -> {
+                            if (!chapterAdded && line.clearAllMarkdown().isNotBlank()) {
+                                readerText.add(
+                                    0, ReaderText.Chapter(
+                                        title = line.clearAllMarkdown(),
+                                        nested = false
+                                    )
+                                )
+                                chapterAdded = true
+                            } else readerText.add(
+                                ReaderText.Text(
+                                    line = markdownParser.parse(line)
+                                )
+                            )
+                        }
+                    }
+                }
             }
 
             yield()
 
-            if (strings.size < 2) {
-                return Resource.Error(UIText.StringResource(R.string.error_file_empty))
-            }
-
-            val title = strings.first().clearAllMarkdown().let { title ->
-                strings.removeAt(0)
-                if (title.isBlank()) return@let "Chapter 1"
-                return@let title
+            if (
+                readerText.filterIsInstance<ReaderText.Text>().isEmpty() ||
+                readerText.filterIsInstance<ReaderText.Chapter>().isEmpty()
+            ) {
+                Log.e(PDF_TAG, "Could not extract text from PDF.")
+                return emptyList()
             }
 
             Log.i(PDF_TAG, "Successfully finished PDF parsing.")
-            Resource.Success(
-                listOf(
-                    ChapterWithText(
-                        chapter = Chapter(
-                            index = 0,
-                            title = title,
-                            startIndex = 0,
-                            endIndex = strings.lastIndex
-                        ),
-                        text = strings
-                    )
-                )
-            )
+            readerText
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Error(
-                UIText.StringResource(
-                    R.string.error_query,
-                    e.message?.take(40)?.trim() ?: ""
-                )
-            )
+            emptyList()
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

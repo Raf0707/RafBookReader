@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.constants
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -15,7 +22,6 @@ object DataStoreConstants {
     val ABSOLUTE_DARK = booleanPreferencesKey("absolute_dark")
     val THEME_CONTRAST = stringPreferencesKey("theme_contrast")
     val SHOW_START_SCREEN = booleanPreferencesKey("guide")
-    val CHECK_FOR_UPDATES = booleanPreferencesKey("check_for_updates")
     val DOUBLE_PRESS_EXIT = booleanPreferencesKey("double_press_exit")
 
     // Reader settings
@@ -24,6 +30,7 @@ object DataStoreConstants {
     val SIDE_PADDING = intPreferencesKey("side_padding")
     val VERTICAL_PADDING = intPreferencesKey("vertical_padding")
     val FONT = stringPreferencesKey("font")
+    val FONT_THICKNESS = stringPreferencesKey("font_thickness")
     val IS_ITALIC = booleanPreferencesKey("font_style")
     val FONT_SIZE = intPreferencesKey("font_size")
     val LINE_HEIGHT = intPreferencesKey("line_height")
@@ -38,19 +45,35 @@ object DataStoreConstants {
     val PERCEPTION_EXPANDER = booleanPreferencesKey("perception_expander")
     val PERCEPTION_EXPANDER_PADDING = intPreferencesKey("perception_expander_padding")
     val PERCEPTION_EXPANDER_THICKNESS = intPreferencesKey("perception_expander_thickness")
-    val CHECK_FOR_TEXT_UPDATE = booleanPreferencesKey("check_for_text_update")
-    val CHECK_FOR_TEXT_UPDATE_TOAST = booleanPreferencesKey("check_for_text_update_toast")
     val SCREEN_ORIENTATION = stringPreferencesKey("screen_orientation")
     val CUSTOM_SCREEN_BRIGHTNESS = booleanPreferencesKey("custom_screen_brightness")
     val SCREEN_BRIGHTNESS = doublePreferencesKey("screen_brightness")
+    val HORIZONTAL_GESTURE = stringPreferencesKey("horizontal_gesture")
+    val HORIZONTAL_GESTURE_SCROLL = doublePreferencesKey("horizontal_gesture_scroll")
+    val HORIZONTAL_GESTURE_SENSITIVITY = doublePreferencesKey("horizontal_gesture_sensitivity")
+    val HORIZONTAL_GESTURE_ALPHA_ANIM = booleanPreferencesKey("horizontal_gesture_alpha_anim_bool")
+    val HORIZONTAL_GESTURE_PULL_ANIM = booleanPreferencesKey("horizontal_gesture_pull_anim")
+    val BOTTOM_BAR_PADDING = intPreferencesKey("bottom_bar_padding")
+    val HIGHLIGHTED_READING = booleanPreferencesKey("highlighted_reading")
+    val HIGHLIGHTED_READING_THICKNESS = intPreferencesKey("highlighted_reading_thickness")
+    val CHAPTER_TITLE_ALIGNMENT = stringPreferencesKey("chapter_title_alignment")
+    val IMAGES = booleanPreferencesKey("images")
+    val IMAGES_CORNERS_ROUNDNESS = intPreferencesKey("images_corners_roundness")
+    val IMAGES_ALIGNMENT = stringPreferencesKey("images_alignment")
+    val IMAGES_WIDTH = doublePreferencesKey("images_width")
+    val IMAGES_COLOR_EFFECTS = stringPreferencesKey("images_color_effects")
+    val PROGRESS_BAR = booleanPreferencesKey("progress_bar")
+    val PROGRESS_BAR_PADDING = intPreferencesKey("progress_bar_padding")
+    val PROGRESS_BAR_ALIGNMENT = stringPreferencesKey("progress_bar_alignment")
+    val PROGRESS_BAR_FONT_SIZE = intPreferencesKey("progress_bar_font_size")
+    val PROGRESS_COUNT = stringPreferencesKey("progress_count")
 
     // Browse settings
-    val BROWSE_FILES_STRUCTURE = stringPreferencesKey("browse_files_structure")
     val BROWSE_LAYOUT = stringPreferencesKey("browse_layout")
     val BROWSE_AUTO_GRID_SIZE = booleanPreferencesKey("browse_auto_grid_size")
     val BROWSE_GRID_SIZE = intPreferencesKey("browse_grid_size")
-    val BROWSE_PIN_FAVORITE_DIRECTORIES = booleanPreferencesKey("browse_pin_favorite_directories")
     val BROWSE_SORT_ORDER = stringPreferencesKey("browse_sort_order")
     val BROWSE_SORT_ORDER_DESCENDING = booleanPreferencesKey("browse_sort_order_descending")
     val BROWSE_INCLUDED_FILTER_ITEMS = stringSetPreferencesKey("browse_included_filter_items")
+    val BROWSE_PINNED_PATHS = stringSetPreferencesKey("browse_pinned_paths")
 }

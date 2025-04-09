@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.dialog
 
 import androidx.compose.foundation.clickable
@@ -10,23 +17,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import raf.console.chitalka.presentation.core.components.common.StyledText
 
-/**
- * Selectable dialog item.
- * Perfectly combines with [DialogWithLazyColumn].
- *
- * @param selected Whether item is selected.
- * @param title Title of the item.
- * @param horizontalPadding Horizontal padding of the item.
- * @param onClick OnClick callback.
- */
 @Composable
 fun SelectableDialogItem(
     selected: Boolean,
@@ -46,17 +43,17 @@ fun SelectableDialogItem(
             onClick = null,
             modifier = Modifier.size(24.dp),
             colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colorScheme.primary,
+                selectedColor = MaterialTheme.colorScheme.secondary,
                 unselectedColor = MaterialTheme.colorScheme.onSurface
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
+        StyledText(
             text = title,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            style = MaterialTheme.typography.bodyLarge.copy(
+                color = MaterialTheme.colorScheme.onSurface
+            ),
+            maxLines = 1
         )
     }
 }

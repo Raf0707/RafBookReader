@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.settings
 
 import androidx.compose.animation.expandHorizontally
@@ -27,20 +34,19 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SegmentedButtonColors
 import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import raf.console.chitalka.R
-import raf.console.chitalka.domain.model.ButtonItem
+import raf.console.chitalka.domain.ui.ButtonItem
 import raf.console.chitalka.presentation.core.components.common.AnimatedVisibility
-import raf.console.chitalka.presentation.screens.settings.components.SettingsCategoryTitle
+import raf.console.chitalka.presentation.core.components.common.StyledText
+import raf.console.chitalka.presentation.settings.components.SettingsSubcategoryTitle
 
 /**
  * Segmented Button with Title.
@@ -70,7 +76,7 @@ fun SegmentedButtonWithTitle(
             .fillMaxWidth()
             .padding(horizontal = horizontalPadding, vertical = verticalPadding)
     ) {
-        SettingsCategoryTitle(title = title, padding = 0.dp)
+        SettingsSubcategoryTitle(title = title, padding = 0.dp)
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -174,18 +180,12 @@ private fun SegmentedButton(
             }
         }
 
-        Text(
+        StyledText(
             text = button.title,
-            style = button.textStyle,
-            fontWeight = FontWeight.Medium,
-            color = if (button.selected) colors.activeContentColor
-            else colors.inactiveContentColor
+            style = button.textStyle.copy(
+                color = if (button.selected) colors.activeContentColor
+                else colors.inactiveContentColor
+            )
         )
     }
 }
-
-
-
-
-
-

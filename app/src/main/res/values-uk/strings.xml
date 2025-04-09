@@ -2,13 +2,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">Читалка</string>
+    <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">Типовий</string>
     <string name="random_string">Випадковий</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">Нові оновлення</string>
-    <string name="updates_notification_title">Нове оновлення Читалка!</string>
+    <string name="updates_notification_title">Нове оновлення RafBook!</string>
     <string name="updates_notification_desc">
         Оновлення %1$s щойно випущено!
         Натисніть, щоб перейти на сторінку випуску.
@@ -178,14 +178,14 @@
     <string name="color_tab">Кольори</string>
     <string name="filter_tab">Фільтр</string>
     <string name="sort_tab">Сортування</string>
-    <string name="reader_tab">Читалка</string>
+    <string name="reader_tab">RafBook</string>
 
     <!-- Settings categories -->
     <string name="general_settings">Загальні</string>
     <string name="general_settings_desc">Мова застосунку</string>
     <string name="appearance_settings">Зовнішній вигляд</string>
     <string name="appearance_settings_desc">Тема, кольори</string>
-    <string name="reader_settings">Читалка</string>
+    <string name="reader_settings">RafBook</string>
     <string name="reader_settings_desc">Шрифт, текст, перекладач</string>
     <string name="browse_settings">Огляд</string>
     <string name="browse_settings_desc">Загальні, фільтр, сортування</string>
@@ -354,7 +354,7 @@
     <string name="chapters">Розділи</string>
 
     <string name="app_version_option">Версія програми</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">Натисніть, щоб перевірити наявність оновлень</string>
     <string name="report_bug_option">Повідомити про помилку</string>
     <string name="whats_new_option">Що нового</string>
@@ -522,7 +522,7 @@
     </string>
 
     <!-- Start -->
-    <string name="start_welcome">Ласкаво просимо в Читалка!</string>
+    <string name="start_welcome">Ласкаво просимо в RafBook!</string>
     <string name="start_welcome_desc">
         В світ, де слова чарують,
         навчають та ведуть на неймовірні пригоди!
@@ -599,5 +599,17 @@
     <string name="chapters_content_desc">Розділи</string>
     <string name="update_text_content_desc">Оновити текст</string>
     <string name="more_content_desc">Більше</string>
+    <string name="shareapp">Поділитися програмою</string>
+    <string name="tg">телеграм</string>
+    <string name="rateapp">оцінити програму</string>
+    <string name="otherapps">інші додатки</string>
+    <string name="vk">ВК</string>
+    <string name="donate">пожертвувати</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">Підтримати розробку</string>
 
 </resources>

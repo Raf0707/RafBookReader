@@ -1,10 +1,17 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.domain.util
 
 import android.graphics.Bitmap
-import raf.console.chitalka.presentation.core.navigation.Navigator
 
 typealias CoverImage = Bitmap
 typealias Selected = Boolean
 typealias ID = Int
-typealias Route = String
-typealias OnNavigate = (Navigator.() -> Unit) -> Unit
+typealias BottomSheet = String
+typealias Dialog = String
+typealias Drawer = String

@@ -6,7 +6,7 @@
         <item name="postSplashScreenTheme">@style/Theme.BookStory</item>
 
         <item name="windowSplashScreenBackground">@color/splash_bg_dark</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/chitalka</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/raf_book_1_round</item>
         <!--item name="android:windowSplashScreenBrandingImage">@drawable/chitalka</item-->
     </style>
 </resources>

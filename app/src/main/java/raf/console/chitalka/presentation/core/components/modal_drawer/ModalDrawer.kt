@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.modal_drawer
 
 import androidx.activity.compose.BackHandler
@@ -29,11 +36,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import raf.console.chitalka.presentation.core.components.common.AnimatedVisibility
 import raf.console.chitalka.presentation.core.components.common.LazyColumnWithScrollbar
-import raf.console.chitalka.presentation.core.constants.Constants
 import raf.console.chitalka.presentation.core.constants.providePrimaryScrollbar
 import raf.console.chitalka.presentation.core.util.noRippleClickable
 
@@ -57,7 +65,9 @@ fun ModalDrawer(
     header: @Composable () -> Unit = {},
     content: LazyListScope.() -> Unit
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
+
     val offset = remember { mutableFloatStateOf(0f) }
     val offsetDp = remember {
         derivedStateOf {
@@ -87,8 +97,14 @@ fun ModalDrawer(
     ) {
         AnimatedVisibility(
             visible = show,
-            enter = slideInHorizontally { (-it + with(density) { -20.dp.toPx() }).toInt() },
-            exit = slideOutHorizontally { (-it + with(density) { -20.dp.toPx() }).toInt() }
+            enter = slideInHorizontally {
+                if (layoutDirection == LayoutDirection.Ltr) (-it + with(density) { -20.dp.toPx() }).toInt()
+                else (it + with(density) { 20.dp.toPx() }).toInt()
+            },
+            exit = slideOutHorizontally {
+                if (layoutDirection == LayoutDirection.Ltr) (-it + with(density) { -20.dp.toPx() }).toInt()
+                else (it + with(density) { 20.dp.toPx() }).toInt()
+            }
         ) {
             Column(
                 modifier = Modifier
@@ -113,13 +129,15 @@ fun ModalDrawer(
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragStart = { offset.floatValue = 0f },
+                            onDragCancel = { offset.floatValue = 0f },
                             onDragEnd = {
                                 if (offset.floatValue.toDp() < (-60).dp) onDismissRequest()
                                 else offset.floatValue = 0f
                             }
                         ) { _, dragAmount ->
-                            offset.floatValue = (offset.floatValue + dragAmount)
-                                .coerceAtMost(0f)
+                            offset.floatValue = (if (layoutDirection == LayoutDirection.Ltr) {
+                                offset.floatValue + dragAmount
+                            } else offset.floatValue + (-dragAmount)).coerceAtMost(0f)
                         }
                     }
                     .systemBarsPadding()
@@ -128,7 +146,7 @@ fun ModalDrawer(
                 LazyColumnWithScrollbar(
                     state = rememberLazyListState(startIndex),
                     modifier = Modifier.fillMaxSize(),
-                    scrollbarSettings = Constants.providePrimaryScrollbar(),
+                    scrollbarSettings = providePrimaryScrollbar(),
                     contentPadding = PaddingValues(vertical = 9.dp)
                 ) {
                     content()

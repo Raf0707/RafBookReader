@@ -1,13 +1,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">Читалка</string>
+    <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">Predefinito</string>
     <string name="random_string">Casuale</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">Nuovi aggiornamenti</string>
-    <string name="updates_notification_title">Nuovo aggiornamento di Читалка!</string>
+    <string name="updates_notification_title">Nuovo aggiornamento di RafBook!</string>
     <string name="updates_notification_desc">
         Aggiornamento %1$s appena rilasciato!
         Clicca per andare alla pagina di rilascio.
@@ -387,7 +387,7 @@
 
     <!-- About -->
     <string name="app_version_option">Versione app</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">Clicca per verificare la presenza di aggiornamenti</string>
     <string name="report_bug_option">Segnala un bug</string>
     <string name="whats_new_option">Novità</string>
@@ -568,7 +568,7 @@
     </string>
 
     <!-- Start -->
-    <string name="start_welcome">Benvenuto in Читалка!</string>
+    <string name="start_welcome">Benvenuto in RafBook!</string>
     <string name="start_welcome_desc">
         In un mondo dove le parole affascinano,
         insegnano e conducono in incredibili avventure!
@@ -645,4 +645,16 @@
     <string name="chapters_content_desc">Capitoli</string>
     <string name="update_text_content_desc">Aggiorna testo</string>
     <string name="more_content_desc">Altro</string>
+    <string name="shareapp">Condividi app</string>
+    <string name="tg">telegramma</string>
+    <string name="rateapp">valuta l\'app</string>
+    <string name="otherapps">altre applicazioni</string>
+    <string name="vk">VK</string>
+    <string name="donate">donare</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">Supporta lo sviluppo</string>
 </resources>

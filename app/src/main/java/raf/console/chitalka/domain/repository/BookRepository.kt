@@ -1,12 +1,16 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.domain.repository
 
-import androidx.compose.ui.text.AnnotatedString
-import raf.console.chitalka.domain.model.Book
-import raf.console.chitalka.domain.model.BookWithText
-import raf.console.chitalka.domain.model.BookWithTextAndCover
-import raf.console.chitalka.domain.model.Chapter
+import raf.console.chitalka.domain.library.book.Book
+import raf.console.chitalka.domain.library.book.BookWithCover
+import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.domain.util.CoverImage
-import raf.console.chitalka.domain.util.Resource
 
 interface BookRepository {
 
@@ -19,22 +23,16 @@ interface BookRepository {
     ): List<Book>
 
     suspend fun getBookText(
-        textPath: String
-    ): List<AnnotatedString>
-
-    suspend fun checkForTextUpdate(bookId: Int): Resource<Pair<List<String>, List<Chapter>>?>
+        bookId: Int
+    ): List<ReaderText>
 
     suspend fun insertBook(
-        bookWithTextAndCover: BookWithTextAndCover
-    ): Boolean
+        bookWithCover: BookWithCover
+    )
 
     suspend fun updateBook(
         book: Book
     )
-
-    suspend fun updateBookWithText(
-        bookWithText: BookWithText
-    ): Boolean
 
     suspend fun updateCoverImageOfBook(
         bookWithOldCover: Book,

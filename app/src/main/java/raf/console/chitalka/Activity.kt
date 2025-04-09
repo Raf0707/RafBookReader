@@ -30,8 +30,8 @@ import raf.console.chitalka.presentation.screens.about.nested.credits.CreditsScr
 import raf.console.chitalka.presentation.screens.about.nested.license_info.LicenseInfoScreenRoot
 import raf.console.chitalka.presentation.screens.about.nested.licenses.LicensesScreenRoot
 import raf.console.chitalka.presentation.screens.book_info.BookInfoScreenRoot
-import raf.console.chitalka.presentation.screens.browse.BrowseScreenRoot
-import raf.console.chitalka.presentation.screens.browse.data.BrowseViewModel
+import raf.console.chitalka.reserve_screens.browse.BrowseScreenRoot
+import raf.console.chitalka.reserve_screens.browse.data.BrowseViewModel
 import raf.console.chitalka.presentation.screens.help.HelpScreenRoot
 import raf.console.chitalka.presentation.screens.history.HistoryScreenRoot
 import raf.console.chitalka.presentation.screens.history.data.HistoryViewModel

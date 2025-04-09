@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Төп юлдар -->
+    <string name="app_version" translatable="false">1.0.0</string>
+    <string name="app_name" translatable="false">Уҡыу</string>
+    <string name="default_string">Ғәҙәттәге</string>
+    <string name="random_string">Осраҡлы</string>
+    <!-- Хәбәрҙәр -->
+    <string name="updates_notification_channel">Яңы яңыртыуҙар</string>
+    <string name="updates_notification_title">Уҡыу өсөн яңы яңыртыу!</string>
+    <string name="updates_notification_desc">%1$s яңыртыуы сыҡты!
+        Релиз битенә күсеү өсөн баҫығыҙ.</string>
+    <string name="updates_notification_action">Йөкләү</string>
+    <!-- Экрандар -->
+    <string name="library_screen">Китапхана</string>
+    <string name="history_screen">Тарих</string>
+    <string name="browse_screen">Ҡарау</string>
+    <string name="settings_screen">Көйләүҙәр</string>
+    <string name="about_screen">Программа тураһында</string>
+    <string name="help_screen">Ярҙам</string>
+    <!-- Диалогтарҙың билдәләре -->
+    <string name="storage_permission">Рөхсәт бирергәме?</string>
+    <string name="add_books">Китаптар өҫтәргәме?</string>
+    <string name="move_books">Китаптарҙы күсерергәме?</string>
+    <string name="delete_books">Китаптарҙы юйырғамы?</string>
+    <string name="delete_book">Китапты юйырғамы?</string>
+    <string name="move_book">Китапты күсерергәме?</string>
+    <string name="delete_history">Уҡыу тарихын юйырғамы?</string>
+    <string name="confirm_update">Яңыртыуҙы раҫларғамы?</string>
+    <string name="enable_check_for_updates">Яңыртыуҙарҙы тикшереүҙе ҡуҙғатырғамы?</string>
+    <string name="update_book">Китапты яңыртырғамы?</string>
+    <!-- Диалогтарҙың тасуирламалары -->
+    <string name="storage_permission_description">Һеҙҙең ҡорамалығыҙҙа китаптарҙы эҙләү өсөн һаҡлауҙа рөхсәт кәрәк.
+    Бынан башҡа рөхсәтһеҙ, китаптар өҫтәй алмаҫһығыҙ.</string>
+    <string name="add_books_description">Һеҙ ҡайһы китаптарҙы өҫтәргә кәрәклеген һайлай алаһығыҙ.
+        Китаптың исеме һәм обложкаһын һуңыраҡ үҙгәртергә мөмкин.
+        Йөкләү процесы бер нисә минут ваҡыт алырға мөмкин.</string>
+    <string name="move_books_description">Һеҙ һайланған барлыҡ китаптарҙы (%1$s) күсерергә теләгән категорияны һайлағыҙ.
+        Барлыҡ һайланған китаптар күрһәтелгән категорияға күсереләсәк.</string>
+    <string name="delete_books_description">Был һеҙҙең һайланған барлыҡ китаптарҙы (%1$s) мәғлүмәттар базаһынан юйыр.
+    Һайланған китаптар Һеҙҙең ҡорамалығыҙҙа ҡаласаҡ.</string>
+    <string name="delete_book_description">Был китапты мәғлүмәттар базаһынан юйыр.
+    Китап Һеҙҙең ҡорамалығыҙҙа ҡаласаҡ.</string>
+    <string name="move_book_description">Һеҙ китапты күсерергә теләгән категорияны һайлағыҙ.
+    Китап күрһәтелгән категорияға күсереләсәк.</string>
+    <string name="delete_history_description">Был уҡыу тарихын мәғлүмәттар базаһынан юйыр.
+    Юйылғандан һуң тарих үҙгәртеләсәк.</string>
+    <string name="confirm_update_description">Китаптың текстын һәм бүлектәрен яңыртығыҙ.
+    Уҡыу процесы үҙгәрмәҫ, әгәр абзацтар тәртибе үҙгәрмәһә.</string>
+    <string name="update_app_description">Программаның яңы версияһы табылды.
+    Релиз битенә күсеүҙе теләйһегеҙме?</string>
+    <string name="enable_check_for_updates_description">«Яңыртыуҙарҙы тикшереүҙе» ҡуҙғатып ҡуйһағыҙ,
+    программа һәр саҡ эшләгәндә «api.github.com»-дан һуңғы релиз тураһында мәғлүмәт аласаҡ.
+    Был функцияны ҡуҙғатырға теләйһегеҙме?</string>
+    <string name="update_book_description">Тексттың яңыртыуы табылды.
+    Яңыртыу һуңғы парсинг ысулдарын ҡулланыу өсөн кәрәк.
+    Процесс офлайн бара.
+    Һеҙҙең прогресс үҙгәрмәҫ, әгәр үҙгәрештәр ҙур булмаһа.
+    Яңыртыуҙы башҡарырға теләйһегеҙме?</string>
+    <!-- Хаталар -->
+    <string name="error_permission">Һеҙҙең ҡорамалығыҙҙа китаптарҙы эҙләү өсөн һаҡлауҙа рөхсәт кәрәк.</string>
+    <string name="error_no_description">Тасуирлама юҡ.</string>
+    <string name="error_something_went_wrong">Ҡайһы бер нәмә дөрөҫ булманы.</string>
+    <string name="error_something_went_wrong_with_file">Ҡайһы бер нәмә дөрөҫ булманы. Китап файлы боҙолмағанлығын тикшерегеҙ.</string>
+    <string name="error_wrong_file_format">Файл форматы дөрөҫ түгел.</string>
+    <string name="error_query">Хата: %1$s</string>
+    <string name="error_file_empty">Был файл буш йәки боҙолған.</string>
+    <string name="error_no_translator">Тәржемә программаһы табылманы.</string>
+    <string name="error_no_dictionary">Һүҙлек программаһы табылманы.</string>
+    <string name="error_no_browser">Браузер табылманы.</string>
+    <string name="error_no_share_app">Бүлешеү программаһы табылманы.</string>
+    <string name="error_no_text">Китаптың эстәлеге буш. Китаптың тексты буш түгеллеген тикшерегеҙ һәм уны яңыртығыҙ.</string>
+    <string name="error_check_internet">Ҡайһы бер нәмә дөрөҫ булманы.
+    Һуңыраҡ ҡабатлап ҡарағыҙ.</string>
+    <string name="error_could_not_reset_cover">Обложканы үҙгәртеп булманы.</string>
+    <string name="error_closed_source">Ябыҡ сығанаҡ коды.</string>
+    <!-- Буш хәбәрҙәр -->
+    <string name="search_field_empty">Эҙләү…</string>
+    <string name="browse_empty">Һеҙҙең йөкләүҙәрегеҙҙән китаптар менән китапхананы тултырығыҙ</string>
+    <string name="library_empty">Яратҡан китаптарығыҙҙы уҡығыҙ һәм уларҙы категориялар буйынса тәртипкә килтерегеҙ</string>
+    <string name="history_empty">Һуңғы уҡылған китап уҡыусы юлығыҙҙың яңы биттәрен асырға мөмкин</string>
+    <!-- Сорау юлдары -->
+    <string name="selected_items_count_query">%1$s һайланған</string>
+    <string name="file_path_query">Файл юлы: %1$s</string>
+    <string name="update_query">%1$s яңыртыу</string>
+    <string name="color_preset_query">%1$s пресеты</string>
+    <string name="color_preset_selected_query">«%1$s» һайланған</string>
+    <!-- Эшмәкәрлек текстары -->
+    <string name="cancel">Кире алыу</string>
+    <string name="grant">Биреү</string>
+    <string name="grant_permission">Рөхсәт биреү</string>
+    <string name="get_help">Миңә ярҙам кәрәк</string>
+    <string name="add">Өҫтәү</string>
+    <string name="add_book">Китап өҫтәү</string>
+    <string name="move">Күсереү</string>
+    <string name="delete">Юйыу</string>
+    <string name="start">Башлау</string>
+    <string name="continue_read">Дауам итеү</string>
+    <string name="never">Бер ҡасан да</string>
+    <string name="go_back">Кире ҡайтыу</string>
+    <string name="undo">Кире алыу</string>
+    <string name="copy">Күсереү</string>
+    <string name="translate">Тәржемә итеү</string>
+    <string name="dictionary">Һүҙлек</string>
+    <string name="retry">Ҡабатлау</string>
+    <string name="confirm">Раҫлау</string>
+    <string name="next">Киләһе</string>
+    <string name="yes_go_to_help">Эйе, ярҙамға күсеү</string>
+    <string name="no">Юҡ</string>
+    <string name="done">Эшләнде</string>
+    <string name="enable">Ҡуҙғатыу</string>
+    <string name="web_search">Интернетта эҙләү</string>
+    <string name="share">Бүлешеү</string>
+    <string name="proceed">Дауам итеү</string>
+    <!-- Китап -->
+    <string name="unknown_author">Билдәһеҙ</string>
+    <string name="read_more">Һеҙ күберәк уҡырға тейешһегеҙ!</string>
+    <string name="read_keep">Шулай тот!</string>
+    <string name="read_done">Бик яҡшы, һеҙ бөтә китапты уҡынығыҙ!</string>
+    <string name="reset_cover">Обложканы кире ҡайтарыу</string>
+    <string name="reset_cover_desc">Китаптың обложкаһын стандартҡа ҡайтарыу</string>
+    <string name="change_cover">Обложканы үҙгәртеү</string>
+    <string name="change_cover_desc">Фотонан яңы обложка һайлау</string>
+    <string name="delete_cover">Обложканы юйыу</string>
+    <string name="delete_cover_desc">Хәҙерге китап обложкаһын юйыу</string>
+    <string name="author">Автор</string>
+    <!-- Көйләүҙәр -->
+    <string name="reading_tab">Уҡыла</string>
+    <string name="already_read_tab">Уҡылған</string>
+    <string name="planning_tab">Планируется</string>
+    <string name="dropped_tab">Ташланған</string>
+    <string name="general_tab">Дөйөм</string>
+    <string name="color_tab">Төҫтәр</string>
+    <string name="filter_tab">Фильтр</string>
+    <string name="sort_tab">Тәртипкә килтереү</string>
+    <string name="reader_tab">Уҡыу</string>
+    <!-- Көйләүҙәр категориялары -->
+    <string name="general_settings">Дөйөм</string>
+    <string name="general_settings_desc">Программа теле</string>
+    <string name="appearance_settings">Күренеш</string>
+    <string name="appearance_settings_desc">Тема, төҫтәр</string>
+    <string name="reader_settings">Уҡыу</string>
+    <string name="reader_settings_desc">Шрифт, текст, тәржемә</string>
+    <string name="browse_settings">Ҡарау</string>
+    <string name="browse_settings_desc">Дөйөм, фильтр, тәртипкә килтереү</string>
+    <!-- Көйләүҙәр аҫкатегориялары -->
+    <string name="font_reader_settings">Шрифт</string>
+    <string name="text_reader_settings">Текст</string>
+    <string name="translator_reader_settings">Тәржемә</string>
+    <string name="padding_reader_settings">Аралаш</string>
+    <string name="misc_reader_settings">Башҡа</string>
+    <string name="reading_speed_reader_settings">Уҡыу тиҙлеге</string>
+    <string name="system_reader_settings">Система</string>
+    <string name="theme_appearance_settings">Тема көйләүҙәре</string>
+    <string name="colors_appearance_settings">Төҫтәр</string>
+    <string name="general_browse_settings">Дөйөм</string>
+    <string name="filter_browse_settings">Фильтр</string>
+    <string name="sort_browse_settings">Тәртипкә килтереү</string>
+    <!-- Көйләүҙәр көйләүҙәре -->
+    <!-- Дөйөм -->
+    <string name="language_option">Программа теле</string>
+    <string name="dark_theme_option">Ҡараңғы тема</string>
+    <string name="pure_dark_option">Һафә ҡараңғы (OLED)</string>
+    <string name="absolute_dark_option">Бөтөнләй ҡараңғы</string>
+    <string name="absolute_dark_option_desc">Фон төҫөн бөтөнләй ҡара итеү</string>
+    <string name="theme_contrast_option">Тема контрасты</string>
+    <string name="app_theme_option">Программа темаһы</string>
+    <string name="check_for_updates_option">Яңыртыуҙарҙы тикшереү</string>
+    <string name="check_for_updates_option_desc">Эшләгәндә яңы версияны тикшереү</string>
+    <string name="double_press_exit_option">Сығыу өсөн ике тапҡыр баҫыу</string>
+    <string name="double_press_exit_option_desc">Сығыу өсөн «Кире» төймәһен ике тапҡыр баҫығыҙ</string>
+    <!-- Уҡыу -->
+    <string name="font_family_option">Шрифт ғаиләһе</string>
+    <string name="font_style_option">Шрифт стиле</string>
+    <string name="font_size_option">Шрифт күләме</string>
+    <string name="line_height_option">Юл бейеклеге</string>
+    <string name="paragraph_height_option">Абзац бейеклеге</string>
+    <string name="paragraph_indentation_option">Абзац араһы</string>
+    <string name="color_preset_option">Төҫ схемаһы</string>
+    <string name="background_color_option">Фон төҫө</string>
+    <string name="font_color_option">Шрифт төҫө</string>
+    <string name="side_padding_option">Яҡ аралаш</string>
+    <string name="vertical_padding_option">Тура аралаш</string>
+    <string name="double_click_translation_option">Ике тапҡыр баҫыу менән тәржемә</string>
+    <string name="double_click_translation_option_desc">Абзацты ике тапҡыр баҫып тәржемә итеү</string>
+    <string name="fast_color_preset_change_option">Төҫ схемаһын тиҙ үҙгәртеү</string>
+    <string name="fast_color_preset_change_option_desc">Өҫкө панелдә уңға йәки һулға тартып төҫтәрҙе үҙгәртеү</string>
+    <string name="text_alignment_option">Текст туралауы</string>
+    <string name="letter_spacing_option">Хәрефтәр араһы</string>
+    <string name="cutout_padding_option">Һыҙыҡ араһы</string>
+    <string name="cutout_padding_option_desc">Һыҙыҡ араһын ҡулланыу</string>
+    <string name="fullscreen_option">Тулы экран режимы</string>
+    <string name="fullscreen_option_desc">Система панелдәрен йәшереү һәм аралашты юйыу</string>
+    <string name="keep_screen_on_option">Экранды һүндермәү</string>
+    <string name="hide_bars_on_fast_scroll_option">Тиз прокруткала панелдәрен йәшереү</string>
+    <string name="perception_expander_option">Ҡабул итеү киңәйтеүсе</string>
+    <string name="perception_expander_option_desc">Уҡыу тиҙлеген үҫтереү, үҙәккә фокустарыу</string>
+    <string name="perception_expander_padding_option">Ҡабул итеү киңәйтеүсе һыҙыҡ араһы</string>
+    <string name="perception_expander_thickness_option">Ҡабул итеү киңәйтеүсе һыҙыҡ ҡалынлығы</string>
+    <string name="check_for_text_update_option">Текст яңыртыуҙарҙы тикшереү</string>
+    <string name="check_for_text_update_option_desc">Текст яңыртыуҙарҙы автоматик тикшереү</string>
+    <string name="check_for_text_update_toast_option">«Текст актуаль» хәбәрен күрһәтеү</string>
+    <string name="screen_orientation_option">Экран ориентацияһы</string>
+    <string name="custom_screen_brightness_option">Экран яҡтылығын көйләү</string>
+    <string name="screen_brightness_option">Экран яҡтылығы</string>
+    <!-- Ҡарау -->
+    <string name="browse_files_structure_option">Файлдар структураһы</string>
+    <string name="browse_layout_option">Күренеш режимы</string>
+    <string name="browse_grid_size_option">Сетка күләме</string>
+    <string name="browse_pin_favorite_directories_option">Яратҡан директорияларҙы ҡаҙау</string>
+    <string name="browse_pin_favorite_directories_option_desc">Яратҡан директорияларҙы экран өҫкө өлөшөнә ҡаҙау</string>
+    <!-- Төҫ схемалары -->
+    <string name="red_color">Ҡыҙыл</string>
+    <string name="green_color">Йәшел</string>
+    <string name="blue_color">Зәңгәр</string>
+    <string name="color_preset_placeholder">Пресет исеме…</string>
+    <!-- Ҡараңғы тема ҡасиеттәре -->
+    <string name="dark_theme_off">Һүндерелгән</string>
+    <string name="dark_theme_on">Ҡуҙғатылған</string>
+    <string name="dark_theme_follow_system">Система</string>
+    <!-- Һафә ҡараңғы тема ҡасиеттәре -->
+    <string name="pure_dark_off">Һүндерелгән</string>
+    <string name="pure_dark_on">Ҡуҙғатылған</string>
+    <string name="pure_dark_power_saver">Энергия һаҡлау</string>
+    <!-- Тема контрасты ҡасиеттәре -->
+    <string name="theme_contrast_standard">Стандарт</string>
+    <string name="theme_contrast_medium">Урта</string>
+    <string name="theme_contrast_high">Юғары</string>
+    <!-- Шрифт стиле ҡасиеттәре -->
+    <string name="font_style_italic">Курсив</string>
+    <string name="font_style_normal">Ғәҙәттәге</string>
+    <!-- Файлдар структураһы ҡасиеттәре -->
+    <string name="files_structure_all">Бөтә файлдар</string>
+    <string name="files_structure_directory">Директориялар</string>
+    <!-- Күренеш режимы ҡасиеттәре -->
+    <string name="browse_layout_list">Исемлек</string>
+    <string name="browse_layout_grid">Сетка</string>
+    <!-- Сетка күләме -->
+    <string name="browse_grid_size_auto">Авто</string>
+    <string name="browse_grid_size_per_row">һәр юлға</string>
+    <!-- Тәртипкә килтереү ҡасиеттәре -->
+    <string name="browse_sort_order_name">Алфавит буйынса</string>
+    <string name="browse_sort_order_file_format">Файл форматы буйынса</string>
+    <string name="browse_sort_order_file_type">Файл төрө буйынса</string>
+    <string name="browse_sort_order_last_modified">Үҙгәртелгән ваҡыт буйынса</string>
+    <string name="browse_sort_order_file_size">Файл күләме буйынса</string>
+    <!-- Текст туралауы ҡасиеттәре -->
+    <string name="text_alignment_start">Башланғысҡа</string>
+    <string name="text_alignment_justify">Киңлеккә</string>
+    <string name="text_alignment_center">Үҙәккә</string>
+    <string name="text_alignment_end">Аҙаҡҡа</string>
+    <!-- Экран ориентацияһы ҡасиеттәре -->
+    <string name="screen_orientation_free">Ирекле</string>
+    <string name="screen_orientation_portrait">Портрет</string>
+    <string name="screen_orientation_landscape">Ландшафт</string>
+    <string name="screen_orientation_locked_portrait">Ҡаҙылған портрет</string>
+    <string name="screen_orientation_locked_landscape">Ҡаҙылған ландшафт</string>
+    <!-- Темалар -->
+    <string name="dynamic_theme">Меркурий</string>
+    <string name="blue_theme">Нептун</string>
+    <string name="green_theme">Ер</string>
+    <string name="red_theme">Марс</string>
+    <string name="gray_theme">Каллисто</string>
+    <string name="purple_theme">Юпитер</string>
+    <string name="pink_theme">Сатурн</string>
+    <string name="pink2_theme">Ганимед</string>
+    <string name="lavender_theme">Эрида</string>
+    <string name="marsh_theme">Плутон</string>
+    <string name="yellow_theme">Венера</string>
+    <string name="aqua_theme">Уран</string>
+    <!-- Toast хәбәрҙәре -->
+    <string name="press_again_toast">Сығыу өсөн «Кире» төймәһен тағы бер тапҡыр баҫығыҙ</string>
+    <string name="books_added">Барлыҡ һайланған китаптар уңышлы өҫтәлде.</string>
+    <string name="books_moved">Барлыҡ һайланған китаптар уңышлы күсерелде.</string>
+    <string name="books_deleted">Барлыҡ һайланған китаптар уңышлы юйылды.</string>
+    <string name="cover_image_changed">Обложка уңышлы үҙгәртелде.</string>
+    <string name="cover_image_deleted">Обложка уңышлы юйылды.</string>
+    <string name="book_deleted">Был китап уңышлы юйылды.</string>
+    <string name="book_moved">Был китап уңышлы күсерелде.</string>
+    <string name="copied">Күсерелде</string>
+    <string name="history_deleted">Тарих уңышлы юйылды.</string>
+    <string name="no_updates">Программаның һуңғы версияһы урынлаштырылған.</string>
+    <string name="cover_reset">Обложка уңышлы кире ҡайтарылды.</string>
+    <!-- Snackbar хәбәрҙәре -->
+    <string name="history_element_deleted">Тарих элементы уңышлы юйылды.</string>
+    <string name="file_not_found">Файл \"%1$s\" табылманы.</string>
+    <string name="book_updated">Китаптың тексты уңышлы яңыртылды.</string>
+    <string name="nothing_changed">Текст актуаль.</string>
+    <!-- DropDown ҡасиеттәре -->
+    <string name="move_this_book">Күсереү</string>
+    <string name="delete_this_book">Юйыу</string>
+    <string name="details_book">Тулыраҡ</string>
+    <!-- Китап тураһында мәғлүмәт -->
+    <string name="file_name">Файл исеме</string>
+    <string name="file_path">Файл юлы</string>
+    <string name="file_last_opened">Файл һуңғы асылған ваҡыт</string>
+    <string name="file_size">Файл күләме</string>
+    <string name="unknown">Билдәһеҙ</string>
+    <!-- Ҡарау -->
+    <string name="internal_storage">Эске һаҡлау</string>
+    <!-- Уҡыу -->
+    <string name="no_chapters">Бүлектәр юҡ</string>
+    <string name="chapters">Бүлектәр</string>
+    <!-- Программа тураһында -->
+    <string name="app_version_option">Программа версияһы</string>
+    <string name="app_version_option_desc_1">Уҡыу v%1$s</string>
+    <string name="app_version_option_desc_2">Яңыртыуҙарҙы тикшереү өсөн баҫығыҙ</string>
+    <string name="report_bug_option">Хата тураһында хәбәр итеү</string>
+    <string name="whats_new_option">Яңылыҡтар</string>
+    <string name="licenses_option">Асыҡ сығанаҡ лицензиялары</string>
+    <string name="credits_option">Рәхмәт</string>
+    <string name="help_translate_option">Тәржемәгә ярҙам итеү</string>
+    <string name="contributors_option">Ҡатнашусылар</string>
+    <!-- Рәхмәт -->
+    <string name="credits_design">Дизайн</string>
+    <string name="credits_icon">Иконкалар</string>
+    <string name="credits_updates">Яңыртыуҙарҙы идаралау</string>
+    <string name="credits_fonts">Шрифттар</string>
+    <string name="credits_translation">Тәржемә</string>
+    <string name="credits_contribution">Ҡатнашыу</string>
+    <string name="credits_ideas">Идейҙәр</string>
+    <!-- Ярҙам -->
+    <string name="help_clickable_note_1">Иғтибар итегеҙ,</string>
+    <string name="help_clickable_note_2">бындай һайланған текст</string>
+    <string name="help_clickable_note_3">баҫып була.
+    Шулай уҡ был хәбәрҙе иконканы баҫып йәшерергә мөмкин, һынап ҡарағыҙ!</string>
+    <string name="help_clickable_note_action">Мин баҫыламын!</string>
+    <string name="help_title_how_to_add_books">Китапханаға китаптарҙы ҡайҙан өҫтәргә?</string>
+    <string name="help_desc_how_to_add_books_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_add_books_2">Ҡарау</string>
+    <string name="help_desc_how_to_add_books_3">Әгәр һеҙ йөкләнгән китаптарҙы күрмәһәгеҙ, исемлекте төбәп яңыртып ҡарағыҙ.
+    Китаптарҙың файл форматы ҡулланыла торғанлығын <тикш></тикш>ерегеҙ.
+    Һуңынан китапты һайлау өсөн уға баҫығыҙ йәки урынлашҡан урынын күрһәтеү өсөн оҙаҡ баҫып тоҡоғыҙ.
+    Бөтә китаптарҙы һайлағандан һуң, өҫкө уң мөйөшләге тикшереү иконкаһына баҫығыҙ,
+    бөтә китаптар йөкләнгәнсе көтөгеҙ һәм «Өҫтәү» төймәһенә баҫығыҙ.
+    Хәҙер һеҙ өҫтәлгән бөтә китаптарҙы</string>
+    <string name="help_desc_how_to_add_books_4">Китапханала</string>
+    <string name="help_title_how_to_customize_app">Программаны нисек көйләргә?</string>
+    <string name="help_desc_how_to_customize_app_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_customize_app_2">Көйләүҙәр</string>
+    <string name="help_desc_how_to_customize_app_3">Был Китапхана, Тарих һәм Ҡарау экрандарынан эшләнә,
+    өҫкө уң мөйөшләге өс нөктәгә баҫып,
+    һуңынан төшөрмә менән «Көйләүҙәрҙе» һайлап.
+    Һуңынан һеҙ был программаның бөтә мөмкин көйләүҙәрен күрәсәкһегеҙ.
+    Улар менән эксперименттар яһауҙан ҡурҡмағыҙ!</string>
+    <string name="help_title_how_to_move_or_delete_books">Китаптарҙы нисек күсерергә йәки юйырға?</string>
+    <string name="help_desc_how_to_move_or_delete_books_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_move_or_delete_books_2">Китапхана</string>
+    <string name="help_desc_how_to_move_or_delete_books_3">Беренсе китаптың обложкаһын һайлау өсөн оҙаҡ баҫып тоҡоғыҙ,
+    һуңынан бөтә китаптарҙың обложкаларына баҫып һайлағыҙ.
+    Һеҙ бер нисә категорияла китаптарҙы һайлай алаһығыҙ.
+    Бөтә китаптарҙы һайлағандан һуң, уларҙы күсереү өсөн уҡ һыҙат иконкаһына,
+    йәки юйыу өсөн һелтәр иконкаһына баҫырға мөмкин.</string>
+    <string name="help_title_how_to_edit_book">Китапты нисек үҙгәртергә?</string>
+    <string name="help_desc_how_to_edit_book_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_edit_book_2">Китапхана</string>
+    <string name="help_desc_how_to_edit_book_3">һәм китаптың детальдарын күреү өсөн обложкаһына баҫығыҙ.
+    Хәҙер китаптың исемен, авторын йәки тасуирламаһын үҙгәртеү өсөн оҙаҡ баҫып тоҡоғыҙ,
+    йәки обложканы үҙгәртеү, кире ҡайтарыу йәки юйыу өсөн обложканы оҙаҡ баҫып тоҡоғыҙ.</string>
+    <string name="help_title_how_to_read_book">Китапты нисек уҡырға?</string>
+    <string name="help_desc_how_to_read_book_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_read_book_2">Китапхана</string>
+    <string name="help_desc_how_to_read_book_3">Китапты уҡый башлау өсөн уҡырға теләгән китаптың обложкаһының уң аҫ мөйөшөндәге төймәгә баҫығыҙ.
+    Шулай уҡ китаптың детальдарын асып, уҡый башлау өсөн уң аҫ мөйөшөндәге төймәгә баҫырға мөмкин.
+    Прогресс автоматик һаҡланыр һәм кире ҡайтарылыр.
+    Һеҙ экрандың тейәнгән урынына баҫып өҫкө һәм аҫҡы панелдәрен саҡыра алаһығыҙ.
+    Китап исеменә баҫып, уның детальдарына күсегеҙ.
+    Шестерня иконкаһына баҫып, Уҡыу көйләүҙәрен асығыҙ.
+    Аҫҡы панелдәге ползунокты ҡулланып, прогресты үҙгәртергә мөмкин.</string>
+    <string name="help_title_how_to_customize_reader">Уҡыуҙы нисек көйләргә?</string>
+    <string name="help_desc_how_to_customize_reader_1">Китапты уҡый башлағыҙ (ҡарағыҙ: Китапты нисек уҡырға?),
+    һуңынан экрандың тейәнгән урынына баҫып өҫкө һәм аҫҡы панелдәрен саҡырығыҙ.
+    Һуңынан өҫкө уң мөйөшөндәге шестерня иконкаһына баҫығыҙ.
+    Был Уҡыуҙың бөтә көйләүҙәрен асыр.
+    Икенсе юл — күсегеҙ</string>
+    <string name="help_desc_how_to_customize_reader_2">Көйләүҙәр</string>
+    <string name="help_desc_how_to_customize_reader_3">һәм «Уҡыу» категорияһын дөйөм көйләүҙәр өсөн,
+    йәки «Күренеш» категорияһын төҫтәрҙе көйләү өсөн һайлағыҙ.</string>
+    <string name="help_title_how_to_update_book">Китапты нисек яңыртырға?</string>
+    <string name="help_desc_how_to_update_book_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_update_book_2">Китапхана</string>
+    <string name="help_desc_how_to_update_book_3">һәм китаптың детальдарын күреү өсөн обложкаһына баҫығыҙ.
+    Экранды төбәп йәки өҫкө уң мөйөшөндәге яңыртыу иконкаһына баҫып китапты яңыртығыҙ.
+    Әгәр китап файлы үҙгәргән булһа, китапты яңыртыуҙы раҫларға йәки кире ҡайтарырға мөмкинһегеҙ.</string>
+    <string name="help_title_how_to_manage_history">Тарихты нисек идараларға?</string>
+    <string name="help_desc_how_to_manage_history_1">Күсегеҙ</string>
+    <string name="help_desc_how_to_manage_history_2">Тарих</string>
+    <string name="help_desc_how_to_manage_history_3">Тарих элементының уң яғындағы юйыу төймәһенә баҫып, уны юйорға мөмкин.
+    Тарих Китапханалағы китаптарҙың тәртибенә тәьҫир итә:
+    тарих элементын юйыу китаптарҙың тәртибен үҙгәртә.
+    Һуңғы асылған китап һәр саҡ Китапханала һәм Тарихта беренсе булыр.</string>
+    <string name="help_title_how_to_use_tooltip">Күрһәтмәләрҙе нисек ҡулланырға?</string>
+    <string name="help_desc_how_to_use_tooltip_1">Күпселек иконкаларҙа күрһәтмәләр бар, улар күмек итә, әгәр һеҙ төймәнең нәмә эшләүен белмәһәгеҙ.
+    Күрһәтмәне күрһәтеү өсөн иконканы оҙаҡ баҫып тоҡоғыҙ.</string>
+    <string name="help_title_how_to_use_double_click_translation">Ике тапҡыр баҫыу менән тәржемәне нисек ҡулланырға?</string>
+    <string name="help_desc_how_to_use_double_click_translation_1">Башта Уҡыу көйләүҙәрен асығыҙ (ҡарағыҙ: Уҡыуҙы нисек көйләргә?),
+    һуңынан тиешле көйләүҙе ҡуҙғатығыҙ. Һуңынан
+    китапты уҡый башлағыҙ (ҡарағыҙ: Китапты нисек уҡырға?).
+    Хәҙер, әгәр һеҙ теләгән абзацҡа ике тапҡыр баҫһағыҙ,
+    тышҡы тәржемә программаһы абзац тексты менән асылыр.</string>
+    <string name="help_title_how_to_create_color_presets">Төҫ схемаларын нисек яһарға һәм үҙгәртергә?</string>
+    <string name="help_desc_how_to_create_color_presets_1">Күсегеҙ Күренеш көйләүҙәренә (ҡарағыҙ: Уҡыуҙы нисек көйләргә?).
+    Һеҙ «Төҫ схемаһы» бүлегендәге бөтә көйләүҙәрҙе үҙгәртә алаһығыҙ.
+    Яңы төҫ схемаһы яһау өсөн «Өҫтәү» иконкаһына баҫығыҙ.
+    Төҫ схемаһын үҙгәртеүҙең бер нисә ысулы бар:
+    текст кырыны баҫып, төҫ схемаһының исемен үҙгәртә алаһығыҙ,
+    ползуноктарҙы хәрәкәтләтеп, төҫтәрҙе үҙгәртә алаһығыҙ,
+    «Ҡатыштырыу» иконкаһына баҫып, бөтә төҫтәрҙе ҡатыштыра алаһығыҙ.
+    Әгәр төҫ схемаһын юйырға теләһәгеҙ, «Юйыу» иконкаһына баҫығыҙ.</string>
+    <string name="help_title_how_to_use_color_presets">Төҫ схемаларын нисек ҡулланырға?</string>
+    <string name="help_desc_how_to_use_color_presets_1">Күсегеҙ Күренеш көйләүҙәренә (ҡарағыҙ: Уҡыуҙы нисек көйләргә?).
+    Һеҙ «Төҫ схемаһы» көйләүендә теләгән төҫ схемаһын һайлай алаһығыҙ.
+    Төҫ схемаһын һайлау өсөн уға баҫығыҙ — был Уҡыуҙың төҫтәрен шунда ук үҙгәртәсәк.
+    Төҫ схемаларын тәртипкә килтереү өсөн теләгән схеманы һайлап, «Ҡалам» иконкаһын оҙаҡ баҫып тоҡоғыҙ,
+    һуңынан уны теләгән урынға күсерегеҙ.
+    Һеҙ төҫ схемалары араһында тиҙ үҙгәртеүҙе ҡуҙғатып, Уҡыуҙа өҫкө панелдә уңға йәки һулға тартып тиҙ үҙгәртә алаһығыҙ.</string>
+    <string name="help_title_how_to_use_perception_expander">Ҡабул итеү киңәйтеүсеһе нәмә һәм уны нисек ҡулланырға?</string>
+    <string name="help_title_how_to_use_perception_expander_1">Ҡабул итеү киңәйтеүсеһе һеҙҙең уҡыу тиҙлегеҙҙе арттырырға ярҙам итә.
+    Башта уны Уҡыу көйләүҙәрендә ҡуҙғатығыҙ (ҡарағыҙ: Уҡыуҙы нисек көйләргә?).
+    Ҡуҙғатылғандан һуң Уҡыуҙа тексттың ике яғында ике вертикаль һыҙыҡ күренәсәк.
+    Уҡыу тиҙлеген оптимизациялау өсөн үҙәк тирәһендәге аралашты ҡыҫҡартығыҙ.
+    Ҡулланыу өсөн үҙәккә фокустарығыҙ,
+    һәр юлдан һуң күҙҙе яҡтарға күсереүҙән баш тартығыҙ.
+    Уҡыу ваҡытында күҙҙе үҙәктә тоторға тырышығыҙ, уны яҡтарға күсереүҙән баш тартығыҙ.</string>
+    <!-- Башлау -->
+    <string name="start_welcome">Уҡыуға RafBook рәхим итегеҙ!</string>
+    <string name="start_welcome_desc">Һүҙҙәрҙең донъяһына, улар һеҙҙе ҡыҙҙыра, өйрәтә һәм ғәжәпле сәйәхәткә алып бара!
+    Программаны көйләүҙе башлайыҡ!</string>
+    <string name="start_language_preferences">Тел көйләүҙәре</string>
+    <string name="start_theme_preferences">Тема көйләүҙәре</string>
+    <string name="start_permissions_preferences">Рөхсәттәр</string>
+    <string name="start_permissions_granted">Рөхсәт бирелгән</string>
+    <string name="start_permissions_storage">Һаҡлауҙа рөхсәт</string>
+    <string name="start_permissions_storage_desc">Ҡорамалыҡта китаптарҙы эҙләү өсөн кәрәк</string>
+    <string name="start_permissions_notifications">Хәбәрҙәрҙә рөхсәт</string>
+    <string name="start_permissions_notifications_desc">Программаның яңы версияһын тикшереү өсөн кәрәк</string>
+    <string name="start_fork_info_desc">Был программа Acclorite/book-story проекты форкына нигеҙләнгән. Оригинал проект GPL-3.0 лицензияһы аҫтында ҡулланыла.</string>
+    <string name="start_done">Бөтәһе әҙер!</string>
+    <string name="start_done_desc">Һеҙ программаның төп көйләүҙәрен уңышлы тамамланығыҙ.
+    Программаны нисек ҡулланыуҙы беләһегеҙ, Ярҙам экранын уҡып ҡарарға теләйһегеҙме?</string>
+    <!-- Тарих -->
+    <string name="today">Бөгөн</string>
+    <string name="yesterday">Кискә</string>
+    <!-- Эстәлек тасуирламалары -->
+    <string name="refresh_book_content_desc">Китапты яңыртыу</string>
+    <string name="continue_reading_content_desc">Уҡыуҙы дауам итеү</string>
+    <string name="go_back_content_desc">Кире ҡайтыу</string>
+    <string name="cover_image_content_desc">Обложка</string>
+    <string name="open_reader_settings_content_desc">Уҡыу көйләүҙәрен асыу</string>
+    <string name="file_icon_content_desc">Файл</string>
+    <string name="directory_icon_content_desc">Папка</string>
+    <string name="favorite_directory_content_desc">Яратҡан папка</string>
+    <string name="sort_order_content_desc">Тәртипкә килтереү</string>
+    <string name="path_arrow_icon_content_desc">Юл күрһәткесе</string>
+    <string name="checkbox_content_desc">Тикшереү</string>
+    <string name="cover_image_not_found_content_desc">Обложка табылманы</string>
+    <string name="apply_changes_content_desc">Үҙгәрештәрҙе ҡулланыу</string>
+    <string name="error_content_desc">Хата</string>
+    <string name="search_content_desc">Эҙләү</string>
+    <string name="clear_selected_items_content_desc">Һайланған элементтарҙы таҙартыу</string>
+    <string name="add_files_content_desc">Файлдар өҫтәү</string>
+    <string name="select_all_files_content_desc">Бөтә файлдарҙы һайлау</string>
+    <string name="exit_search_content_desc">Эҙләүҙән сығыу</string>
+    <string name="delete_whole_history_content_desc">Бөтә тарихты юйыу</string>
+    <string name="move_books_content_desc">Һайланған китаптарҙы күсереү</string>
+    <string name="delete_books_content_desc">Һайланған китаптарҙы юйыу</string>
+    <string name="revert_content_desc">Үҙгәрештәрҙе кире ҡайтарыу</string>
+    <string name="selected_content_desc">Һайланған</string>
+    <string name="app_icon_content_desc">Программа иконкаһы</string>
+    <string name="note_content_desc">Хәбәр</string>
+    <string name="delete_history_element_content_desc">Тарих элементын юйыу</string>
+    <string name="library_content_desc">Һеҙҙең китапханағыҙ</string>
+    <string name="history_content_desc">Уҡыу тарихы</string>
+    <string name="browse_content_desc">Китаптар өҫтәү</string>
+    <string name="arrow_content_desc">Уҡ</string>
+    <string name="required_content_desc">Мотлаҡ</string>
+    <string name="reset_start_content_desc">Башланғыс күрһәтмәне кире ҡайтарыу</string>
+    <string name="exit_editing_content_desc">Үҙгәртеү режимынан сығыу</string>
+    <string name="open_in_web_content_desc">Браузерҙа асыу</string>
+    <string name="delete_color_preset_content_desc">Төҫ схемаһын юйыу</string>
+    <string name="create_color_preset_content_desc">Яңы төҫ схемаһы яһау</string>
+    <string name="shuffle_color_preset_content_desc">Төҫтәрҙе ҡатыштырыу</string>
+    <string name="x_content_desc" translatable="false">X</string>
+    <string name="reddit_content_desc" translatable="false">Reddit</string>
+    <string name="patreon_content_desc" translatable="false">Patreon</string>
+    <string name="tryzub_content_desc">Тризуб</string>
+    <string name="github_profile_content_desc">GitHub профиле</string>
+    <string name="drag_content_desc">Күсереү</string>
+    <string name="filter_content_desc">Фильтр</string>
+    <string name="checkpoint_back_content_desc">Алдағы нөктәгә кире ҡайтыу</string>
+    <string name="checkpoint_forward_content_desc">Киләһе нөктәгә күсеү</string>
+    <string name="chapters_content_desc">Бүлектәр</string>
+    <string name="update_text_content_desc">Текстты яңыртыу</string>
+    <string name="more_content_desc">Тағы</string>
+    <string name="shareapp">Программа менән бүлешеү</string>
+    <string name="tg">Телеграм</string>
+    <string name="rateapp">Программаны баһалау</string>
+    <string name="otherapps">Башҡа программалар</string>
+    <string name="vk">ВК</string>
+    <string name="donate">Иғәнә</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">Төҙөүсегә ярҙам итеү</string>
+</resources>

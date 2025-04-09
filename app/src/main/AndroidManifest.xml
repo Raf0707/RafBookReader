@@ -20,8 +20,8 @@
     <application
         android:name=".Application"
         android:allowBackup="false"
-        android:icon="@mipmap/chitalka"
-        android:roundIcon="@mipmap/chitalka_round"
+        android:icon="@mipmap/raf_book_1"
+        android:roundIcon="@mipmap/raf_book_1_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Start.Splash"

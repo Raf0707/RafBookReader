@@ -1,13 +1,13 @@
 <resources>
     <!-- Basic Strings -->
     <string name="app_version" translatable="false">1.0.0</string>
-    <string name="app_name" translatable="false">Читалка</string>
+    <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">Domyślny</string>
     <string name="random_string">Losowy</string>
 
     <!-- Notifications -->
     <string name="updates_notification_channel">Nowe aktualizacje</string>
-    <string name="updates_notification_title">Nowa aktualizacja Читалка!</string>
+    <string name="updates_notification_title">Nowa aktualizacja RafBook!</string>
     <string name="updates_notification_desc">
         Aktualizacja %1$s właśnie wydana!
         Kliknij, aby przejść do strony wydania.
@@ -387,7 +387,7 @@
 
     <!-- About -->
     <string name="app_version_option">Wersja aplikacji</string>
-    <string name="app_version_option_desc_1">Читалка v%1$s</string>
+    <string name="app_version_option_desc_1">RafBook v%1$s</string>
     <string name="app_version_option_desc_2">Kliknij, aby sprawdzić aktualizacje</string>
     <string name="report_bug_option">Zgłoś błąd</string>
     <string name="whats_new_option">Co nowego</string>
@@ -567,7 +567,7 @@
 </string>
 
     <!-- Start -->
-    <string name="start_welcome">Witamy w Читалка!</string>
+    <string name="start_welcome">Witamy w RafBook!</string>
     <string name="start_welcome_desc">
      Do świata, w którym słowa czarują,
     uczą i prowadzą na niesamowite przygody!
@@ -644,4 +644,16 @@
     <string name="chapters_content_desc">Rozdziały</string>
     <string name="update_text_content_desc">Zaktualizuj tekst</string>
     <string name="more_content_desc">Więcej</string>
+    <string name="shareapp">Udostępnij aplikację</string>
+    <string name="tg">telegram</string>
+    <string name="rateapp">oceń aplikację</string>
+    <string name="otherapps">inne zastosowania</string>
+    <string name="vk">VK</string>
+    <string name="donate">podarować</string>
+    <string name="qr_code">QR</string>
+    <string name="source_code">Source code</string>
+    <string name="email">e-mail</string>
+    <string name="byteflipper">byteflipper.com</string>
+    <string name="portfolio">My Github Projects</string>
+    <string name="support_development_option">Wspieraj rozwój</string>
 </resources>

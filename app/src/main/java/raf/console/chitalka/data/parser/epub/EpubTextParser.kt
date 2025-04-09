@@ -1,26 +1,31 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
 package raf.console.chitalka.data.parser.epub
 
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.jsoup.Jsoup
-import raf.console.chitalka.R
 import raf.console.chitalka.data.parser.DocumentParser
 import raf.console.chitalka.data.parser.TextParser
-import raf.console.chitalka.domain.model.Chapter
-import raf.console.chitalka.domain.model.ChapterWithText
-import raf.console.chitalka.domain.util.Resource
-import raf.console.chitalka.domain.util.UIText
+import raf.console.chitalka.domain.file.CachedFile
+import raf.console.chitalka.domain.reader.ReaderText
+import raf.console.chitalka.presentation.core.constants.provideImageExtensions
 import raf.console.chitalka.presentation.core.util.addAll
-import raf.console.chitalka.presentation.core.util.clearMarkdown
+import raf.console.chitalka.presentation.core.util.containsVisibleText
 import java.io.File
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.zip.ZipEntry
@@ -29,24 +34,26 @@ import javax.inject.Inject
 import kotlin.collections.set
 
 private const val EPUB_TAG = "EPUB Parser"
-private typealias Title = String
+private typealias Source = String
 
-private val dispatcher = Dispatchers.IO.limitedParallelism(2)
+private val dispatcher = Dispatchers.IO.limitedParallelism(3)
 
 class EpubTextParser @Inject constructor(
     private val documentParser: DocumentParser
 ) : TextParser {
 
-    override suspend fun parse(file: File): Resource<List<ChapterWithText>> {
-        Log.i(EPUB_TAG, "Started EPUB parsing: ${file.name}.")
+    override suspend fun parse(cachedFile: CachedFile): List<ReaderText> {
+        Log.i(EPUB_TAG, "Started EPUB parsing: ${cachedFile.name}.")
 
         return try {
-            val chapters = mutableListOf<ChapterWithText>()
-
             yield()
+            var readerText = listOf<ReaderText>()
+
+            val rawFile = cachedFile.rawFile
+            if (rawFile == null || !rawFile.exists() || !rawFile.canRead()) return emptyList()
 
             withContext(Dispatchers.IO) {
-                ZipFile(file).use { zip ->
+                ZipFile(rawFile).use { zip ->
                     val tocEntry = zip.entries().toList().find { entry ->
                         entry.name.endsWith(".ncx", ignoreCase = true)
                     }
@@ -55,6 +62,11 @@ class EpubTextParser @Inject constructor(
                     }
 
                     val chapterEntries = zip.getChapterEntries(opfEntry)
+                    val imageEntries = zip.entries().toList().filter {
+                        provideImageExtensions().any { format ->
+                            it.name.endsWith(format, ignoreCase = true)
+                        }
+                    }
                     val chapterTitleEntries = zip.getChapterTitleMapFromToc(tocEntry)
 
                     Log.i(EPUB_TAG, "TOC Entry: ${tocEntry?.name ?: "no toc.ncx"}")
@@ -62,35 +74,29 @@ class EpubTextParser @Inject constructor(
                     Log.i(EPUB_TAG, "Chapter entries, size: ${chapterEntries.size}")
                     Log.i(EPUB_TAG, "Title entries, size: ${chapterTitleEntries?.size}")
 
-                    zip.parseEpub(
+                    readerText = zip.parseEpub(
                         chapterEntries = chapterEntries,
+                        imageEntries = imageEntries,
                         chapterTitleEntries = chapterTitleEntries
-                    ).let {
-                        if (it == null || it.isEmpty()) {
-                            Log.e(EPUB_TAG, "Could not parse EPUB (null or empty).")
-                            return@withContext
-                        }
-                        chapters.addAll(it)
-                    }
+                    )
                 }
             }
 
             yield()
 
-            if (chapters.isEmpty()) {
-                return Resource.Error(UIText.StringResource(R.string.error_file_empty))
+            if (
+                readerText.filterIsInstance<ReaderText.Text>().isEmpty() ||
+                readerText.filterIsInstance<ReaderText.Chapter>().isEmpty()
+            ) {
+                Log.e(EPUB_TAG, "Could not extract text from EPUB.")
+                return emptyList()
             }
 
             Log.i(EPUB_TAG, "Successfully finished EPUB parsing.")
-            Resource.Success(chapters)
+            readerText
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Error(
-                UIText.StringResource(
-                    R.string.error_query,
-                    e.message?.take(40)?.trim() ?: ""
-                )
-            )
+            emptyList()
         }
     }
 
@@ -103,25 +109,26 @@ class EpubTextParser @Inject constructor(
      *
      * @return Null if could not parse.
      */
-    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun ZipFile.parseEpub(
         chapterEntries: List<ZipEntry>,
-        chapterTitleEntries: Map<Title, List<String>>?
-    ): List<ChapterWithText>? {
+        imageEntries: List<ZipEntry>,
+        chapterTitleEntries: Map<Source, ReaderText.Chapter>?
+    ): List<ReaderText> {
 
-        val chapters = mutableListOf<ChapterWithText>()
-        coroutineScope {
-            val unformattedChapters = ConcurrentLinkedQueue<ChapterWithText>()
+        val readerText = mutableListOf<ReaderText>()
+        withContext(Dispatchers.IO) {
+            val unformattedText = ConcurrentLinkedQueue<Pair<Int, List<ReaderText>>>()
 
             // Asynchronously getting all chapters with text
             val jobs = chapterEntries.mapIndexed { index, entry ->
                 async(dispatcher) {
                     yield()
 
-                    unformattedChapters.parseZipEntry(
+                    unformattedText.parseZipEntry(
                         zip = this@parseEpub,
                         index = index,
                         entry = entry,
+                        imageEntries = imageEntries,
                         chapterTitleMap = chapterTitleEntries
                     )
 
@@ -131,27 +138,15 @@ class EpubTextParser @Inject constructor(
             jobs.awaitAll()
 
             // Sorting chapters in correct order
-            chapters.addAll {
-                var textIndex = -1
-                unformattedChapters.toList()
-                    .sortedBy { it.chapter.index }
-                    .mapIndexed { index, item ->
-                        item.copy(
-                            chapter = item.chapter.copy(
-                                index = index,
-                                startIndex = textIndex + 1,
-                                endIndex = textIndex + item.text.size
-                            )
-                        ).also { textIndex += item.text.size }
-                    }
+            readerText.addAll {
+                unformattedText.toList()
+                    .sortedBy { (index, _) -> index }
+                    .map { it.second }
+                    .flatten()
             }
         }
 
-        if (chapters.isEmpty()) {
-            return null
-        }
-
-        return chapters
+        return readerText
     }
 
     /**
@@ -163,54 +158,59 @@ class EpubTextParser @Inject constructor(
      * @param entry [ZipEntry].
      * @param chapterTitleMap Titles from [getChapterTitleMapFromToc].
      */
-    private suspend fun ConcurrentLinkedQueue<ChapterWithText>.parseZipEntry(
+    private suspend fun ConcurrentLinkedQueue<Pair<Int, List<ReaderText>>>.parseZipEntry(
         zip: ZipFile,
         index: Int,
         entry: ZipEntry,
-        chapterTitleMap: Map<Title, List<String>>?
+        imageEntries: List<ZipEntry>,
+        chapterTitleMap: Map<Source, ReaderText.Chapter>?
     ) {
         // Getting all text
-        val content = zip.getInputStream(entry).bufferedReader().use { it.readText() }
-        var chapter = documentParser.run {
-            Jsoup.parse(content).parseDocument()
-        }
+        val content = withContext(Dispatchers.IO) {
+            zip.getInputStream(entry)
+        }.bufferedReader().use { it.readText() }
+        var readerText = documentParser.parseDocument(
+            document = Jsoup.parse(content),
+            zipFile = zip,
+            imageEntries = imageEntries,
+            includeChapter = false
+        ).toMutableList()
 
-        if (chapter.isEmpty()) {
-            Log.w(EPUB_TAG, "Chapter ${entry.name} is empty.")
-            return
-        }
-
-        // Getting title and removing first line (if matches title)
-        val chapterTitle = getChapterTitleFromToc(
+        // Adding chapter title from TOC if found
+        getChapterTitleFromToc(
             chapterSource = entry.name,
             chapterTitleMap = chapterTitleMap
-        ).run {
-            if (this != null) {
-                return@run this
+        ).apply {
+            val chapter = this ?: run {
+                val firstVisibleText = readerText.firstOrNull { line ->
+                    line is ReaderText.Text && line.line.text.containsVisibleText()
+                } as? ReaderText.Text ?: return
+
+                return@run ReaderText.Chapter(
+                    title = firstVisibleText.line.text,
+                    nested = false
+                )
             }
-            chapter.first().clearMarkdown()
-        }.also { title ->
-            chapter = chapter.dropWhile { line ->
-                line.clearMarkdown().lowercase() == title.lowercase()
-            }
+
+            readerText = readerText.dropWhile { line ->
+                (line is ReaderText.Text && line.line.text.lowercase() == chapter.title.lowercase())
+            }.toMutableList()
+
+            readerText.add(
+                0,
+                chapter
+            )
         }
 
-        if (chapter.isEmpty()) {
-            Log.w(EPUB_TAG, "Chapter ${entry.name} is empty.")
+        if (
+            readerText.filterIsInstance<ReaderText.Text>().isEmpty() ||
+            readerText.filterIsInstance<ReaderText.Chapter>().isEmpty()
+        ) {
+            Log.w(EPUB_TAG, "Could not extract text from [${entry.name}].")
             return
         }
 
-        add(
-            ChapterWithText(
-                Chapter(
-                    index = index,
-                    title = chapterTitle,
-                    startIndex = 0,
-                    endIndex = 0
-                ),
-                text = chapter
-            )
-        )
+        add(index to readerText)
     }
 
     /**
@@ -220,7 +220,7 @@ class EpubTextParser @Inject constructor(
      */
     private suspend fun ZipFile.getChapterTitleMapFromToc(
         tocEntry: ZipEntry?
-    ): Map<Title, List<String>>? {
+    ): Map<Source, ReaderText.Chapter>? {
         val tocContent = tocEntry?.let {
             withContext(Dispatchers.IO) {
                 getInputStream(it)
@@ -229,18 +229,43 @@ class EpubTextParser @Inject constructor(
         val tocDocument = tocContent?.let { Jsoup.parse(it) }
 
         if (tocDocument == null) return null
-        var titleMap = mutableMapOf<Title, List<String>>()
+        val titleMap = mutableMapOf<Source, ReaderText.Chapter>()
 
         tocDocument.select("navPoint").forEach { navPoint ->
-            val title = navPoint.selectFirst("navLabel > text")?.text()?.trim()
-                ?: return@forEach
-            val source = navPoint.selectFirst("content")?.attr("src")?.trim()
-                .let {
-                    if (it == null) return@forEach
-                    Uri.parse(it).path ?: it
-                }.substringAfterLast("/")
+            val title = navPoint.selectFirst("navLabel > text")?.text()
+                .let { title ->
+                    if (title.isNullOrBlank()) return@forEach
+                    title.trim()
+                }
 
-            titleMap[source] = (titleMap[source] ?: emptyList()) + title
+            val source = navPoint.selectFirst("content")?.attr("src")?.trim()
+                .let { source ->
+                    if (source.isNullOrBlank()) return@forEach
+                    source.toUri().path ?: source
+                }.substringAfterLast(File.separator)
+
+            val parent = navPoint.parent()
+                .let { parent ->
+                    if (parent == null) return@let null
+                    if (!parent.tagName().equals("navPoint", ignoreCase = true)) return@let null
+
+                    val parentSource = parent.selectFirst("content")?.attr("src")?.trim()
+                        .let { parentSource ->
+                            if (parentSource.isNullOrBlank()) return@forEach
+                            parentSource.toUri().path ?: parentSource
+                        }.substringAfterLast(File.separator)
+                    if (parentSource == source) return@let null
+                    return@let parentSource
+                }
+
+            val chapter = ReaderText.Chapter(
+                title = titleMap[source]?.title.run {
+                    if (this == null) return@run title
+                    return@run "$this / $title"
+                },
+                nested = titleMap[source]?.nested ?: (parent != null)
+            )
+            titleMap[source] = chapter
         }
 
         return titleMap
@@ -253,13 +278,12 @@ class EpubTextParser @Inject constructor(
      */
     private fun getChapterTitleFromToc(
         chapterSource: String,
-        chapterTitleMap: Map<String, List<String>>?
-    ): String? {
+        chapterTitleMap: Map<Source, ReaderText.Chapter>?
+    ): ReaderText.Chapter? {
         if (chapterTitleMap.isNullOrEmpty()) return null
-        return chapterTitleMap
-            .getOrElse(chapterSource.substringAfterLast("/")) { null }
-            ?.joinToString(separator = " / ")
-            ?.ifBlank { null }
+        return chapterTitleMap.getOrElse(chapterSource.substringAfterLast(File.separator)) {
+            null
+        }
     }
 
     /**
@@ -272,12 +296,9 @@ class EpubTextParser @Inject constructor(
      * @return List of chapter entries in correct order (do not reorder).
      */
     private fun ZipFile.getChapterEntries(opfEntry: ZipEntry?): List<ZipEntry> {
-        opfEntry.let { opfEntry ->
-            if (opfEntry == null) {
-                return@let
-            }
+        opfEntry?.let {
 
-            val opfContent = getInputStream(opfEntry).bufferedReader().use {
+        val opfContent = getInputStream(opfEntry).bufferedReader().use {
                 it.readText()
             }
             val document = Jsoup.parse(opfContent)
@@ -289,11 +310,13 @@ class EpubTextParser @Inject constructor(
 
             document.select("spine > itemref").mapNotNull { itemRef ->
                 val spineId = itemRef.attr("idref")
-                val chapterSource = manifestItems[spineId]?.substringAfterLast('/')?.lowercase()
+                val chapterSource = manifestItems[spineId]
+                    ?.substringAfterLast(File.separator)
+                    ?.lowercase()
                     ?: return@mapNotNull null
 
                 zipEntries.find { entry ->
-                    entry.name.substringAfterLast('/').lowercase() == chapterSource
+                    entry.name.substringAfterLast(File.separator).lowercase() == chapterSource
                 }
             }.also { entries ->
                 if (entries.isEmpty()) return@let

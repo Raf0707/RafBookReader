@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.local.room
 
 import androidx.room.Dao
@@ -9,7 +16,6 @@ import androidx.room.Update
 import androidx.room.Upsert
 import raf.console.chitalka.data.local.dto.BookEntity
 import raf.console.chitalka.data.local.dto.ColorPresetEntity
-import raf.console.chitalka.data.local.dto.FavoriteDirectoryEntity
 import raf.console.chitalka.data.local.dto.HistoryEntity
 
 /**
@@ -20,8 +26,8 @@ interface BookDao {
 
     /* ------ BookEntity ------------------------ */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBooks(
-        books: List<BookEntity>
+    suspend fun insertBook(
+        book: BookEntity
     )
 
     @Query(
@@ -87,17 +93,5 @@ interface BookDao {
 
     @Query("DELETE FROM colorpresetentity")
     suspend fun deleteColorPresets()
-    /* - - - - - - - - - - - - - - - - - - - - - - */
-
-
-    /* ------ FavoriteDirectoryEntity ----------- */
-    @Upsert
-    suspend fun insertFavoriteDirectory(favoriteDirectoryEntity: FavoriteDirectoryEntity)
-
-    @Query("SELECT EXISTS(SELECT 1 FROM favoritedirectoryentity WHERE path = :path LIMIT 1)")
-    suspend fun favoriteDirectoryExits(path: String): Boolean
-
-    @Delete
-    suspend fun deleteFavoriteDirectory(favoriteDirectoryEntity: FavoriteDirectoryEntity)
     /* - - - - - - - - - - - - - - - - - - - - - - */
 }

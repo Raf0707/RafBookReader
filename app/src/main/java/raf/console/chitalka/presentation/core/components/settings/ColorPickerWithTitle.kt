@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.settings
 
 import androidx.compose.foundation.layout.Arrangement
@@ -31,19 +38,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import raf.console.chitalka.R
 import raf.console.chitalka.presentation.core.components.common.IconButton
-import raf.console.chitalka.presentation.screens.settings.components.SettingsCategoryTitle
+import raf.console.chitalka.presentation.settings.components.SettingsSubcategoryTitle
 
-/**
- * Color picker with title.
- *
- * @param modifier Modifier.
- * @param value Target [Color].
- * @param presetId Current Color Preset id(to trigger initial value change).
- * @param title Title.
- * @param horizontalPadding Horizontal item padding.
- * @param verticalPadding Vertical item padding.
- * @param onValueChange Callback when target color changes.
- */
 @OptIn(FlowPreview::class)
 @Composable
 fun ColorPickerWithTitle(
@@ -71,7 +67,7 @@ fun ColorPickerWithTitle(
             .fillMaxWidth()
             .padding(vertical = verticalPadding, horizontal = horizontalPadding)
     ) {
-        SettingsCategoryTitle(
+        SettingsSubcategoryTitle(
             title = title,
             padding = 0.dp
         )

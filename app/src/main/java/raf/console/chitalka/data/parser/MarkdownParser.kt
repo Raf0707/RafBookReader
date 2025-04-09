@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.parser
 
 import androidx.compose.ui.text.AnnotatedString
@@ -68,6 +75,7 @@ class MarkdownParser @Inject constructor(
                     )
                 ) {
                     parseChildren(node)
+                    append(" (${node.destination})")
                 }
             }
 

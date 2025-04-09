@@ -1,3 +1,10 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.presentation.core.components.navigation_rail
 
 import androidx.compose.animation.Crossfade
@@ -5,28 +12,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import raf.console.chitalka.domain.model.NavigationItem
+import raf.console.chitalka.domain.navigator.NavigatorItem
+import raf.console.chitalka.presentation.core.components.common.StyledText
 import raf.console.chitalka.presentation.core.components.common.Tooltip
 
-/**
- * Navigation Rail item.
- *
- * @param modifier Modifier.
- * @param item [NavigationItem].
- * @param isSelected Whether this screen is currently selected.
- * @param onClick OnClick callback.
- */
 @Composable
 fun NavigationRailItem(
     modifier: Modifier = Modifier,
-    item: NavigationItem,
+    item: NavigatorItem,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -36,10 +34,9 @@ fun NavigationRailItem(
                 text = stringResource(id = item.tooltip),
                 padding = 48.dp
             ) {
-                Text(
+                StyledText(
                     text = stringResource(id = item.title),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 1
                 )
             }
         },

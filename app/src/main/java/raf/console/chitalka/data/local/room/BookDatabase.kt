@@ -1,5 +1,13 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.local.room
 
+import android.app.Application
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
@@ -10,17 +18,16 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import raf.console.chitalka.data.local.dto.BookEntity
 import raf.console.chitalka.data.local.dto.ColorPresetEntity
-import raf.console.chitalka.data.local.dto.FavoriteDirectoryEntity
 import raf.console.chitalka.data.local.dto.HistoryEntity
+import java.io.File
 
 @Database(
     entities = [
         BookEntity::class,
         HistoryEntity::class,
         ColorPresetEntity::class,
-        FavoriteDirectoryEntity::class,
     ],
-    version = 7,
+    version = 9,
     autoMigrations = [
         AutoMigration(1, 2),
         AutoMigration(2, 3),
@@ -28,6 +35,8 @@ import raf.console.chitalka.data.local.dto.HistoryEntity
         AutoMigration(4, 5),
         AutoMigration(5, 6),
         AutoMigration(6, 7),
+        AutoMigration(7, 8, spec = DatabaseHelper.MIGRATION_7_8::class),
+        AutoMigration(8, 9, spec = DatabaseHelper.MIGRATION_8_9::class),
     ],
     exportSchema = true
 )
@@ -83,4 +92,27 @@ object DatabaseHelper {
             )
         }
     }
+
+    @DeleteColumn("BookEntity", "textPath")
+    @DeleteColumn("BookEntity", "chapters")
+    class MIGRATION_7_8 : AutoMigrationSpec {
+        companion object {
+            /**
+             * Along with textPath deletion,
+             * books directory with text does not
+             * serve any purpose.
+             */
+            fun removeBooksDir(application: Application) {
+                val booksDir = File(application.filesDir, "books")
+
+                if (booksDir.exists()) {
+                    booksDir.deleteRecursively()
+                }
+            }
+        }
+    }
+
+    @DeleteTable("FavoriteDirectoryEntity")
+    class MIGRATION_8_9 : AutoMigrationSpec
 }
+

@@ -1,81 +1,79 @@
+/*
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * Copyright (C) 2024-2025 Acclorite
+ * Modified by ByteFlipper for RafBook
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package raf.console.chitalka.data.parser
 
 import android.util.Log
-import raf.console.chitalka.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import raf.console.chitalka.data.parser.epub.EpubTextParser
-import raf.console.chitalka.data.parser.fb2.Fb2TextParser
 import raf.console.chitalka.data.parser.html.HtmlTextParser
 import raf.console.chitalka.data.parser.pdf.PdfTextParser
 import raf.console.chitalka.data.parser.txt.TxtTextParser
-import raf.console.chitalka.domain.model.ChapterWithText
-import raf.console.chitalka.domain.util.Resource
-import raf.console.chitalka.domain.util.UIText
-import java.io.File
+import raf.console.chitalka.data.parser.xml.XmlTextParser
+import raf.console.chitalka.domain.file.CachedFile
+import raf.console.chitalka.domain.reader.ReaderText
 import javax.inject.Inject
 
 private const val TEXT_PARSER = "Text Parser"
 
 class TextParserImpl @Inject constructor(
+    // Markdown parser (Markdown)
     private val txtTextParser: TxtTextParser,
     private val pdfTextParser: PdfTextParser,
+
+    // Document parser (HTML+Markdown)
     private val epubTextParser: EpubTextParser,
-    private val fb2TextParser: Fb2TextParser,
     private val htmlTextParser: HtmlTextParser,
+    private val xmlTextParser: XmlTextParser
 ) : TextParser {
-    override suspend fun parse(file: File): Resource<List<ChapterWithText>> {
-        if (!file.exists()) {
-            Log.e(TEXT_PARSER, "File does not exist.")
-            return Resource.Error(
-                UIText.StringResource(R.string.error_something_went_wrong_with_file)
-            )
+
+    override suspend fun parse(cachedFile: CachedFile): List<ReaderText> {
+        if (!cachedFile.canAccess()) {
+            Log.e(TEXT_PARSER, "File does not exist or no read access is granted.")
+            return emptyList()
         }
 
-        val fileFormat = ".${file.extension}".lowercase().trim()
-        return when (fileFormat) {
-            ".pdf" -> {
-                pdfTextParser.parse(file)
-            }
+        val fileFormat = ".${cachedFile.name.substringAfterLast(".")}".lowercase().trim()
+        return withContext(Dispatchers.IO) {
+            when (fileFormat) {
+                ".pdf" -> {
+                    pdfTextParser.parse(cachedFile)
+                }
 
-            ".epub" -> {
-                epubTextParser.parse(file)
-            }
+                ".epub" -> {
+                    epubTextParser.parse(cachedFile)
+                }
 
-            ".txt" -> {
-                txtTextParser.parse(file)
-            }
+                ".txt" -> {
+                    txtTextParser.parse(cachedFile)
+                }
 
-            ".fb2" -> {
-                fb2TextParser.parse(file)
-            }
+                ".fb2" -> {
+                    xmlTextParser.parse(cachedFile)
+                }
 
-            ".zip" -> {
-                epubTextParser.parse(file)
-            }
+                ".html" -> {
+                    htmlTextParser.parse(cachedFile)
+                }
 
-            ".html" -> {
-                htmlTextParser.parse(file)
-            }
+                ".htm" -> {
+                    htmlTextParser.parse(cachedFile)
+                }
 
-            ".htm" -> {
-                htmlTextParser.parse(file)
-            }
+                ".md" -> {
+                    htmlTextParser.parse(cachedFile)
+                }
 
-            ".md" -> {
-                htmlTextParser.parse(file)
-            }
-
-            else -> {
-                Log.e(TEXT_PARSER, "Wrong file format, could not find supported extension.")
-                Resource.Error(UIText.StringResource(R.string.error_wrong_file_format))
+                else -> {
+                    Log.e(TEXT_PARSER, "Wrong file format, could not find supported extension.")
+                    emptyList()
+                }
             }
         }
     }
 }
-
-
-
-
-
-
-
-
