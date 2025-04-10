@@ -25,7 +25,7 @@
 
 # <p align="center">Overview</p>
 
-<img src="https://github.com/Raf0707/Chitalka/blob/master/assets/readme/github_overview.png">
+<img src="https://github.com/Raf0707/Chitalka/blob/master/assets/readme/overview_rafbook.jpg">
 Built using Jetpack Compose and Kotlin.
 
 <!------------ Screenshots ------------>
@@ -59,7 +59,7 @@ _You can find more screenshots in [assets](https://github.com/Raf0707/Chitalka/t
 Don't see your favorite app store? Create an [Issue](https://github.com/Raf0707/Chitalka/issues)!
 
 ### 📲 How to download and install
-- _**Install from Github**_: Click on the "Get it on GitHub" badge above, scroll down and download **book-story.apk** or download the last apk from GitHub [here](https://github.com/Raf0707/Chitalka/releases/download/v1.0.0/app-release.apk). After that, find downloaded APK and install it.
+- _**Install from RuStore**_: Download apk from RuStore [here](https://www.rustore.ru/catalog/app/raf.console.chitalka). After that, find downloaded APK and install it.
 - If you don't know how to install APK file, follow [this guide](https://www.lifewire.com/install-apk-on-android-4177185).
 
 ### 🧭 Afterwards

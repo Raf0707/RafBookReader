@@ -1,7 +1,7 @@
 /*
  * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for RafBook
+ * Modified by Raf0707 for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -13,6 +13,24 @@ import raf.console.chitalka.domain.ui.UIText
 import raf.console.chitalka.domain.ui.UIText.StringResource
 
 fun provideCredits() = listOf(
+    Credit(
+        name = "Raf0707",
+        source = "GitHub",
+        credits = listOf(
+            UIText.StringResource(R.string.credits_design),
+            UIText.StringResource(R.string.credits_ideas),
+            UIText.StringValue("Readme"),
+            UIText.StringValue("SAF"),
+            UIText.StringResource(R.string.credits_fonts),
+            UIText.StringResource(R.string.credits_icon),
+            UIText.StringResource(R.string.rustore_updates),
+            UIText.StringResource(R.string.translate_tatar),
+            UIText.StringResource(R.string.translate_bashkir),
+            UIText.StringResource(R.string.translate_belarus)
+
+        ),
+        website = "https://github.com/Raf0707"
+    ),
     Credit(
         name = "Acclorite/book-story",
         source = "This app is based on a fork of the Acclorite/book-story project. The original project is available under the GPL-3.0 license.",

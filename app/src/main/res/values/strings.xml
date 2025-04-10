@@ -1,6 +1,6 @@
 <resources>
     <!-- Basic Strings -->
-    <string name="app_version" translatable="false">1.0.0</string>
+    <string name="app_version" translatable="false">2.6.1</string>
     <string name="app_name" translatable="false">RafBook</string>
     <string name="default_string">Default</string>
     <string name="random_string">Random</string>
@@ -25,22 +25,16 @@
     <string name="help_screen">Help</string>
 
     <!-- Dialog Labels -->
-    <string name="storage_permission">Grant Permission?</string>
     <string name="add_books">Add books?</string>
     <string name="move_books">Move books?</string>
     <string name="delete_books">Delete books?</string>
     <string name="delete_book">Delete book?</string>
     <string name="move_book">Move book?</string>
     <string name="delete_history">Delete reading history?</string>
-    <string name="confirm_update">Confirm update?</string>
     <string name="enable_check_for_updates">Enable check for updates?</string>
-    <string name="update_book">Update book?</string>
+    <string name="edit">Edit</string>
 
     <!-- Dialog Descriptions -->
-    <string name="storage_permission_description">
-        We need storage permission to scan Your Device for books.
-        Without this permission, you will not be able to add a book.
-    </string>
     <string name="add_books_description">
         You can choose which books you want to add.
         You can edit Title and Cover image of the book later.
@@ -66,10 +60,6 @@
         It will delete the whole history from the database.
         After deleting the whole history, the order of the books will be reset.
     </string>
-    <string name="confirm_update_description">
-        Update this book\'s text and chapters.
-        The progress should remain unchanged unless the order of paragraphs was changed.
-    </string>
     <string name="update_app_description">
         New app version was found.
         Do you want to proceed and go to the release page?
@@ -80,36 +70,17 @@
         when app starts.
         Do you want to proceed and enable «Check for updates»?
     </string>
-    <string name="update_book_description">
-        Update of the text has been found.
-        Update is needed to ensure latest parser methods are used.
-        It is offline process.
-        Your progress will not be affected unless big changes occur.
-        Do you want to proceed with update?
-    </string>
 
     <!-- Errors -->
-    <string name="error_permission">
-        We need storage permission to scan Your Device for books
-    </string>
-    <string name="error_no_description">
-        No description.
-    </string>
-    <string name="error_something_went_wrong">
-        Something went wrong.
-    </string>
-    <string name="error_something_went_wrong_with_file">
-        Something went wrong. Please check whether this book\'s file is not corrupted.
-    </string>
-    <string name="error_wrong_file_format">Wrong file format.</string>
-    <string name="error_query">Error: %1$s</string>
-    <string name="error_file_empty">This file is empty or corrupted.</string>
+    <string name="error_no_description">No description.</string>
+    <string name="error_something_went_wrong">Something went wrong.</string>
     <string name="error_no_translator">No translator app found.</string>
     <string name="error_no_dictionary">No dictionary app found.</string>
     <string name="error_no_browser">No browser app found.</string>
     <string name="error_no_share_app">No app to share found.</string>
-    <string name="error_no_text">
-        The book content is empty. Please, make sure that the book content is not empty and update it.
+    <string name="error_could_not_get_text">
+        File is empty, missing, or inaccessible.
+        Verify the file, scan settings or change the path, then try again.
     </string>
     <string name="error_check_internet">
         Something went wrong.
@@ -117,6 +88,7 @@
     </string>
     <string name="error_could_not_reset_cover">Could not reset cover image.</string>
     <string name="error_closed_source">Closed source</string>
+    <string name="error_no_file">File does not exist or inaccessible</string>
 
     <!-- Is Empty messages -->
     <string name="search_field_empty">
@@ -141,23 +113,16 @@
 
     <!-- Action Texts -->
     <string name="cancel">Cancel</string>
-    <string name="grant">Grant</string>
-    <string name="grant_permission">Grant permission</string>
-    <string name="get_help">I need help</string>
     <string name="add">Add</string>
     <string name="add_book">Add a book</string>
     <string name="move">Move</string>
     <string name="delete">Delete</string>
-    <string name="start">Start</string>
     <string name="continue_read">Continue</string>
     <string name="never">Never</string>
-    <string name="go_back">Go back</string>
     <string name="undo">Undo</string>
     <string name="copy">Copy</string>
     <string name="translate">Translate</string>
     <string name="dictionary">Dictionary</string>
-    <string name="retry">Retry</string>
-    <string name="confirm">Confirm</string>
     <string name="next">Next</string>
     <string name="yes_go_to_help">Yes, go to Help</string>
     <string name="no">No</string>
@@ -166,6 +131,10 @@
     <string name="web_search">Web search</string>
     <string name="share">Share</string>
     <string name="proceed">Proceed</string>
+    <string name="ok">OK</string>
+    <string name="change_path">Change path</string>
+    <string name="add_folder">Add folder</string>
+    <string name="set_up_scanning">Set up scanning</string>
 
     <!-- Book -->
     <string name="unknown_author">Unknown</string>
@@ -179,6 +148,7 @@
     <string name="delete_cover">Delete cover image</string>
     <string name="delete_cover_desc">Delete current cover image of the book</string>
     <string name="author">Author</string>
+    <string name="scan_browse_settings">Scan</string>
 
     <!-- Tabs -->
     <string name="reading_tab">Reading</string>
@@ -186,11 +156,18 @@
     <string name="planning_tab">Planning</string>
     <string name="dropped_tab">Dropped</string>
     <string name="general_tab">General</string>
+    <string name="display_tab">Display</string>
     <string name="color_tab">Colors</string>
     <string name="filter_tab">Filter</string>
     <string name="sort_tab">Sort</string>
     <string name="reader_tab">Reader</string>
 
+    <!-- Settings notes -->
+    <string name="browse_scan_option_note">
+        These folders are used to scan and retrieve files in the Browse.
+        Removing a folder here will not delete actual files or books from the Library.
+        To revoke access, click the corresponding button.
+    </string>
     <!-- Settings categories -->
     <string name="general_settings">General</string>
     <string name="general_settings_desc">App language</string>
@@ -205,13 +182,17 @@
     <string name="font_reader_settings">Font</string>
     <string name="text_reader_settings">Text</string>
     <string name="translator_reader_settings">Translator</string>
-    <string name="padding_reader_settings">Padding</string>
+    <string name="padding_reader_settings">Margins</string>
     <string name="misc_reader_settings">Misc</string>
     <string name="reading_speed_reader_settings">Reading speed</string>
+    <string name="reading_mode_reader_settings">Reading mode</string>
     <string name="system_reader_settings">System</string>
+    <string name="chapters_reader_settings">Chapters</string>
+    <string name="images_reader_settings">Images</string>
+    <string name="progress_reader_settings">Progress</string>
     <string name="theme_appearance_settings">Theme preferences</string>
     <string name="colors_appearance_settings">Colors</string>
-    <string name="general_browse_settings">General</string>
+    <string name="display_settings">Display</string>
     <string name="filter_browse_settings">Filter</string>
     <string name="sort_browse_settings">Sort</string>
 
@@ -231,6 +212,7 @@
 
     <!-- Reader -->
     <string name="font_family_option">Font family</string>
+    <string name="font_thickness_option">Font thickness</string>
     <string name="font_style_option">Font style</string>
     <string name="font_size_option">Font size</string>
     <string name="line_height_option">Line height</string>
@@ -239,36 +221,60 @@
     <string name="color_preset_option">Color preset</string>
     <string name="background_color_option">Background color</string>
     <string name="font_color_option">Font color</string>
-    <string name="side_padding_option">Side padding</string>
-    <string name="vertical_padding_option">Vertical padding</string>
+    <string name="side_padding_option">Side margins</string>
+    <string name="vertical_padding_option">Vertical margins</string>
     <string name="double_click_translation_option">Double click translation</string>
     <string name="double_click_translation_option_desc">Double click on paragraph to translate it</string>
     <string name="fast_color_preset_change_option">Fast color preset change</string>
     <string name="fast_color_preset_change_option_desc">Swipe top bar left or right to change color preset</string>
     <string name="text_alignment_option">Text alignment</string>
+    <string name="chapter_title_alignment_option">Chapter title alignment</string>
     <string name="letter_spacing_option">Letter spacing</string>
-    <string name="cutout_padding_option">Cutout padding</string>
-    <string name="cutout_padding_option_desc">Apply padding to cutout area</string>
+    <string name="cutout_padding_option">Cutout margin</string>
+    <string name="cutout_padding_option_desc">Apply margin to the cutout area</string>
     <string name="fullscreen_option">Fullscreen</string>
-    <string name="fullscreen_option_desc">Hide system bars and remove padding</string>
+    <string name="fullscreen_option_desc">Hide system bars and margins</string>
     <string name="keep_screen_on_option">Keep screen on</string>
     <string name="hide_bars_on_fast_scroll_option">Hide bars on fast scroll</string>
     <string name="perception_expander_option">Perception expander</string>
     <string name="perception_expander_option_desc">
         Increase your reading speed by focusing on center
     </string>
-    <string name="perception_expander_padding_option">Perception expander line padding</string>
-    <string name="perception_expander_thickness_option">Perception expander line thickness</string>
-    <string name="check_for_text_update_option">Check for text update</string>
-    <string name="check_for_text_update_option_desc">Automatically check whether there is text update</string>
-    <string name="check_for_text_update_toast_option">Show \"text is up-to-date\" toast</string>
+    <string name="perception_expander_padding_option">Line side margin</string>
+    <string name="perception_expander_thickness_option">Line thickness</string>
     <string name="screen_orientation_option">Screen orientation</string>
     <string name="custom_screen_brightness_option">Custom brightness</string>
     <string name="screen_brightness_option">Brightness</string>
+    <string name="horizontal_gesture_option">Horizontal gesture</string>
+    <string name="horizontal_gesture_scroll_option">Scroll fraction</string>
+    <string name="horizontal_gesture_sensitivity_option">Sensitivity</string>
+    <string name="horizontal_gesture_alpha_anim_option">Visibility animation</string>
+    <string name="horizontal_gesture_alpha_anim_option_desc">
+        Enable visibility animation when using horizontal gesture
+    </string>
+    <string name="horizontal_gesture_pull_anim_option">Pull animation</string>
+    <string name="horizontal_gesture_pull_anim_option_desc">
+        Enable pull animation when using horizontal gesture
+    </string>
+    <string name="bottom_bar_padding_option">Bottom bar margin</string>
+    <string name="highlighted_reading_option">Highlight words</string>
+    <string name="highlighted_reading_option_desc">Highlight the beginning of each word</string>
+    <string name="highlighted_reading_thickness_option">Highlight thickness</string>
+    <string name="images_option">Images</string>
+    <string name="images_option_desc">Display images along with their captions</string>
+    <string name="images_corners_roundness_option">Corners roundness</string>
+    <string name="images_alignment_option">Alignment</string>
+    <string name="images_width_option">Size</string>
+    <string name="images_color_effects_option">Color effects</string>
+    <string name="progress_bar_option">Progress bar</string>
+    <string name="progress_bar_option_desc">Display progress bar at the bottom</string>
+    <string name="progress_bar_padding_option">Margins</string>
+    <string name="progress_bar_alignment_option">Alignment</string>
+    <string name="progress_bar_font_size_option">Font size</string>
+    <string name="progress_count_option">Progress count</string>
 
     <!-- Browse -->
     <string name="browse_files_structure_option">Files structure</string>
-    <string name="browse_layout_option">Display mode</string>
     <string name="browse_grid_size_option">Grid size</string>
     <string name="browse_pin_favorite_directories_option">Pin favorite directories</string>
     <string name="browse_pin_favorite_directories_option_desc">
@@ -304,10 +310,6 @@
     <string name="files_structure_all">All files</string>
     <string name="files_structure_directory">Directories</string>
 
-    <!-- Browse Layout properties -->
-    <string name="browse_layout_list">List</string>
-    <string name="browse_layout_grid">Grid</string>
-
     <!-- Browse Grid Size properties -->
     <string name="browse_grid_size_auto">Auto</string>
     <string name="browse_grid_size_per_row">per row</string>
@@ -319,11 +321,16 @@
     <string name="browse_sort_order_last_modified">Last modified</string>
     <string name="browse_sort_order_file_size">File size</string>
 
-    <!-- Text Alignment properties -->
-    <string name="text_alignment_start">Start</string>
-    <string name="text_alignment_justify">Justify</string>
-    <string name="text_alignment_center">Center</string>
-    <string name="text_alignment_end">End</string>
+    <!-- Layout properties -->
+    <string name="layout_option">Display mode</string>
+    <string name="layout_list">List</string>
+    <string name="layout_grid">Grid</string>
+
+    <!-- Alignment properties -->
+    <string name="alignment_start">Start</string>
+    <string name="alignment_justify">Justify</string>
+    <string name="alignment_center">Center</string>
+    <string name="alignment_end">End</string>
 
     <!-- Screen Orientation properties -->
     <string name="screen_orientation_free">Free</string>
@@ -332,18 +339,47 @@
     <string name="screen_orientation_locked_portrait">Locked portrait</string>
     <string name="screen_orientation_locked_landscape">Locked landscape</string>
 
+    <!-- Horizontal Gesture properties -->
+    <string name="horizontal_gesture_off">Off</string>
+    <string name="horizontal_gesture_on">On</string>
+    <string name="horizontal_gesture_inverse">On (Inverse)</string>
+
+    <!-- Highlighted Reading properties -->
+    <string name="highlighted_reading_level">level</string>
+
+    <!-- Color Effect properties -->
+    <string name="color_effects_off">Off</string>
+    <string name="color_effects_grayscale">Grayscale</string>
+    <string name="color_effects_font">Font color</string>
+    <string name="color_effects_background">Background color</string>
+
+    <!-- Font Thickness properties -->
+    <string name="font_thickness_thin">Thin</string>
+    <string name="font_thickness_extra_light">Extra light</string>
+    <string name="font_thickness_light">Light</string>
+    <string name="font_thickness_normal">Normal</string>
+    <string name="font_thickness_medium">Medium</string>
+
+    <!-- Progress Count properties -->
+    <string name="progress_count_percentage">Percentage</string>
+    <string name="progress_count_quantity">Quantity</string>
+
     <!-- Themes -->
     <string name="dynamic_theme">Mercury</string>
     <string name="blue_theme">Neptune</string>
     <string name="green_theme">Earth</string>
+    <string name="green2_theme">Io</string>
+    <string name="green_gray_theme">Enceladus</string>
     <string name="red_theme">Mars</string>
-    <string name="gray_theme">Callisto</string>
+    <string name="red_gray_theme">Callisto</string>
     <string name="purple_theme">Jupiter</string>
+    <string name="purple_gray_theme">Ceres</string>
     <string name="pink_theme">Saturn</string>
     <string name="pink2_theme">Ganymede</string>
     <string name="lavender_theme">Eris</string>
     <string name="marsh_theme">Pluto</string>
     <string name="yellow_theme">Venus</string>
+    <string name="yellow2_theme">Makemake</string>
     <string name="aqua_theme">Uranus</string>
 
     <!-- Toast messages -->
@@ -359,23 +395,21 @@
     <string name="history_deleted">History was successfully deleted.</string>
     <string name="no_updates">The latest version of the app is already installed.</string>
     <string name="cover_reset">Cover image was successfully reset.</string>
+    <string name="title_changed">Title was successfully changed.</string>
+    <string name="author_changed">Author was successfully changed.</string>
+    <string name="description_changed">Description was successfully changed.</string>
+    <string name="path_changed">File path was successfully changed.</string>
 
     <!-- Snackbar messages -->
     <string name="history_element_deleted">History element was successfully deleted.</string>
-    <string name="file_not_found">File \"%1$s\" was not found.</string>
-    <string name="book_updated">Book\'s text was successfully updated.</string>
-    <string name="nothing_changed">Text is up-to-date.</string>
 
-    <!-- DropDown properties -->
-    <string name="move_this_book">Move</string>
-    <string name="delete_this_book">Delete</string>
-    <string name="details_book">Details</string>
-
-    <!-- BookInfo details -->
-    <string name="file_name">File name</string>
-    <string name="file_path">File path</string>
-    <string name="file_last_opened">File last opened</string>
-    <string name="file_size">File size</string>
+    <!-- BookInfo -->
+    <string name="start_reading">Start</string>
+    <string name="continue_reading_query">Continue from %1$s</string>
+    <string name="file_details">File details</string>
+    <string name="file_path">Path</string>
+    <string name="file_last_opened">Last opened</string>
+    <string name="file_size">Size</string>
     <string name="unknown">Unknown</string>
 
     <!-- Browse -->
@@ -394,7 +428,15 @@
     <string name="licenses_option">Open source licenses</string>
     <string name="credits_option">Credits</string>
     <string name="help_translate_option">Help translate</string>
+    <string name="support_development_option">Support development</string>
     <string name="contributors_option">Contributors</string>
+    <string name="slava_ukraini">Slava Ukraini!</string>
+
+    <!-- Badges -->
+    <string name="reddit_badge" translatable="false">Reddit</string>
+    <string name="github_badge" translatable="false">GitHub</string>
+    <string name="gitlab_badge" translatable="false">GitLab</string>
+    <string name="codeberg_badge" translatable="false">Codeberg</string>
 
     <!-- Credits -->
     <string name="credits_design">Design</string>
@@ -406,14 +448,6 @@
     <string name="credits_ideas">Ideas</string>
 
     <!-- Help -->
-    <string name="help_clickable_note_1">Please note, that</string>
-    <string name="help_clickable_note_2">such highlighted text</string>
-    <string name="help_clickable_note_3">
-        can be clicked.
-        Also you can hide this note by clicking the icon, try it out!
-    </string>
-    <string name="help_clickable_note_action">I\'m clickable!</string>
-
     <string name="help_title_how_to_add_books">How do I add books to the Library?</string>
     <string name="help_desc_how_to_add_books_1">Go to the</string>
     <string name="help_desc_how_to_add_books_2">Browse</string>
@@ -488,15 +522,6 @@
         or Appearance category to customize Colors settings.
     </string>
 
-    <string name="help_title_how_to_update_book">How do I update a book?</string>
-    <string name="help_desc_how_to_update_book_1">Go to the</string>
-    <string name="help_desc_how_to_update_book_2">Library</string>
-    <string name="help_desc_how_to_update_book_3">
-        and click the book\'s cover image to see book\'s details.
-        Pull down the screen or click the refresh icon in the upper right corner to update the book.
-        If book\'s file changed you may confirm and update the book or cancel update.
-    </string>
-
     <string name="help_title_how_to_manage_history">How do I manage history?</string>
     <string name="help_desc_how_to_manage_history_1">Go to the</string>
     <string name="help_desc_how_to_manage_history_2">History</string>
@@ -560,7 +585,7 @@
         First, enable it in the Reader settings(see: How do I customize the Reader?).
         Once enabled, two vertical lines will appear on either side of the Reader.
         To optimize your reading speed further,
-        adjust the padding to create less space around the center.
+        adjust the margin to create less space around the center.
         To use it, focus on the center of the screen while
         allowing your peripheral vision to pick up the text on the sides.
         As you read, maintain your focus on the center without directly
@@ -577,14 +602,12 @@
     </string>
     <string name="start_language_preferences">Language preferences</string>
     <string name="start_theme_preferences">Theme preferences</string>
-    <string name="start_permissions_preferences">Permissions</string>
-    <string name="start_permissions_granted">Granted</string>
-    <string name="start_permissions_storage">Storage permission</string>
-    <string name="start_permissions_storage_desc">Required to scan your device and find books</string>
+    <string name="start_scan_preferences">Scan preferences</string>
     <string name="start_permissions_notifications">Notifications permission</string>
     <string name="start_permissions_notifications_desc">Required to check for newer app version</string>
     <string name="start_fork_info_title" translatable="false">Acclorite/book-story</string>
     <string name="start_fork_info_desc">This app is based on a fork of the Acclorite/book-story project. The original project is available under the GPL-3.0 license.</string>
+    <string name="start_source_code">Source code</string>
     <string name="start_done">Everything\'s done!</string>
     <string name="start_done_desc">
         You\'re successfully done basic setting of the app.
@@ -596,7 +619,6 @@
     <string name="yesterday">Yesterday</string>
 
     <!-- Content description -->
-    <string name="refresh_book_content_desc">Refresh book</string>
     <string name="continue_reading_content_desc">Continue reading</string>
     <string name="go_back_content_desc">Go back</string>
     <string name="cover_image_content_desc">Cover image</string>
@@ -621,7 +643,6 @@
     <string name="revert_content_desc">Revert</string>
     <string name="selected_content_desc">Selected</string>
     <string name="app_icon_content_desc">App icon</string>
-    <string name="note_content_desc">Note</string>
     <string name="delete_history_element_content_desc">Delete history element</string>
     <string name="library_content_desc">Your library</string>
     <string name="history_content_desc">Reading history</string>
@@ -644,19 +665,23 @@
     <string name="checkpoint_back_content_desc">Checkpoint back</string>
     <string name="checkpoint_forward_content_desc">Checkpoint forward</string>
     <string name="chapters_content_desc">Chapters</string>
-    <string name="update_text_content_desc">Update text</string>
     <string name="more_content_desc">More</string>
-    <string name="shareapp">Share app</string>
-    <string name="tg">telegram</string>
-    <string name="rateapp">rate app</string>
-    <string name="otherapps">other apps</string>
+    <string name="pin_content_desc">Pin</string>
+    <string name="show_less_content_desc">Show less</string>
+    <string name="show_more_content_desc">Show more</string>
+    <string name="edit_content_desc">Edit field</string>
+    <string name="expand_content_desc">Expand</string>
+    <string name="collapse_content_desc">Collapse</string>
+    <string name="remove_content_desc">Remove</string>
+    <string name="note_content_desc">Note</string>
+    <string name="share_app">Share App</string>
+    <string name="other_apps">Other apps</string>
     <string name="vk">VK</string>
-    <string name="donate">donate</string>
-    <string name="qr_code">QR</string>
-    <string name="source_code">Source code</string>
-    <string name="email">e-mail</string>
-    <string name="byteflipper">byteflipper.com</string>
-    <string name="portfolio">My Github Projects</string>
-    <string name="support_development_option">Support development</string>
-
+    <string name="telegram">Telegram</string>
+    <string name="freePalestine">Free Palestine!</string>
+    <string name="rate_app">Rate App</string>
+    <string name="translate_tatar">Translation: Tatar language</string>
+    <string name="translate_bashkir">Translation: Bashkir language</string>
+    <string name="translate_belarus">Translation: Belarusian language</string>
+    <string name="rustore_updates">RuStore Updates</string>
 </resources>

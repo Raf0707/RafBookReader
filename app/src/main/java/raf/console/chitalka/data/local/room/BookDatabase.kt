@@ -1,7 +1,7 @@
 /*
  * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for RafBook
+ * Modified by Raf0707 for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -115,4 +115,3 @@ object DatabaseHelper {
     @DeleteTable("FavoriteDirectoryEntity")
     class MIGRATION_8_9 : AutoMigrationSpec
 }
-

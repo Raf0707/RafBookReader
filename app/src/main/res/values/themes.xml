@@ -15,6 +15,6 @@
         <item name="postSplashScreenTheme">@style/Theme.BookStory</item>
 
         <item name="windowSplashScreenBackground">@color/splash_bg_light</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_monochrome_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/raf_book_1_round</item>
     </style>
 </resources>

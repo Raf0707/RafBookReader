@@ -1,12 +1,17 @@
 /*
  * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for RafBook
+ * Modified by Raf0707 for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 package raf.console.chitalka.presentation.about
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,13 +66,14 @@ fun AboutLayout(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painterResource(id = R.drawable.raf_book),
+                Image(
+                    painterResource(id = R.drawable.raf_book_1),
                     contentDescription = stringResource(id = R.string.app_icon_content_desc),
                     modifier = Modifier
                         .padding(14.dp)
-                        .size(120.dp),
-                    tint = MaterialTheme.colorScheme.secondary
+                        .size(120.dp)
+                        .scale(1.5f)
+                    //tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -81,15 +88,25 @@ fun AboutLayout(
 
         item {
             AboutItem(
-                title = stringResource(id = R.string.app_version_option),
-                description = "Book's Story v${stringResource(id = R.string.app_version)}",
+                title = stringResource(id = R.string.share_app),
+                description = "RafBook v${stringResource(id = R.string.app_version)}",
             ) {
-                navigateToBrowserPage(
-                    AboutEvent.OnNavigateToBrowserPage(
-                        page = provideReleasesPage(),
-                        context = context
-                    )
-                )
+                // Создаем текст для шаринга
+                val shareText = "Скачайте приложение RafBook по ссылке https://www.rustore.ru/catalog/app/raf.console.chitalka"
+
+                // Копируем ссылку в буфер обмена
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("app_share_link", shareText)
+                clipboard.setPrimaryClip(clip)
+
+                // Создаем интент для шаринга
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, shareText)
+                }
+
+                // Запускаем интент
+                context.startActivity(Intent.createChooser(shareIntent, "Поделиться приложением"))
             }
         }
 

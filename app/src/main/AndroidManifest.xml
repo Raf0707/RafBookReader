@@ -33,11 +33,11 @@
         tools:ignore="DataExtractionRules">
 
         <activity
-            android:name=".Activity"
-            android:windowSoftInputMode="adjustResize"
+            android:name=".ui.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|locale|density|uiMode"
             android:exported="true"
-            android:theme="@style/Theme.Start.Splash">
+            android:theme="@style/Theme.Start.Splash"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
