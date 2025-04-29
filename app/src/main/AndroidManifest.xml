@@ -14,7 +14,7 @@
 
     <!-- Removing DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION, which is not used -->
     <uses-permission
-        android:name="ua.acclorite.book_story.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="raf.console.chitalka.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         tools:node="remove" />
 
     <application
@@ -42,6 +42,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- Crash activity -->
+        <activity
+            android:name=".ui.crash.CrashActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|locale|density|uiMode"
+            android:exported="false"
+            android:theme="@style/Theme.BookStory"
+            android:windowSoftInputMode="adjustResize">
+
         </activity>
 
         <!-- Save app locales -->

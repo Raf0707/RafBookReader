@@ -1,11 +1,5 @@
-/*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
- * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
- * SPDX-License-Identifier: GPL-3.0-only
- */
-
 package raf.console.chitalka.presentation.start
+
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,11 +31,11 @@ import raf.console.chitalka.R
 import raf.console.chitalka.ui.about.AboutEvent
 
 @Composable
-fun StartSourceCode(
+fun StartTelegramGroup(
     navigateForward: () -> Unit,
 ) {
     val context = LocalContext.current
-    StartSourceCodeScaffold(
+    StartTelegramGroupScaffold(
         navigateForward = navigateForward,
     ) {
         Column(
@@ -51,7 +47,7 @@ fun StartSourceCode(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Code,
+                imageVector = Icons.Filled.Send,
                 contentDescription = "Source Code Icon",
                 modifier = Modifier
                     .size(190.dp),
@@ -59,14 +55,14 @@ fun StartSourceCode(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(id = R.string.start_fork_info_title),
+                text = stringResource(id = R.string.rafbook),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(id = R.string.start_fork_info_desc),
+                text = stringResource(id = R.string.start_join_tg_group),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
@@ -74,17 +70,15 @@ fun StartSourceCode(
             Spacer(modifier = Modifier.height(16.dp))
             ElevatedButton(
                 onClick = {
-
                     ChromeCustomTabUtil.openUrl(
                         context = context,
-                        url = "https://github.com/Acclorite/book-story",
+                        url = "https://t.me/rafbook_reader",
                     )
-
                 },
                 shape = MaterialTheme.shapes.medium,
             ) {
                 Text(
-                    text = stringResource(id = R.string.start_source_code),
+                    text = stringResource(id = R.string.join),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.labelLarge
                 )

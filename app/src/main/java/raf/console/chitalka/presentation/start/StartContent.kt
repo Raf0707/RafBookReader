@@ -32,6 +32,11 @@ fun StartContent(
         targetValue = when {
             currentPage in 0..2 -> StartScreen.SETTINGS
             currentPage == 3 -> StartScreen.SOURCE_CODE
+            currentPage == 4 -> StartScreen.TELEGRAM_GROUP
+            currentPage == 5 -> StartScreen.LICENSE
+            currentPage == 6 -> StartScreen.PRIVACY_POLICY
+            currentPage == 7 -> StartScreen.USER_AGREEMENT
+            currentPage == 8 -> StartScreen.WEB_RAF_CONSOLE
             else -> StartScreen.DONE
         },
         stackEvent = stackEvent
@@ -48,6 +53,31 @@ fun StartContent(
             }
             StartScreen.SOURCE_CODE -> {
                 StartSourceCode(
+                    navigateForward = navigateForward
+                )
+            }
+            StartScreen.TELEGRAM_GROUP -> {
+                StartTelegramGroup(
+                    navigateForward = navigateForward
+                )
+            }
+            StartScreen.LICENSE -> {
+                LicenseAgreementScreen(
+                    navigateForward = navigateForward
+                )
+            }
+            StartScreen.PRIVACY_POLICY -> {
+                PrivacyPolicyScreen(
+                    navigateForward = navigateForward
+                )
+            }
+            StartScreen.USER_AGREEMENT -> {
+                UserAgreementScreen(
+                    navigateForward = navigateForward
+                )
+            }
+            StartScreen.WEB_RAF_CONSOLE -> {
+                StartWebRafConsole(
                     navigateForward = navigateForward
                 )
             }

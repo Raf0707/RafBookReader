@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,7 +25,8 @@ import raf.console.chitalka.presentation.core.components.common.StyledText
 
 @Composable
 fun StartSettingsBottomBar(
-    navigateForward: () -> Unit
+    navigateForward: () -> Unit,
+    enabled: Boolean = true
 ) {
     Column {
         Spacer(modifier = Modifier.height(18.dp))
@@ -33,7 +36,12 @@ fun StartSettingsBottomBar(
                 .padding(bottom = 8.dp)
                 .padding(horizontal = 18.dp)
                 .fillMaxWidth(),
-            onClick = { navigateForward() }
+            onClick = navigateForward,
+            enabled = enabled,
+            colors = ButtonDefaults.buttonColors(
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         ) {
             StyledText(text = stringResource(id = R.string.next))
         }

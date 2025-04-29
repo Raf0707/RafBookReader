@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import org.bouncycastle.LICENSE
 import raf.console.chitalka.domain.navigator.Screen
 import raf.console.chitalka.domain.navigator.StackEvent
 import raf.console.chitalka.domain.ui.ButtonItem
@@ -47,6 +48,21 @@ object StartScreen : Screen, Parcelable {
 
     @IgnoredOnParcel
     const val SOURCE_CODE = "source_code"
+
+    @IgnoredOnParcel
+    const val TELEGRAM_GROUP = "telegram_group"
+
+    @IgnoredOnParcel
+    const val LICENSE = "license"
+
+    @IgnoredOnParcel
+    const val PRIVACY_POLICY = "privacy_policy"
+
+    @IgnoredOnParcel
+    const val USER_AGREEMENT  = "user_agreement"
+
+    @IgnoredOnParcel
+    const val WEB_RAF_CONSOLE  = "web_raf_console"
 
     @IgnoredOnParcel
     const val DONE = "done"
@@ -81,7 +97,7 @@ object StartScreen : Screen, Parcelable {
             languages = languages,
             changeLanguage = mainModel::onEvent,
             navigateForward = {
-                if (currentPage.intValue + 1 == 5) {
+                if (currentPage.intValue + 1 == 10) {
                     return@StartContent
                 }
 

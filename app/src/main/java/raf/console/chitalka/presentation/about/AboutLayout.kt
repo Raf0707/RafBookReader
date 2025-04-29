@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import raf.console.chitalka.R
 import raf.console.chitalka.presentation.core.components.common.LazyColumnWithScrollbar
+import raf.console.chitalka.presentation.core.constants.bugReportPage
 import raf.console.chitalka.presentation.core.constants.provideContributorsPage
 import raf.console.chitalka.presentation.core.constants.provideIssuesPage
 import raf.console.chitalka.presentation.core.constants.provideReleasesPage
@@ -92,7 +93,7 @@ fun AboutLayout(
                 description = "RafBook v${stringResource(id = R.string.app_version)}",
             ) {
                 // Создаем текст для шаринга
-                val shareText = "Скачайте приложение RafBook по ссылке https://www.rustore.ru/catalog/app/raf.console.chitalka"
+                val shareText = "Скачайте приложение RafBook по ссылке https://play.google.com/store/apps/details?id=raf.console.chitalka"
 
                 // Копируем ссылку в буфер обмена
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -117,7 +118,7 @@ fun AboutLayout(
             ) {
                 navigateToBrowserPage(
                     AboutEvent.OnNavigateToBrowserPage(
-                        page = provideIssuesPage(),
+                        page = bugReportPage(),
                         context = context
                     )
                 )

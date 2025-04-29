@@ -2,7 +2,7 @@
 
 <div align="center">
 
-  <img src="https://github.com/Raf0707/Chitalka/blob/master/app/src/main/res/drawable/raf_book.png?raw=true" width="120" />
+  <img src="https://github.com/Raf0707/RafBookReader/blob/master/app/src/main/res/drawable/raf_book.png?raw=true" width="120" />
 </div>
 
 # <p align="center">RafBook</p>
@@ -15,7 +15,7 @@
 
 
 <a href="">[![Stars](https://img.shields.io/github/stars/ByteFlipper-58/book-story?style=flat&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIC05NjAgOTYwIDk2MCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Im0zNTQtMjQ3IDEyNi03NiAxMjYgNzctMzMtMTQ0IDExMS05Ni0xNDYtMTMtNTgtMTM2LTU4IDEzNS0xNDYgMTMgMTExIDk3LTMzIDE0M1pNMjMzLTgwbDY1LTI4MUw4MC01NTBsMjg4LTI1IDExMi0yNjUgMTEyIDI2NSAyODggMjUtMjE4IDE4OSA2NSAyODEtMjQ3LTE0OUwyMzMtODBabTI0Ny0zNTBaIiBzdHlsZT0iZmlsbDogcmdiKDI0NSwgMjI3LCA2Nik7Ii8%2BCjwvc3ZnPg%3D%3D&color=949b3f&labelColor=27303D&label=Stars)](https://github.com/Acclorite/book-story/stargazers)</a>
-<a href="">[![Development Stage](https://img.shields.io/badge/Active-9b3f90?label=Development%20stage&labelColor=27303D)](https://github.com/Raf0707/Chitalka/commits/)</a>
+<a href="">[![Development Stage](https://img.shields.io/badge/Active-9b3f90?label=Development%20stage&labelColor=27303D)](https://github.com/Raf0707/RafBookReader/commits/)</a>
 <a href="">[![Last Commit](https://img.shields.io/github/last-commit/ByteFlipper-58/book-story?label=Last%20commit&labelColor=27303D&color=749b3f)](https://github.com/Acclorite/book-story/commits/)</a>
 <a href="">[![License: GPL-3.0](https://img.shields.io/github/license/ByteFlipper-58/book-story?label=License&labelColor=27303D&color=3f9b75)](/LICENSE)</a>
 <a href="">[![Repository Size](https://img.shields.io/github/repo-size/ByteFlipper-58/book-story?label=Repository%20size&labelColor=27303D&color=563f9b)]()</a>
@@ -25,7 +25,7 @@
 
 # <p align="center">Overview</p>
 
-<img src="https://github.com/Raf0707/Chitalka/blob/master/assets/readme/overview_rafbook.jpg">
+<img src="https://github.com/Raf0707/RafBookReader/blob/master/assets/readme/overview_rafbook.jpg">
 Built using Jetpack Compose and Kotlin.
 
 <!------------ Screenshots ------------>
@@ -44,7 +44,7 @@ Built using Jetpack Compose and Kotlin.
 </div>
 </br>
 
-_You can find more screenshots in [assets](https://github.com/Raf0707/Chitalka/tree/master/assets) folder._
+_You can find more screenshots in [assets](https://github.com/Raf0707/RafBookReader/tree/master/assets) folder._
 
 <!------------ Download guide ------------>
 
@@ -53,10 +53,10 @@ _You can find more screenshots in [assets](https://github.com/Raf0707/Chitalka/t
 
 <div align="left">
 
-[<img src="https://raw.githubusercontent.com/ismartcoding/plain-app/main/assets/get-it-on-github.png" alt='Get it on GitHub' height="80">](https://github.com/Raf0707/Chitalka/releases/download/v1.0.0/app-release.apk)
+[<img src="https://raw.githubusercontent.com/ismartcoding/plain-app/main/assets/get-it-on-github.png" alt='Get it on GitHub' height="80">](https://github.com/Raf0707/RafBookReader/releases/download/v1.0.0/app-release.apk)
 </div>
 
-Don't see your favorite app store? Create an [Issue](https://github.com/Raf0707/Chitalka/issues)!
+Don't see your favorite app store? Create an [Issue](https://github.com/Raf0707/RafBookReader/issues)!
 
 ### 📲 How to download and install
 - _**Install from RuStore**_: Download apk from RuStore [here](https://www.rustore.ru/catalog/app/raf.console.chitalka). After that, find downloaded APK and install it.
@@ -65,7 +65,7 @@ Don't see your favorite app store? Create an [Issue](https://github.com/Raf0707/
 ### 🧭 Afterwards
 - Open the app and follow basic instructions.
 - If you don't understand how to use the app, please read everything in the app's Help Screen. (You can find it in: Library, History, Browse → Three Dots → Help)
-- If you still have questions, please create an [Issue](https://github.com/Raf0707/Chitalka/issues) if you feel like some area should be documented better.
+- If you still have questions, please create an [Issue](https://github.com/Raf0707/RafBookReader/issues) if you feel like some area should be documented better.
 
 <!------------ Features ------------>
 
@@ -87,11 +87,11 @@ Don't see your favorite app store? Create an [Issue](https://github.com/Raf0707/
 ## 🤝 How to contribute
 - **The most improtant thing is I do not want someone's code.** This project is maintaining only by me and I want it to be this way. Creating Pull Requests will not have much sense as they will probably be closed.
 - **Place your suggestions on Issues
-  with [Suggestion Needed](https://github.com/Raf0707/Chitalka/labels/%F0%9F%93%9D%20Suggestion%20needed)
+  with [Suggestion Needed](https://github.com/Raf0707/RafBookReader/labels/%F0%9F%93%9D%20Suggestion%20needed)
   label.** When the issue has this label that means I seek new ideas on how to improve what I
   already propose. Feel free to tell me what's on your mind!
-- **Share your ideas and suggestions.** Your ideas and suggestions are always welcome, if you miss some feature or got an interesting idea, feel free to create a new [Issue](https://github.com/Raf0707/Chitalka/issues).
-- **Report bugs**. Had a crash or something went wrong? Create a new [Issue](https://github.com/Raf0707/Chitalka/issues), the more information you can give the better it is.
+- **Share your ideas and suggestions.** Your ideas and suggestions are always welcome, if you miss some feature or got an interesting idea, feel free to create a new [Issue](https://github.com/Raf0707/RafBookReader/issues).
+- **Report bugs**. Had a crash or something went wrong? Create a new [Issue](https://github.com/Raf0707/RafBookReader/issues), the more information you can give the better it is.
 - **Enjoy the app**. Your best contribution is using my app and enjoying it!
 
 <!------------ Credits and License ------------>

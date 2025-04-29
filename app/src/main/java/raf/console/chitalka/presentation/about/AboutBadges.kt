@@ -8,6 +8,8 @@
 package raf.console.chitalka.presentation.about
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -53,22 +55,30 @@ fun AboutBadges(
             ) { badge ->
                 AboutBadgeItem(badge = badge) {
                     when (badge.id) {
-                        "palestine" -> {
+                        /*"palestine" -> {
                             "Free Palestine!"
                                 .showToast(context = context, longToast = false)
-                        }
+                        }*/
                         "shareApp" -> {
                             val appLink =
-                                "https://www.rustore.ru/catalog/app/raf.console.chitalka"
+                                "https://play.google.com/store/apps/details?id=raf.console.chitalka"
+
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("Download RafBook Reader", "Download RafBook Reader \n" +
+                                    "\n" +
+                                    " $appLink")
+                            clipboard.setPrimaryClip(clip)
+
+
                             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
-                                putExtra(Intent.EXTRA_SUBJECT, "Поделитесь этим приложением")
-                                putExtra(Intent.EXTRA_TEXT, "Скачайте приложение «RafBook» по этой ссылке: $appLink")
+                                putExtra(Intent.EXTRA_SUBJECT, R.string.share_app)
+                                putExtra(Intent.EXTRA_TEXT, "Download RafBook Reader \n\n $appLink")
                             }
 
                             try {
                                 context.startActivity(
-                                    Intent.createChooser(shareIntent, "Поделиться приложением через")
+                                    Intent.createChooser(shareIntent, "Share app with")
                                 )
                             } catch (e: Exception) {
                                 e.printStackTrace()
@@ -83,47 +93,34 @@ fun AboutBadges(
                             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                                 data = Uri.parse("mailto:") // Только email-клиенты
                                 putExtra(Intent.EXTRA_EMAIL, arrayOf("raf_android-dev@mail.ru")) // Адрес
-                                putExtra(Intent.EXTRA_SUBJECT, "Обратная связь") // Тема письма
-                                putExtra(Intent.EXTRA_TEXT, "Здравствуйте,\n\n") // Текст по умолчанию
+                                putExtra(Intent.EXTRA_SUBJECT, "Feedback") // Тема письма
+                                putExtra(Intent.EXTRA_TEXT, "Hello, I'm <your name>,\n\n") // Текст по умолчанию
                             }
 
                             try {
-                                context.startActivity(Intent.createChooser(emailIntent, "Выберите почтовый клиент"))
+                                context.startActivity(Intent.createChooser(emailIntent, "Select a mail client"))
                             } catch (e: Exception) {
                                 e.printStackTrace()
                                 Toast.makeText(
                                     context,
-                                    "Ошибка: нет доступных почтовых клиентов",
+                                    "Error: No email clients available",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
 
-                        "rate_app_here" -> {
-                            val manager = RuStoreReviewManagerFactory.create(context)
+                        /*"rate_app_here" -> {
 
-                            manager.requestReviewFlow()
-                                .addOnSuccessListener { reviewInfo ->
-                                    manager.launchReviewFlow(reviewInfo)
-                                        .addOnFailureListener {
-                                            // Если RuStore не позволяет открыть окно повторно → открываем страницу приложения
-                                            openRuStorePage(context)
-                                        }
-                                }
-                                .addOnFailureListener {
-                                    // Ошибка при запросе ReviewInfo → сразу открываем страницу приложения
-                                    openRuStorePage(context)
-                                }
-                        }
+                        }*/
 
-                        "info_version" -> {
+                        /*"info_version" -> {
                             val activity = context as? Activity
                             if (activity != null) {
                                 checkForUpdates(context, activity)
                             } else {
                                 Log.e(TAG, "Ошибка: context не является Activity")
                             }
-                        }
+                        }*/
 
                         else -> {
                             badge.url?.let {
@@ -143,8 +140,8 @@ fun AboutBadges(
 }
 
 
-fun openRuStorePage(context: Context) {
-    val uri = Uri.parse("https://www.rustore.ru/catalog/app/raf.console.chitalka")
+fun openGPPage(context: Context) {
+    val uri = Uri.parse("https://play.google.com/store/apps/details?id=raf.console.chitalka")
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("ru.rustore")
     try {
