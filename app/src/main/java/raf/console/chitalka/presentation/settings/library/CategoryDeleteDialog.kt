@@ -13,13 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import raf.console.chitalka.R
 import raf.console.chitalka.presentation.core.components.dialog.Dialog
+import raf.console.chitalka.presentation.core.components.dialog.DialogCenter
 
 @Composable
 fun CategoryDeleteDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    Dialog(
+    DialogCenter(
         title = stringResource(id = R.string.delete_category),
         icon = Icons.Outlined.DeleteOutline,
         description = stringResource(id = R.string.delete_category_confirm),
