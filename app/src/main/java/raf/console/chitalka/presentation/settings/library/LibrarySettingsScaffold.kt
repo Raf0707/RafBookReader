@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import raf.console.chitalka.math.Expr
 import raf.console.chitalka.ui.settings.SettingsModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+/*@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibrarySettingsScaffold(
     scrollBehavior: TopAppBarScrollBehavior,
@@ -101,6 +101,68 @@ fun LibrarySettingsScaffold(
             onRename = onRename,
             onDelete = onDelete,
             onReorder = settingsModel::updateCategoryPositions
+        )
+    }
+}*/
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LibrarySettingsScaffold(
+    scrollBehavior: TopAppBarScrollBehavior,
+    listState: LazyListState,
+    categories: List<Category>,
+    navigateBack: () -> Unit,
+    onCreate: (String) -> Unit,
+    onToggleVisibility: (Int, Boolean) -> Unit,
+    onRename: (Int, String) -> Unit,
+    onDelete: (Int, Int?) -> Unit,
+    settingsModel: SettingsModel
+) {
+    var isEditMode by remember { mutableStateOf(false) }
+
+    Scaffold(
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.navigationBars)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        StyledText(stringResource(id = R.string.categories_settings_title))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        IconButton(
+                            onClick = { isEditMode = !isEditMode }
+                        ) {
+                            Icon(
+                                imageVector = if (isEditMode) Icons.Outlined.Check else Icons.Outlined.Edit,
+                                contentDescription = if (isEditMode) "Confirm" else "Edit"
+                            )
+                        }
+                    }
+                },
+                navigationIcon = { NavigatorBackIconButton(navigateBack = navigateBack) },
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer
+                )
+            )
+        }
+    ) { padding ->
+        LibrarySettingsLayout(
+            listState = listState,
+            paddingValues = padding,
+            categories = categories,
+            onCreate = onCreate,
+            onToggleVisibility = onToggleVisibility,
+            onRename = onRename,
+            onDelete = onDelete,
+            onReorder = settingsModel::updateCategoryPositions,
+            isEditMode = isEditMode // 👈 добавлено сюда
         )
     }
 }

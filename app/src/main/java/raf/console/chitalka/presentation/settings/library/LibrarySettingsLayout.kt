@@ -75,117 +75,7 @@ fun LibrarySettingsLayout(
     onRename: (Int, String) -> Unit,
     onDelete: (Int, Int?) -> Unit,
     onReorder: (List<Category>) -> Unit,
-    //isEditMode: Boolean
-) {
-    var dialogData by remember { mutableStateOf<Pair<Int?, String>?>(null) }
-    val categoryState = remember { mutableStateListOf<Category>() }
-
-    LaunchedEffect(categories) {
-        categoryState.clear()
-        categoryState.addAll(categories)
-    }
-
-    val reorderState = rememberReorderableLazyListState(
-        lazyListState = listState,
-        onMove = { from, to ->
-            categoryState.move(from.index, to.index)
-            onReorder(categoryState)
-        }
-    )
-
-    if (dialogData != null) {
-        DialogWithTextField(
-            initialValue = dialogData!!.second,
-            onDismiss = { dialogData = null },
-            onAction = { newName ->
-                val id = dialogData!!.first
-                if (id == null) onCreate(newName) else onRename(id, newName)
-                dialogData = null
-            }
-        )
-    }
-
-    LazyColumnWithScrollbar(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding()),
-            //.reorderable(reorderState)
-            //.detectReorderAfterLongPress(reorderState),
-        state = listState,
-        contentPadding = PaddingValues(horizontal = 16.dp)
-    ) {
-        item { Spacer(Modifier.height(4.dp)) }
-
-        items(categoryState, key = { it.id }) { cat ->
-            ReorderableItem(reorderState, key = cat.id) { isDragging ->
-                var askDelete by remember { mutableStateOf(false) }
-
-                CategoryItem(
-                    category = cat,
-                    onToggleVisibility = { onToggleVisibility(cat.id, !cat.isVisible) },
-                    onEdit = { dialogData = Pair(cat.id, cat.name) },
-                    onDelete = if (cat.isDefault) null else {
-                        { askDelete = true }
-                    },
-                    isDragging = isDragging,
-                    dragHandle = {
-                        IconButton(
-                            onClick = {},
-                            modifier = Modifier
-                                .size(36.dp)
-                                .draggableHandle()
-                        ) {}
-                    }
-                )
-
-                if (askDelete) {
-                    CategoryDeleteDialog(
-                        onConfirm = {
-                            askDelete = false
-                            onDelete(cat.id, null)
-                        },
-                        onDismiss = {
-                            askDelete = false
-                        }
-                    )
-                }
-
-                Spacer(Modifier.height(12.dp))
-            }
-        }
-
-        item {
-            Spacer(Modifier.height(8.dp))
-            CreateCategoryButton { dialogData = Pair(null, "") }
-            Spacer(Modifier.height(8.dp))
-        }
-
-        item {
-            Text(
-                text = stringResource(R.string.categories_settings_description),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-        }
-    }
-
-}*/
-
-
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun LibrarySettingsLayout(
-    listState: LazyListState,
-    paddingValues: PaddingValues,
-    categories: List<Category>,
-    onCreate: (String) -> Unit,
-    onToggleVisibility: (Int, Boolean) -> Unit,
-    onRename: (Int, String) -> Unit,
-    onDelete: (Int, Int?) -> Unit,
-    onReorder: (List<Category>) -> Unit
+    isEditMode: Boolean
 ) {
     var dialogData by remember { mutableStateOf<Pair<Int?, String>?>(null) }
     val categoryState = remember { mutableStateListOf<Category>() }
@@ -295,5 +185,118 @@ fun LibrarySettingsLayout(
             )
         }
     }
+}*/
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun LibrarySettingsLayout(
+    listState: LazyListState,
+    paddingValues: PaddingValues,
+    categories: List<Category>,
+    onCreate: (String) -> Unit,
+    onToggleVisibility: (Int, Boolean) -> Unit,
+    onRename: (Int, String) -> Unit,
+    onDelete: (Int, Int?) -> Unit,
+    onReorder: (List<Category>) -> Unit,
+    isEditMode: Boolean
+) {
+    var dialogData by remember { mutableStateOf<Pair<Int?, String>?>(null) }
+    val categoryState = remember { mutableStateListOf<Category>() }
+
+    LaunchedEffect(Unit) {
+        categoryState.clear()
+        categoryState.addAll(categories)
+    }
+    LaunchedEffect(categories) {
+        categoryState.clear()
+        categoryState.addAll(categories)
+    }
+
+    val reorderState = rememberReorderableLazyListState(
+        lazyListState = listState,
+        onMove = { from, to ->
+            categoryState.move(from.index, to.index)
+            onReorder(categoryState)
+        }
+    )
+
+    if (dialogData != null) {
+        DialogWithTextField(
+            initialValue = dialogData!!.second,
+            onDismiss = { dialogData = null },
+            onAction = { newName ->
+                val id = dialogData!!.first
+                if (id == null) onCreate(newName) else onRename(id, newName)
+                dialogData = null
+            }
+        )
+    }
+
+    LazyColumnWithScrollbar(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = paddingValues.calculateTopPadding()),
+        state = listState,
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        items(categoryState, key = { it.id }) { cat ->
+            ReorderableItem(reorderState, key = cat.id) { isDragging ->
+                var askDelete by remember { mutableStateOf(false) }
+
+                CategoryItem(
+                    category = cat,
+                    onToggleVisibility = { onToggleVisibility(cat.id, !cat.isVisible) },
+                    onEdit = { dialogData = Pair(cat.id, cat.name) },
+                    onDelete = if (!cat.isDefault && isEditMode) {
+                        { askDelete = true }
+                    } else null,
+                    isDragging = isDragging,
+                    isEditMode = isEditMode,
+                    dragHandle = if (isEditMode) {
+                        {
+                            IconButton(
+                                onClick = {},
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .draggableHandle()
+                            ) {}
+                        }
+                    } else null
+                )
+
+                if (askDelete) {
+                    CategoryDeleteDialog(
+                        onConfirm = {
+                            askDelete = false
+                            onDelete(cat.id, null)
+                        },
+                        onDismiss = {
+                            askDelete = false
+                        }
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+            }
+        }
+
+        item {
+            Spacer(Modifier.height(8.dp))
+            if (isEditMode) {
+                CreateCategoryButton { dialogData = Pair(null, "") }
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+
+        item {
+            Text(
+                text = stringResource(R.string.categories_settings_description),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+        }
+    }
 }
+
 

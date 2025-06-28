@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import raf.console.chitalka.domain.library.custom_category.Category
 import raf.console.chitalka.presentation.settings.library.subcategory.CategoriesSubcategory
 
-fun LazyListScope.LibrarySettingsCategory(
+/*fun LazyListScope.LibrarySettingsCategory(
     categories: List<Category>,
     onToggleVisibility: (Int, Boolean) -> Unit,
     onDelete: (Int, Int?) -> Unit,
@@ -24,5 +24,23 @@ fun LazyListScope.LibrarySettingsCategory(
         onRequestRename = onRequestRename,
         onDelete = onDelete,
         onRequestCreate = onRequestCreate,
+    )
+}*/
+
+fun LazyListScope.LibrarySettingsCategory(
+    categories: List<Category>,
+    onToggleVisibility: (Int, Boolean) -> Unit,
+    onDelete: (Int, Int?) -> Unit,
+    onRequestCreate: () -> Unit,
+    onRequestRename: (Int, String) -> Unit,
+    isEditMode: Boolean // 👈 добавлен параметр
+) {
+    CategoriesSubcategory(
+        categories = categories,
+        onToggleVisibility = onToggleVisibility,
+        onRequestRename = onRequestRename,
+        onDelete = onDelete,
+        onRequestCreate = onRequestCreate,
+        isEditMode = isEditMode // 👈 передаётся дальше
     )
 }

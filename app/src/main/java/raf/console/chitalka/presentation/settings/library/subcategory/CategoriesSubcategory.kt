@@ -49,6 +49,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -270,7 +271,11 @@ private fun SwipeDeleteBackground(
     }
 }*/
 
-@OptIn(ExperimentalFoundationApi::class)
+
+/*---------------------------------------------------------------*/
+
+
+/*@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.CategoriesSubcategory(
     categories: List<Category>,
     onToggleVisibility: (Int, Boolean) -> Unit,
@@ -341,5 +346,87 @@ fun LazyListScope.CategoriesSubcategory(
             )
         }
     }
+}*/
+
+
+@OptIn(ExperimentalFoundationApi::class)
+fun LazyListScope.CategoriesSubcategory(
+    categories: List<Category>,
+    onToggleVisibility: (Int, Boolean) -> Unit,
+    onRequestRename: (Int, String) -> Unit,
+    onDelete: (Int, Int?) -> Unit,
+    onRequestCreate: () -> Unit,
+    isEditMode: Boolean // 👈 добавлено
+) {
+    item { Spacer(Modifier.height(4.dp)) }
+
+    SettingsSubcategory(
+        titleColor = { MaterialTheme.colorScheme.primary },
+        title = { "" },
+        showTitle = false,
+        showDivider = false
+    ) {
+        categories.forEach { cat ->
+            item(key = cat.id) {
+                val scope = rememberCoroutineScope()
+                var askDelete by remember { mutableStateOf(false) }
+
+                CategoryItem(
+                    category = cat,
+                    onToggleVisibility = { onToggleVisibility(cat.id, !cat.isVisible) },
+                    onEdit = { onRequestRename(cat.id, cat.name) },
+                    onDelete = if (!cat.isDefault && isEditMode) {
+                        { askDelete = true }
+                    } else null,
+                    isDragging = false,
+                    isEditMode = isEditMode,
+                    dragHandle = if (isEditMode) {
+                        {
+                            IconButton(
+                                onClick = {},
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .alpha(0.6f) // можно убрать если не нужно визуально отличать
+                            ) {}
+                        }
+                    } else null
+                )
+
+                if (askDelete) {
+                    CategoryDeleteDialog(
+                        onConfirm = {
+                            askDelete = false
+                            onDelete(cat.id, null)
+                        },
+                        onDismiss = {
+                            askDelete = false
+                        }
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+            }
+        }
+
+        item {
+            Spacer(Modifier.height(8.dp))
+            if (isEditMode) {
+                CreateCategoryButton {
+                    onRequestCreate()
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+
+        item {
+            Text(
+                text = stringResource(id = R.string.categories_settings_description),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+        }
+    }
 }
+
 

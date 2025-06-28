@@ -148,7 +148,12 @@ private fun SmallIconButton(icon: ImageVector, descRes: Int, onClick: () -> Unit
     }
 }*/
 
-@Composable
+
+
+/*---------------------*/
+
+
+/*@Composable
 fun CategoryItem(
     category: Category,
     onToggleVisibility: () -> Unit,
@@ -233,7 +238,98 @@ fun CategoryItem(
             }
         }
     }
+}*/
+
+@Composable
+fun CategoryItem(
+    category: Category,
+    onToggleVisibility: () -> Unit,
+    onEdit: () -> Unit,
+    onDelete: (() -> Unit)? = null,
+    dragHandle: (@Composable () -> Unit)? = null,
+    isDragging: Boolean = false,
+    isEditMode: Boolean
+) {
+    val dragAlpha by animateFloatAsState(
+        targetValue = if (isDragging) 0.5f else 1f,
+        label = "dragAlpha"
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .alpha(dragAlpha),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.LocalOffer,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .graphicsLayer { scaleX = -1f },
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+
+            Text(
+                text = category.title.asString(),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            if (isEditMode) {
+                IconButton(
+                    onClick = {}, // не нужен onClick — перетаскивание по удержанию
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Dehaze,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    dragHandle?.invoke()
+                }
+            }
+
+            SmallIconButton(
+                icon = if (category.isVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                contentDesc = if (category.isVisible) R.string.hide_category else R.string.show_category,
+                onClick = onToggleVisibility
+            )
+
+            if (isEditMode) {
+                SmallIconButton(
+                    icon = Icons.Outlined.Edit,
+                    contentDesc = R.string.edit_category,
+                    onClick = onEdit
+                )
+
+                onDelete?.let {
+                    SmallIconButton(
+                        icon = Icons.Outlined.Close,
+                        contentDesc = R.string.delete_category,
+                        onClick = it,
+                        isError = true
+                    )
+                }
+            }
+        }
+    }
 }
+
 
 @Composable
 private fun SmallIconButton(
