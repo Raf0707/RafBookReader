@@ -25,7 +25,7 @@
 
 # <p align="center">Overview</p>
 
-<img src="https://github.com/Raf0707/RafBookReader/blob/master/assets/readme/overview_rafbook.jpg">
+<img src="https://github.com/Raf0707/RafBookReader/blob/master/assets/readme/rafbook_banner.jpg">
 Built using Jetpack Compose and Kotlin.
 
 <!------------ Screenshots ------------>
