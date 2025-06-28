@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -27,7 +27,7 @@ import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.library.book.SelectableBook
 import raf.console.chitalka.domain.use_case.book.DeleteBooks
 import raf.console.chitalka.domain.use_case.book.GetBooks
-import raf.console.chitalka.domain.use_case.book.UpdateBook
+import raf.console.chitalka.domain.use_case.book.SetBookCategories
 import raf.console.chitalka.presentation.core.util.showToast
 import raf.console.chitalka.ui.browse.BrowseScreen
 import raf.console.chitalka.ui.history.HistoryScreen
@@ -37,7 +37,7 @@ import javax.inject.Inject
 class LibraryModel @Inject constructor(
     private val getBooks: GetBooks,
     private val deleteBooks: DeleteBooks,
-    private val moveBooks: UpdateBook
+    private val setBookCategories: SetBookCategories
 ) : ViewModel() {
 
     private val mutex = Mutex()
@@ -195,7 +195,7 @@ class LibraryModel @Inject constructor(
                 }
             }
 
-            is LibraryEvent.OnShowMoveDialog -> {
+            is LibraryEvent.OnShowCategoriesDialog -> {
                 viewModelScope.launch {
                     _state.update {
                         it.copy(
@@ -205,15 +205,11 @@ class LibraryModel @Inject constructor(
                 }
             }
 
-            is LibraryEvent.OnActionMoveDialog -> {
+            is LibraryEvent.OnActionSetCategoriesDialog -> {
                 viewModelScope.launch {
-                    _state.value.books.forEach { book ->
-                        if (!book.selected) return@forEach
-                        moveBooks.execute(
-                            book.data.copy(
-                                category = event.selectedCategory
-                            )
-                        )
+                    val ids = _state.value.books.filter { it.selected }.map { it.data.id }
+                    ids.forEach { id ->
+                        setBookCategories(id, event.categoryIds)
                     }
 
                     _state.update {
@@ -221,9 +217,6 @@ class LibraryModel @Inject constructor(
                             books = it.books.map { book ->
                                 if (!book.selected) return@map book
                                 book.copy(
-                                    data = book.data.copy(
-                                        category = event.selectedCategory
-                                    ),
                                     selected = false
                                 )
                             },
@@ -233,17 +226,14 @@ class LibraryModel @Inject constructor(
                     }
 
                     HistoryScreen.refreshListChannel.trySend(0)
-                    LibraryScreen.scrollToPageCompositionChannel.trySend(
-                        event.categories.dropLastWhile {
-                            it.category != event.selectedCategory
-                        }.lastIndex
-                    )
+                    BrowseScreen.refreshListChannel.trySend(Unit)
 
-                    withContext(Dispatchers.Main) {
-                        event.context
-                            .getString(R.string.books_moved)
-                            .showToast(context = event.context)
-                    }
+                    onEvent(
+                        LibraryEvent.OnRefreshList(
+                            loading = false,
+                            hideSearch = false
+                        )
+                    )
                 }
             }
 
@@ -294,6 +284,9 @@ class LibraryModel @Inject constructor(
                     }
                 }
             }
+
+            is LibraryEvent.OnShowMoveDialog -> { /* deprecated */ }
+            is LibraryEvent.OnActionMoveDialog -> { /* deprecated */ }
         }
     }
 

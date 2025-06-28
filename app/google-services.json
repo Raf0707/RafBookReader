@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970501636622",
+    "project_id": "rafbook-9e764",
+    "storage_bucket": "rafbook-9e764.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970501636622:android:3619778cd11b5e1233f25f",
+        "android_client_info": {
+          "package_name": "raf.console.chitalka.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxCH6QfmrjCELYhSA0M78wM-rvIDljewU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

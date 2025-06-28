@@ -31,8 +31,6 @@ import raf.console.chitalka.R
 import raf.console.chitalka.presentation.core.constants.provideAboutBadges
 import raf.console.chitalka.presentation.core.util.showToast
 import raf.console.chitalka.ui.about.AboutEvent
-import raf.console.chitalka.util.update.checkForUpdates
-import ru.rustore.sdk.review.RuStoreReviewManagerFactory
 
 @Composable
 fun AboutBadges(
@@ -136,18 +134,5 @@ fun AboutBadges(
                 }
             }
         }
-    }
-}
-
-
-fun openGPPage(context: Context) {
-    val uri = Uri.parse("https://play.google.com/store/apps/details?id=raf.console.chitalka")
-    val intent = Intent(Intent.ACTION_VIEW, uri)
-    intent.setPackage("ru.rustore")
-    try {
-        context.startActivity(intent)
-    } catch (e: Exception) {
-        // Если RuStore не установлен, открываем страницу в браузере
-        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 }

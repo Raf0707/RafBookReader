@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -22,7 +22,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import raf.console.chitalka.R
-import raf.console.chitalka.domain.library.category.Category
 import raf.console.chitalka.domain.use_case.book.CanResetCover
 import raf.console.chitalka.domain.use_case.book.DeleteBooks
 import raf.console.chitalka.domain.use_case.book.GetBookById
@@ -33,7 +32,10 @@ import raf.console.chitalka.presentation.core.util.showToast
 import raf.console.chitalka.ui.browse.BrowseScreen
 import raf.console.chitalka.ui.history.HistoryScreen
 import raf.console.chitalka.ui.library.LibraryScreen
+import raf.console.chitalka.domain.use_case.category.ObserveCategories
 import javax.inject.Inject
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class BookInfoModel @Inject constructor(
@@ -42,7 +44,9 @@ class BookInfoModel @Inject constructor(
     private val canResetCover: CanResetCover,
     private val updateCoverImageOfBook: UpdateCoverImageOfBook,
     private val resetCoverImage: ResetCoverImage,
-    private val deleteBooks: DeleteBooks
+    private val deleteBooks: DeleteBooks,
+    observeCategories: ObserveCategories,
+    private val setBookCategories: raf.console.chitalka.domain.use_case.book.SetBookCategories
 ) : ViewModel() {
 
     private val mutex = Mutex()
@@ -52,6 +56,8 @@ class BookInfoModel @Inject constructor(
 
     private var eventJob = SupervisorJob()
     private var resetJob: Job? = null
+
+    val categories = observeCategories()
 
     fun onEvent(event: BookInfoEvent) {
         viewModelScope.launch(eventJob + Dispatchers.Main) {
@@ -346,46 +352,25 @@ class BookInfoModel @Inject constructor(
                     }
                 }
 
-                is BookInfoEvent.OnShowMoveDialog -> {
+                is BookInfoEvent.OnShowCategoriesDialog -> {
                     _state.update {
                         it.copy(
-                            dialog = BookInfoScreen.MOVE_DIALOG
+                            dialog = BookInfoScreen.CATEGORIES_DIALOG
                         )
                     }
                 }
 
-                is BookInfoEvent.OnActionMoveDialog -> {
+                is BookInfoEvent.OnActionSetCategoriesDialog -> {
                     launch {
                         _state.update {
-                            it.copy(
-                                dialog = null,
-                                bottomSheet = null
-                            )
+                            it.copy(dialog = null)
                         }
 
-                        _state.update {
-                            it.copy(
-                                book = it.book.copy(
-                                    category = event.category
-                                )
-                            )
-                        }
-                        updateBook.execute(_state.value.book)
+                        setBookCategories(_state.value.book.id, event.categoryIds)
 
-                        LibraryScreen.refreshListChannel.trySend(0)
-                        LibraryScreen.scrollToPageCompositionChannel.trySend(
-                            Category.entries.dropLastWhile {
-                                it != event.category
-                            }.size - 1
-                        )
-                        HistoryScreen.refreshListChannel.trySend(0)
-
-                        withContext(Dispatchers.Main) {
-                            event.context.getString(R.string.book_moved)
-                                .showToast(context = event.context)
-                        }
-
-                        event.navigateToLibrary()
+                        // refresh library lists
+                        raf.console.chitalka.ui.library.LibraryScreen.refreshListChannel.trySend(0)
+                        raf.console.chitalka.ui.history.HistoryScreen.refreshListChannel.trySend(0)
                     }
                 }
 
@@ -396,6 +381,9 @@ class BookInfoModel @Inject constructor(
                         )
                     }
                 }
+
+                is BookInfoEvent.OnShowMoveDialog -> { /* deprecated, ignore */ }
+                is BookInfoEvent.OnActionMoveDialog -> { /* deprecated */ }
             }
         }
     }

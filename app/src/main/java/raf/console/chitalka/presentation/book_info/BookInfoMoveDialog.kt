@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import raf.console.chitalka.R
 import raf.console.chitalka.domain.library.book.Book
-import raf.console.chitalka.domain.library.category.Category
+import raf.console.chitalka.domain.library.custom_category.Category
 import raf.console.chitalka.presentation.core.components.dialog.Dialog
 import raf.console.chitalka.presentation.core.components.dialog.SelectableDialogItem
 import raf.console.chitalka.ui.book_info.BookInfoEvent
@@ -25,18 +25,17 @@ import raf.console.chitalka.ui.book_info.BookInfoEvent
 @Composable
 fun BookInfoMoveDialog(
     book: Book,
+    categories: List<Category>,
     actionMoveDialog: (BookInfoEvent.OnActionMoveDialog) -> Unit,
     dismissDialog: (BookInfoEvent.OnDismissDialog) -> Unit,
     navigateToLibrary: () -> Unit
 ) {
     val context = LocalContext.current
 
-    val categories = remember {
-        Category.entries.filter { book.category != it }
+    val selectableCategories = remember(categories, book) {
+        categories.filter { !book.categoryIds.contains(it.id) }
     }
-    val selectedCategory = remember {
-        mutableStateOf(categories[0])
-    }
+    val selectedCategory = remember { mutableStateOf(selectableCategories.firstOrNull()) }
 
     Dialog(
         title = stringResource(id = R.string.move_book),
@@ -47,29 +46,24 @@ fun BookInfoMoveDialog(
         actionEnabled = true,
         onDismiss = { dismissDialog(BookInfoEvent.OnDismissDialog) },
         onAction = {
+            selectedCategory.value?.let { cat ->
             actionMoveDialog(
                 BookInfoEvent.OnActionMoveDialog(
-                    category = selectedCategory.value,
+                        categoryId = cat.id,
                     context = context,
                     navigateToLibrary = navigateToLibrary
                 )
             )
+            }
         },
         withContent = true,
         items = {
-            items(categories, key = { it.name }) {
-                val category = when (it) {
-                    Category.READING -> stringResource(id = R.string.reading_tab)
-                    Category.ALREADY_READ -> stringResource(id = R.string.already_read_tab)
-                    Category.PLANNING -> stringResource(id = R.string.planning_tab)
-                    Category.DROPPED -> stringResource(id = R.string.dropped_tab)
-                }
-
+            items(selectableCategories, key = { it.id }) { cat ->
                 SelectableDialogItem(
-                    selected = it == selectedCategory.value,
-                    title = category
+                    selected = cat == selectedCategory.value,
+                    title = cat.title.asString()
                 ) {
-                    selectedCategory.value = it
+                    selectedCategory.value = cat
                 }
             }
         }

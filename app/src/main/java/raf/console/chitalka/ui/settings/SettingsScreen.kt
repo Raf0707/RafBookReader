@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -16,6 +16,7 @@ import raf.console.chitalka.domain.navigator.Screen
 import raf.console.chitalka.presentation.core.components.top_bar.collapsibleTopAppBarScrollBehavior
 import raf.console.chitalka.presentation.navigator.LocalNavigator
 import raf.console.chitalka.presentation.settings.SettingsContent
+import raf.console.chitalka.ui.settings.LibrarySettingsScreen
 
 @Parcelize
 object SettingsScreen : Screen, Parcelable {
@@ -40,6 +41,9 @@ object SettingsScreen : Screen, Parcelable {
             },
             navigateToBrowseSettings = {
                 navigator.push(BrowseSettingsScreen)
+            },
+            navigateToLibrarySettings = {
+                navigator.push(LibrarySettingsScreen)
             },
             navigateBack = {
                 navigator.pop()

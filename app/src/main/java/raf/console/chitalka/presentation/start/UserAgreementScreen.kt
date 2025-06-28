@@ -98,7 +98,7 @@ for RafBook Mobile Application
 5. Privacy and Data  
     5.1. Data collection:  
         5.1.1. For unauthorized users, data collection is limited to anonymous statistics (e.g., error frequency).  
-        5.1.2. When registering via VK-ID, data is processed according to VK and RuStore privacy policies.  
+        5.1.2. When registering via Google, data is processed according to Google and Google Play privacy policies.  
 
     5.2. Data storage:  
         5.2.1. Local device data (settings, cache) isn't transmitted to the Developer without User consent.  

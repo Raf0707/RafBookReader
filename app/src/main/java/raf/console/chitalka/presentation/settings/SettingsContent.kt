@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -21,6 +21,7 @@ fun SettingsContent(
     navigateToAppearanceSettings: () -> Unit,
     navigateToReaderSettings: () -> Unit,
     navigateToBrowseSettings: () -> Unit,
+    navigateToLibrarySettings: () -> Unit,
     navigateBack: () -> Unit
 ) {
     SettingsScaffold(
@@ -30,6 +31,7 @@ fun SettingsContent(
         navigateToAppearanceSettings = navigateToAppearanceSettings,
         navigateToReaderSettings = navigateToReaderSettings,
         navigateToBrowseSettings = navigateToBrowseSettings,
+        navigateToLibrarySettings = navigateToLibrarySettings,
         navigateBack = navigateBack
     )
 }

@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -54,17 +54,21 @@ class MainModel @Inject constructor(
     private val getAllSettings: GetAllSettings
 ) : ViewModel() {
 
+    private val initialState: MainState = stateHandle[provideMainState()] ?: MainState()
+
+    private val _state: MutableStateFlow<MainState> = MutableStateFlow(initialState)
+    val state = _state.asStateFlow()
+
     private val mutex = Mutex()
+
+    init {
+        raf.console.chitalka.math.MathConfig.enabled = initialState.renderMath
+    }
 
     private val _isReady = MutableStateFlow(false)
     val isReady = _isReady.asStateFlow()
 
     private val mainModelReady = MutableStateFlow(false)
-
-    private val _state: MutableStateFlow<MainState> = MutableStateFlow(
-        stateHandle[provideMainState()] ?: MainState()
-    )
-    val state = _state.asStateFlow()
 
     fun onEvent(event: MainEvent) {
         when (event) {
@@ -513,6 +517,15 @@ class MainModel @Inject constructor(
                 value = event.value,
                 updateState = {
                     it.copy(horizontalGesturePullAnim = this)
+                }
+            )
+
+            is MainEvent.OnChangeRenderMath -> handleDatastoreUpdate(
+                key = DataStoreConstants.RENDER_MATH,
+                value = event.value,
+                updateState = {
+                    raf.console.chitalka.math.MathConfig.enabled = this
+                    it.copy(renderMath = this)
                 }
             )
         }

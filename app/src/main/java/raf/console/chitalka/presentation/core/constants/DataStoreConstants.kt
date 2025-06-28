@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -67,6 +67,9 @@ object DataStoreConstants {
     val PROGRESS_BAR_ALIGNMENT = stringPreferencesKey("progress_bar_alignment")
     val PROGRESS_BAR_FONT_SIZE = intPreferencesKey("progress_bar_font_size")
     val PROGRESS_COUNT = stringPreferencesKey("progress_count")
+
+    // Math renderer
+    val RENDER_MATH = booleanPreferencesKey("render_math")
 
     // Browse settings
     val BROWSE_LAYOUT = stringPreferencesKey("browse_layout")

@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -12,6 +12,7 @@ import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.util.Dialog
 import raf.console.chitalka.ui.book_info.BookInfoEvent
 import raf.console.chitalka.ui.book_info.BookInfoScreen
+import raf.console.chitalka.domain.library.custom_category.Category
 
 @Composable
 fun BookInfoDialog(
@@ -22,7 +23,8 @@ fun BookInfoDialog(
     actionDescriptionDialog: (BookInfoEvent.OnActionDescriptionDialog) -> Unit,
     actionPathDialog: (BookInfoEvent.OnActionPathDialog) -> Unit,
     actionDeleteDialog: (BookInfoEvent.OnActionDeleteDialog) -> Unit,
-    actionMoveDialog: (BookInfoEvent.OnActionMoveDialog) -> Unit,
+    actionSetCategoriesDialog: (BookInfoEvent.OnActionSetCategoriesDialog) -> Unit,
+    categories: List<raf.console.chitalka.domain.library.custom_category.Category>,
     dismissDialog: (BookInfoEvent.OnDismissDialog) -> Unit,
     navigateBack: () -> Unit,
     navigateToLibrary: () -> Unit
@@ -33,15 +35,6 @@ fun BookInfoDialog(
                 actionDeleteDialog = actionDeleteDialog,
                 dismissDialog = dismissDialog,
                 navigateBack = navigateBack
-            )
-        }
-
-        BookInfoScreen.MOVE_DIALOG -> {
-            BookInfoMoveDialog(
-                book = book,
-                actionMoveDialog = actionMoveDialog,
-                dismissDialog = dismissDialog,
-                navigateToLibrary = navigateToLibrary
             )
         }
 
@@ -74,6 +67,15 @@ fun BookInfoDialog(
                 book = book,
                 actionPathDialog = actionPathDialog,
                 dismissDialog = dismissDialog
+            )
+        }
+
+        BookInfoScreen.CATEGORIES_DIALOG -> {
+            BookInfoCategoriesDialog(
+                currentCategoryIds = book.categoryIds,
+                categories = categories,
+                onAction = actionSetCategoriesDialog,
+                onDismiss = { dismissDialog(BookInfoEvent.OnDismissDialog) }
             )
         }
     }

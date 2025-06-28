@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -12,6 +12,7 @@ import raf.console.chitalka.R
 import raf.console.chitalka.data.local.dto.BookEntity
 import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.ui.UIText
+import raf.console.chitalka.domain.library.category.Category
 import javax.inject.Inject
 
 class BookMapperImpl @Inject constructor() : BookMapper {
@@ -26,7 +27,13 @@ class BookMapperImpl @Inject constructor() : BookMapper {
             author = book.author.getAsString(),
             description = book.description,
             image = book.coverImage?.toString(),
-            category = book.category
+            categoryId = if (book.categoryId != 0) book.categoryId else when (book.category) {
+                Category.READING -> 1
+                Category.ALREADY_READ -> 2
+                Category.PLANNING -> 3
+                Category.DROPPED -> 4
+                else -> 0
+            }
         )
     }
 
@@ -43,7 +50,14 @@ class BookMapperImpl @Inject constructor() : BookMapper {
             progress = bookEntity.progress,
             filePath = bookEntity.filePath,
             lastOpened = null,
-            category = bookEntity.category,
+            categoryId = bookEntity.categoryId,
+            category = when (bookEntity.categoryId) {
+                1 -> Category.READING
+                2 -> Category.ALREADY_READ
+                3 -> Category.PLANNING
+                4 -> Category.DROPPED
+                else -> null
+            },
             coverImage = if (bookEntity.image != null) bookEntity.image.toUri() else null
         )
     }

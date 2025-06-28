@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -31,4 +31,12 @@ sealed class ReaderText {
     data class Image(
         val imageBitmap: ImageBitmap
     ) : ReaderText()
+
+    /**
+     * Представление LaTeX-формулы как отдельного элемента текста.
+     * Поскольку формула будет рендериться кастомным Canvas, здесь хранится
+     * только исходная строка LaTeX без ограждающих `$`.
+     */
+    @Immutable
+    data class Math(val latex: String) : ReaderText()
 }

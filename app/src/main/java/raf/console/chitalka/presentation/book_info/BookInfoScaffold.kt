@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -30,6 +30,7 @@ fun BookInfoScaffold(
     showAuthorDialog: (BookInfoEvent.OnShowAuthorDialog) -> Unit,
     showDescriptionDialog: (BookInfoEvent.OnShowDescriptionDialog) -> Unit,
     showMoveDialog: (BookInfoEvent.OnShowMoveDialog) -> Unit,
+    showCategoriesDialog: (BookInfoEvent.OnShowCategoriesDialog) -> Unit = {},
     showDeleteDialog: (BookInfoEvent.OnShowDeleteDialog) -> Unit,
     navigateToReader: () -> Unit,
     navigateBack: () -> Unit
@@ -58,6 +59,7 @@ fun BookInfoScaffold(
             showDescriptionDialog = showDescriptionDialog,
             showChangeCoverBottomSheet = showChangeCoverBottomSheet,
             showMoveDialog = showMoveDialog,
+            showCategoriesDialog = showCategoriesDialog,
             showDeleteDialog = showDeleteDialog,
             navigateToReader = navigateToReader
         )

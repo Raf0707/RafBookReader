@@ -52,8 +52,8 @@ object StartScreen : Screen, Parcelable {
     @IgnoredOnParcel
     const val TELEGRAM_GROUP = "telegram_group"
 
-    @IgnoredOnParcel
-    const val LICENSE = "license"
+    /*@IgnoredOnParcel
+    const val LICENSE = "license"*/
 
     @IgnoredOnParcel
     const val PRIVACY_POLICY = "privacy_policy"
@@ -97,7 +97,7 @@ object StartScreen : Screen, Parcelable {
             languages = languages,
             changeLanguage = mainModel::onEvent,
             navigateForward = {
-                if (currentPage.intValue + 1 == 10) {
+                if (currentPage.intValue + 1 == 9) {
                     return@StartContent
                 }
 

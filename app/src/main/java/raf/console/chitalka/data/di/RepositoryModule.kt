@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -35,6 +35,10 @@ import raf.console.chitalka.domain.repository.DataStoreRepository
 import raf.console.chitalka.domain.repository.FileSystemRepository
 import raf.console.chitalka.domain.repository.HistoryRepository
 import raf.console.chitalka.domain.repository.PermissionRepository
+import raf.console.chitalka.data.mapper.category.CategoryMapper
+import raf.console.chitalka.data.mapper.category.CategoryMapperImpl
+import raf.console.chitalka.data.repository.CategoryRepositoryImpl
+import raf.console.chitalka.domain.repository.CategoryRepository
 import javax.inject.Singleton
 
 @Module
@@ -111,4 +115,16 @@ abstract class RepositoryModule {
     abstract fun bindTextParser(
         textParserImpl: TextParserImpl
     ): TextParser
+
+    @Binds
+    @Singleton
+    abstract fun bindCategoryRepository(
+        categoryRepositoryImpl: CategoryRepositoryImpl
+    ): CategoryRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCategoryMapper(
+        categoryMapperImpl: CategoryMapperImpl
+    ): CategoryMapper
 }

@@ -9,6 +9,7 @@ package raf.console.chitalka.presentation.crash
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
+//import raf.console.chitalka.presentation.core.components.common.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,6 +37,21 @@ fun CrashContent(
                             )
                         )
                     }
+                    /*SelectionContainer(
+                        onCopyRequested = copy,
+                        onShareRequested = {}, // или передайте нужную реализацию
+                        onWebSearchRequested = {},
+                        onTranslateRequested = {},
+                        onDictionaryRequested = {}
+                    ) { toolbarHidden ->
+                        StyledText(
+                            text = crashLog,
+                            modifier = Modifier.horizontalScroll(rememberScrollState()),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        )
+                    }*/
                 }
             }
         }

@@ -11,19 +11,13 @@
         android:name="raf.console.chitalka.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         tools:node="remove" />
 
-    <!-- Removing DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION, which is not used -->
     <uses-permission
-        android:name="com.byteflipper.everbook.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="raf.console.chitalka.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        tools:node="remove" />
+    <uses-permission
+        android:name="raf.console.chitalka.release.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         tools:node="remove" />
 
-    <uses-permission
-        android:name="com.byteflipper.everbook.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-        tools:node="remove" />
-    <uses-permission
-        android:name="com.byteflipper.everbook.release.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-        tools:node="remove" />
-
-    <!-- Removing READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE explicitly -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         tools:node="remove"
@@ -33,13 +27,6 @@
         tools:node="remove"
         tools:ignore="ScopedStorage" />
 
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:node="remove" />
-
-    <uses-permission
-        android:name="com.google.android.gms.permission.AD_ID"
-        tools:node="remove" />
 
     <application
         android:name=".Application"

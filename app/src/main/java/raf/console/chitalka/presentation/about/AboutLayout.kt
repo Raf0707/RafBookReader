@@ -11,6 +11,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,10 +23,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -32,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import raf.console.chitalka.R
 import raf.console.chitalka.presentation.core.components.common.LazyColumnWithScrollbar
 import raf.console.chitalka.presentation.core.constants.bugReportPage
@@ -41,6 +51,9 @@ import raf.console.chitalka.presentation.core.constants.provideReleasesPage
 import raf.console.chitalka.presentation.core.constants.provideSupportPage
 import raf.console.chitalka.presentation.core.constants.provideTranslationPage
 import raf.console.chitalka.ui.about.AboutEvent
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun AboutLayout(
@@ -51,6 +64,7 @@ fun AboutLayout(
     navigateToCredits: () -> Unit
 ) {
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
 
     LazyColumnWithScrollbar(
         Modifier
@@ -116,12 +130,28 @@ fun AboutLayout(
                 title = stringResource(id = R.string.report_bug_option),
                 description = null
             ) {
+
+                val bagReportMessage = getDeviceInfo(context)
+
+                val clipboardManager = ContextCompat.getSystemService(context, ClipboardManager::class.java)
+                val clip = ClipData.newPlainText("bug_report", bagReportMessage)
+                clipboardManager?.setPrimaryClip(clip)
+
                 navigateToBrowserPage(
                     AboutEvent.OnNavigateToBrowserPage(
                         page = bugReportPage(),
                         context = context
                     )
                 )
+
+                /*if (showDialog) {
+                    BugReportDialog(
+                        onDismiss = { showDialog = false },
+                        context = LocalContext.current,
+                        screenName = "MainScreen",
+                        error = "NullPointerException at line 42"
+                    )
+                }*/
             }
         }
 
@@ -192,4 +222,87 @@ fun AboutLayout(
             )
         }
     }
+}
+
+fun getDeviceInfo(context: Context, currentScreen: String = "Screen where the error occurred (describe the screen or send a screenshot)", error: String = "Describe the error that occurred or record a video of the screen and show it to us"): String {
+    val displayMetrics = context.resources.displayMetrics
+    val screenSize = "${displayMetrics.widthPixels} x ${displayMetrics.heightPixels}"
+    val locale = context.resources.configuration.locales[0]
+
+    val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
+    return """
+        📱 Device Info:
+        - Manufacturer: ${Build.MANUFACTURER}
+        - Model: ${Build.MODEL}
+        - Android Version: ${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})
+        - Screen params: $screenSize
+        - Language: ${locale.language}-${locale.country}
+        
+        🧭 Screen: $currentScreen
+        ⏰ Time: $dateTime
+        
+        ❌ Error:
+        $error
+    """.trimIndent()
+}
+
+@Composable
+fun BugReportDialog(
+    onDismiss: () -> Unit,
+    context: Context,
+    screenName: String,
+    error: String,
+    navigateToBrowserPage: (AboutEvent.OnNavigateToBrowserPage) -> Unit
+) {
+    val bugReportText = remember {
+        getDeviceInfo(context, screenName, error)
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Сообщить об ошибке") },
+        text = { Text("Скопировать данные об устройстве и ошибке?") },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val clipboardManager = ContextCompat.getSystemService(context, ClipboardManager::class.java)
+                    val clip = ClipData.newPlainText("bug_report", bugReportText)
+                    clipboardManager?.setPrimaryClip(clip)
+
+                    // Переход в Telegram
+                    /*val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/your_group_link"))
+                    context.startActivity(intent)*/
+
+                    navigateToBrowserPage(
+                        AboutEvent.OnNavigateToBrowserPage(
+                            page = bugReportPage(),
+                            context = context
+                        )
+                    )
+
+                    onDismiss()
+                }
+            ) {
+                Text("Скопировать")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    /*val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/your_group_link"))
+                    context.startActivity(intent)*/
+                    navigateToBrowserPage(
+                        AboutEvent.OnNavigateToBrowserPage(
+                            page = bugReportPage(),
+                            context = context
+                        )
+                    )
+                    onDismiss()
+                }
+            ) {
+                Text("Отмена")
+            }
+        }
+    )
 }

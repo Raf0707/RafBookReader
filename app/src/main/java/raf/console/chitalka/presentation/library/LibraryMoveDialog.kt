@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -40,7 +40,7 @@ fun LibraryMoveDialog(
     val moveCategories = remember {
         derivedStateOf {
             categories.mapNotNull { category ->
-                if (!selectedBooks.value.all { it.data.category == category.category }) {
+                if (!selectedBooks.value.all { it.data.categoryIds.contains(category.id) }) {
                     return@mapNotNull category
                 }
                 return@mapNotNull null
@@ -48,7 +48,7 @@ fun LibraryMoveDialog(
         }
     }
     val selectedCategory = remember {
-        mutableStateOf(moveCategories.value[0])
+        mutableStateOf(moveCategories.value.getOrNull(0))
     }
 
     Dialog(
@@ -63,13 +63,15 @@ fun LibraryMoveDialog(
             dismissDialog(LibraryEvent.OnDismissDialog)
         },
         onAction = {
-            actionMoveDialog(
-                LibraryEvent.OnActionMoveDialog(
-                    selectedCategory = selectedCategory.value.category,
-                    categories = categories,
-                    context = context
+            selectedCategory.value?.let { cat ->
+                actionMoveDialog(
+                    LibraryEvent.OnActionMoveDialog(
+                        selectedCategory = cat.id,
+                        categories = categories,
+                        context = context
+                    )
                 )
-            )
+            }
         },
         withContent = true,
         items = {

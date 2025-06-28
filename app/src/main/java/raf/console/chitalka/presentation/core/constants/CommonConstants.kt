@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -30,7 +30,8 @@ fun provideEmptyBook() = Book(
     scrollOffset = 0,
     progress = 0f,
     lastOpened = null,
-    category = Category.READING
+    category = Category.READING,
+    categoryIds = listOf(0)
 )
 
 // Default Color Preset

@@ -77,7 +77,7 @@ fun StartSourceCode(
 
                     ChromeCustomTabUtil.openUrl(
                         context = context,
-                        url = "https://github.com/Acclorite/book-story",
+                        url = "https://github.com/byteflipper-58/book-story",
                     )
 
                 },

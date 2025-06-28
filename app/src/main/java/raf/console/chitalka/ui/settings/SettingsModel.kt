@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -21,6 +21,9 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import raf.console.chitalka.R
+import raf.console.chitalka.data.local.dto.CategoryEntity
+import raf.console.chitalka.data.local.room.CategoryDao
+import raf.console.chitalka.domain.library.custom_category.Category
 import raf.console.chitalka.domain.reader.ColorPreset
 import raf.console.chitalka.domain.use_case.color_preset.DeleteColorPreset
 import raf.console.chitalka.domain.use_case.color_preset.GetColorPresets
@@ -42,7 +45,8 @@ class SettingsModel @Inject constructor(
     private val reorderColorPresets: ReorderColorPresets,
     private val deleteColorPreset: DeleteColorPreset,
     private val grantPersistableUriPermission: GrantPersistableUriPermission,
-    private val releasePersistableUriPermission: ReleasePersistableUriPermission
+    private val releasePersistableUriPermission: ReleasePersistableUriPermission,
+    private val categoryDao: CategoryDao
 ) : ViewModel() {
 
     private val mutex = Mutex()
@@ -518,4 +522,24 @@ class SettingsModel @Inject constructor(
             this.value = function(this.value)
         }
     }
+
+
+    fun updateCategoryPositions(categories: List<Category>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val updated = categories.mapIndexed { index, category ->
+                CategoryEntity(
+                    id = category.id,
+                    name = category.name,
+                    kind = category.kind,
+                    isVisible = category.isVisible,
+                    isDefault = category.isDefault,
+                    position = index
+                )
+            }
+
+            updated.forEach { categoryDao.update(it) }
+        }
+    }
+
+
 }

@@ -1,7 +1,7 @@
 /*
- * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by Raf0707 for RafBook
+ * Modified by ByteFlipper for EverBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -63,7 +63,7 @@ fun LibraryTopBar(
     searchQueryChange: (LibraryEvent.OnSearchQueryChange) -> Unit,
     search: (LibraryEvent.OnSearch) -> Unit,
     clearSelectedBooks: (LibraryEvent.OnClearSelectedBooks) -> Unit,
-    showMoveDialog: (LibraryEvent.OnShowMoveDialog) -> Unit,
+    showCategoriesDialog: (LibraryEvent.OnShowCategoriesDialog) -> Unit,
     showDeleteDialog: (LibraryEvent.OnShowDeleteDialog) -> Unit
 ) {
     val animatedItemCountBackgroundColor = animateColorAsState(
@@ -175,7 +175,7 @@ fun LibraryTopBar(
                         enabled = !isLoading && !isRefreshing,
                         disableOnClick = false,
                     ) {
-                        showMoveDialog(LibraryEvent.OnShowMoveDialog)
+                        showCategoriesDialog(LibraryEvent.OnShowCategoriesDialog)
                     }
                     IconButton(
                         icon = Icons.Outlined.Delete,
