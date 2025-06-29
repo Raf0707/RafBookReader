@@ -12,6 +12,7 @@ package raf.console.chitalka.presentation.core.components.common
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -257,8 +258,9 @@ private class SelectionToolbar(
  * @param onDictionaryRequested Callback for when the dictionary option is clicked.
  * @param content Selection container content.
  */
+
 @Composable
-fun SelectionContainer(
+fun SelectionContainer1(
     onCopyRequested: (() -> Unit),
     onShareRequested: ((String) -> Unit),
     onWebSearchRequested: ((String) -> Unit),
@@ -305,3 +307,126 @@ fun SelectionContainer(
         }
     }
 }
+
+
+
+/*@Composable
+fun SelectionContainer(
+    onCopyRequested: (() -> Unit),
+    onShareRequested: ((String) -> Unit),
+    onWebSearchRequested: ((String) -> Unit),
+    onTranslateRequested: ((String) -> Unit),
+    onDictionaryRequested: ((String) -> Unit),
+    content: @Composable (toolbarHidden: Boolean) -> Unit
+) {
+    val view = LocalView.current
+    val context = LocalContext.current
+
+    val selectionToolbar = remember {
+        SelectionToolbar(
+            view = view,
+            context = context,
+            onCopyRequest = onCopyRequested,
+            onShareRequest = onShareRequested,
+            onWebSearchRequest = onWebSearchRequested,
+            onTranslateRequest = onTranslateRequested,
+            onDictionaryRequest = onDictionaryRequested
+        )
+    }
+
+    val isToolbarHidden = remember(selectionToolbar.status) {
+        derivedStateOf {
+            selectionToolbar.status == TextToolbarStatus.Hidden
+        }
+    }
+
+    CompositionLocalProvider(
+        LocalTextToolbar provides selectionToolbar
+    ) {
+        androidx.compose.foundation.text.selection.SelectionContainer {
+            content(isToolbarHidden.value)
+        }
+    }
+
+}*/
+
+@Composable
+fun SelectionContainer(
+    onCopyRequested: (() -> Unit),
+    onShareRequested: ((String) -> Unit),
+    onWebSearchRequested: ((String) -> Unit),
+    onTranslateRequested: ((String) -> Unit),
+    onDictionaryRequested: ((String) -> Unit),
+    content: @Composable (toolbarHidden: Boolean) -> Unit
+) {
+    val view = LocalView.current
+    val context = LocalContext.current
+
+    val selectionToolbar = remember {
+        SelectionToolbar(
+            view = view,
+            context = context,
+            onCopyRequest = onCopyRequested,
+            onShareRequest = onShareRequested,
+            onWebSearchRequest = onWebSearchRequested,
+            onTranslateRequest = onTranslateRequested,
+            onDictionaryRequest = onDictionaryRequested
+        )
+    }
+
+    val isToolbarHidden by remember {
+        derivedStateOf {
+            selectionToolbar.status == TextToolbarStatus.Hidden
+        }
+    }
+
+    CompositionLocalProvider(LocalTextToolbar provides selectionToolbar) {
+        // ⚠️ ВАЖНО: не вкладывай SelectionContainer в другие SelectionContainer'ы
+        // иначе возникнет крах при множественном выделении.
+        androidx.compose.foundation.text.selection.SelectionContainer {
+            content(isToolbarHidden)
+        }
+    }
+}
+
+@Composable
+fun SafeSelectionContainer(
+    onCopyRequested: (() -> Unit),
+    onShareRequested: ((String) -> Unit),
+    onWebSearchRequested: ((String) -> Unit),
+    onTranslateRequested: ((String) -> Unit),
+    onDictionaryRequested: ((String) -> Unit),
+    content: @Composable (toolbarHidden: Boolean) -> Unit
+) {
+    val view = LocalView.current
+    val context = LocalContext.current
+
+    val selectionToolbar = remember {
+        SelectionToolbar(
+            view = view,
+            context = context,
+            onCopyRequest = onCopyRequested,
+            onShareRequest = onShareRequested,
+            onWebSearchRequest = onWebSearchRequested,
+            onTranslateRequest = onTranslateRequested,
+            onDictionaryRequest = onDictionaryRequested
+        )
+    }
+
+    val isToolbarHidden = remember(selectionToolbar.status) {
+        derivedStateOf {
+            selectionToolbar.status == TextToolbarStatus.Hidden
+        }
+    }
+
+    CompositionLocalProvider(LocalTextToolbar provides selectionToolbar) {
+        // Мы оборачиваем в обычный SelectionContainer только 1 блок текста,
+        // поэтому ошибок не будет при множественном выделении
+        androidx.compose.foundation.text.selection.SelectionContainer {
+            content(isToolbarHidden.value)
+        }
+    }
+}
+
+
+
