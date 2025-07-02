@@ -1,7 +1,7 @@
 /*
- * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for EverBook
+ * Modified by Raf</>Console Studio for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -279,7 +279,7 @@ fun ReaderLayout(
                 isLoading = isLoading
             )
     ) {
-        LazyColumnWithScrollbar(
+        /*LazyColumnWithScrollbar(
             state = listState,
             enableScrollbar = false,
             parentModifier = Modifier.weight(1f),
@@ -316,6 +316,72 @@ fun ReaderLayout(
                             openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
                         }
                     ) { toolbarHidden ->
+                        ReaderLayoutText(
+                            activity = activity,
+                            showMenu = showMenu,
+                            entry = entry,
+                            imagesCornersRoundness = imagesCornersRoundness,
+                            imagesAlignment = imagesAlignment,
+                            imagesWidth = imagesWidth,
+                            imagesColorEffects = imagesColorEffects,
+                            fontFamily = fontFamily,
+                            fontColor = fontColor,
+                            lineHeight = lineHeight,
+                            fontThickness = fontThickness,
+                            fontStyle = fontStyle,
+                            chapterTitleAlignment = chapterTitleAlignment,
+                            textAlignment = textAlignment,
+                            horizontalAlignment = horizontalAlignment,
+                            fontSize = fontSize,
+                            letterSpacing = letterSpacing,
+                            sidePadding = sidePadding,
+                            paragraphIndentation = paragraphIndentation,
+                            fullscreenMode = fullscreenMode,
+                            doubleClickTranslation = doubleClickTranslation,
+                            highlightedReading = highlightedReading,
+                            highlightedReadingThickness = highlightedReadingThickness,
+                            toolbarHidden = toolbarHidden,
+                            openTranslator = openTranslator,
+                            menuVisibility = menuVisibility
+                        )
+                    }
+                }
+            }
+        }*/
+
+        SafeSelectionContainer(
+            onCopyRequested = {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                    activity.getString(R.string.copied).showToast(context = activity)
+                }
+            },
+            onShareRequested = {
+                openShareApp(ReaderEvent.OnOpenShareApp(it, activity))
+            },
+            onWebSearchRequested = {
+                openWebBrowser(ReaderEvent.OnOpenWebBrowser(it, activity))
+            },
+            onTranslateRequested = {
+                openTranslator(ReaderEvent.OnOpenTranslator(it, false, activity))
+            },
+            onDictionaryRequested = {
+                openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
+            }
+        ) { toolbarHidden ->
+            LazyColumnWithScrollbar(
+                state = listState,
+                enableScrollbar = false,
+                parentModifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    top = (WindowInsets.displayCutout.asPaddingValues().calculateTopPadding() + paragraphHeight).coerceAtLeast(18.dp),
+                    bottom = (WindowInsets.displayCutout.asPaddingValues().calculateBottomPadding() + paragraphHeight).coerceAtLeast(18.dp),
+                )
+            ) {
+                itemsIndexed(text, key = { index, _ -> index }) { index, entry ->
+                    if (!images && entry is ReaderText.Image) return@itemsIndexed
+
+                    SpacedItem(index = index, spacing = paragraphHeight) {
                         ReaderLayoutText(
                             activity = activity,
                             showMenu = showMenu,

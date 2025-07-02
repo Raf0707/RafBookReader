@@ -534,8 +534,8 @@
     <string name="start_theme_preferences">Preferencje motywu</string>
     <string name="start_permissions_notifications">Zezwolenie na powiadomienia</string>
     <string name="start_permissions_notifications_desc">Wymagane do sprawdzania nowszej wersji aplikacji</string>
-    <string name="start_fork_info_title" translatable="false">ByteFlipper-58/EverBook</string>
-    <string name="start_fork_info_desc">Ta aplikacja opiera się na forku projektu ByteFlipper-58/EverBook. Oryginalny projekt jest dostępny na licencji GPL-3.0.</string>
+    <string name="start_fork_info_title" translatable="false">ByteBlipper-58/EverBook</string>
+    <string name="start_fork_info_desc">Ta aplikacja opiera się na forku projektu ByteBlipper-58/EverBook. Oryginalny projekt jest dostępny na licencji GPL-3.0.</string>
     <string name="start_source_code">Kod źródłowy</string>
     <string name="start_done">Wszystko gotowe!</string>
     <string name="start_done_desc">

@@ -1,7 +1,7 @@
 /*
- * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for EverBook
+ * Modified by Raf</>Console Studio for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -82,7 +82,7 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = horizontalAlignment
         ) {
-            StyledText(
+            /*StyledText(
                 text = paragraph.line,
                 modifier = Modifier.then(
                     if (doubleClickTranslation && toolbarHidden) {
@@ -123,7 +123,46 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                 ),
                 highlightText = highlightedReading,
                 highlightThickness = highlightedReadingThickness
+            )*/
+
+            SelectableParagraph(
+                text = paragraph.line.text,
+                style = TextStyle(
+                    fontFamily = fontFamily.font,
+                    fontWeight = fontThickness.thickness,
+                    textAlign = textAlignment.textAlignment,
+                    textIndent = TextIndent(firstLine = paragraphIndentation),
+                    fontStyle = fontStyle,
+                    letterSpacing = letterSpacing,
+                    fontSize = fontSize,
+                    lineHeight = lineHeight,
+                    color = fontColor,
+                    lineBreak = LineBreak.Paragraph
+                ),
+                onDoubleClick = {
+                    openTranslator(
+                        ReaderEvent.OnOpenTranslator(
+                            textToTranslate = paragraph.line.text,
+                            translateWholeParagraph = true,
+                            activity = activity
+                        )
+                    )
+                },
+                onClick = {
+                    menuVisibility(
+                        ReaderEvent.OnMenuVisibility(
+                            show = !showMenu,
+                            fullscreenMode = fullscreenMode,
+                            saveCheckpoint = true,
+                            activity = activity
+                        )
+                    )
+                },
+                toolbarHidden = toolbarHidden,
+                highlightText = highlightedReading,
+                highlightThickness = highlightedReadingThickness
             )
+
         }
         return
     }

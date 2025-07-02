@@ -1,7 +1,7 @@
 /*
- * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for EverBook
+ * Modified by Raf</>Console Studio for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -57,12 +57,6 @@ import raf.console.chitalka.presentation.settings.library.components.CreateCateg
 import kotlinx.coroutines.launch
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
-
-fun <T> MutableList<T>.move(from: Int, to: Int) {
-    if (from == to) return
-    val item = removeAt(from)
-    add(if (to > from) to - 1 else to, item)
-}
 
 /*@OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -186,6 +180,12 @@ fun LibrarySettingsLayout(
         }
     }
 }*/
+
+fun <T> MutableList<T>.move(from: Int, to: Int) {
+    if (from == to) return
+    val item = removeAt(from)
+    add(if (to > from) to - 1 else to, item)
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

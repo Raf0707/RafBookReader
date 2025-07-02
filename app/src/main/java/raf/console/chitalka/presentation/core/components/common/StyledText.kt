@@ -1,12 +1,13 @@
 /*
- * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for EverBook
+ * Modified by Raf</>Console Studio for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 package raf.console.chitalka.presentation.core.components.common
 
+import android.text.Highlights
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -82,4 +83,47 @@ fun StyledText(
         minLines = minLines,
         overflow = overflow
     )
+}
+
+@Composable
+fun StyledText(
+    text: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = LocalTextStyle.current,
+    maxLines: Int = Int.MAX_VALUE,
+    minLines: Int = 1,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
+    highlightText: Boolean = false,
+    highlightThickness: FontWeight = FontWeight.SemiBold
+) {
+    when (highlightText) {
+        true -> {
+            HighlightedText(
+                modifier = modifier,
+                text = AnnotatedString(text),
+                highlightThickness = highlightThickness,
+                style = style.copy(
+                    textDirection = TextDirection.Content,
+                    color = style.color.takeOrElse { LocalContentColor.current }
+                ),
+                maxLines = maxLines,
+                minLines = minLines,
+                overflow = overflow
+            )
+        }
+
+        false -> {
+            BasicText(
+                modifier = modifier,
+                text = text,
+                style = style.copy(
+                    textDirection = TextDirection.Content,
+                    color = style.color.takeOrElse { LocalContentColor.current }
+                ),
+                maxLines = maxLines,
+                minLines = minLines,
+                overflow = overflow
+            )
+        }
+    }
 }

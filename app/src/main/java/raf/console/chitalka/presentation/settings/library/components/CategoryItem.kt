@@ -1,7 +1,7 @@
 /*
- * EverBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
+ * RafBook — a modified fork of Book's Story, a free and open-source Material You eBook reader.
  * Copyright (C) 2024-2025 Acclorite
- * Modified by ByteFlipper for EverBook
+ * Modified by Raf</>Console Studio for RafBook
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -311,11 +311,13 @@ fun CategoryItem(
             )
 
             if (isEditMode) {
-                SmallIconButton(
-                    icon = Icons.Outlined.Edit,
-                    contentDesc = R.string.edit_category,
-                    onClick = onEdit
-                )
+                onDelete?.let {
+                    SmallIconButton(
+                        icon = Icons.Outlined.Edit,
+                        contentDesc = R.string.edit_category,
+                        onClick = onEdit
+                    )
+                }
 
                 onDelete?.let {
                     SmallIconButton(
