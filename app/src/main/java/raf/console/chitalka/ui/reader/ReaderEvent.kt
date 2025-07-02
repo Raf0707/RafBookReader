@@ -7,6 +7,7 @@
 
 package raf.console.chitalka.ui.reader
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Immutable
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
@@ -68,6 +69,8 @@ sealed class ReaderEvent {
         val activity: ComponentActivity
     ) : ReaderEvent()
 
+    data class OnShowNotesBookmarksDrawer(val bookId: Long) : ReaderEvent()
+
     data object OnShowSettingsBottomSheet : ReaderEvent()
 
     data object OnDismissBottomSheet : ReaderEvent()
@@ -75,4 +78,6 @@ sealed class ReaderEvent {
     data object OnShowChaptersDrawer : ReaderEvent()
 
     data object OnDismissDrawer : ReaderEvent()
+
+    data class OnStartTextToSpeech(val context: Context) : ReaderEvent()
 }

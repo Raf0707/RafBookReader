@@ -21,6 +21,8 @@ import raf.console.chitalka.data.local.dto.ColorPresetEntity
 import raf.console.chitalka.data.local.dto.HistoryEntity
 import raf.console.chitalka.data.local.dto.CategoryEntity
 import raf.console.chitalka.data.local.dto.BookCategoryCrossRef
+import raf.console.chitalka.data.local.dto.BookmarkEntity
+import raf.console.chitalka.data.local.dto.NoteEntity
 import java.io.File
 
 @Database(
@@ -30,8 +32,10 @@ import java.io.File
         ColorPresetEntity::class,
         CategoryEntity::class,
         BookCategoryCrossRef::class,
+        BookmarkEntity::class, // 🆕
+        NoteEntity::class      // 🆕
     ],
-    version = 10,
+    version = 11, // ⬆️ обновлено
     autoMigrations = [
         AutoMigration(1, 2),
         AutoMigration(2, 3),
@@ -41,13 +45,18 @@ import java.io.File
         AutoMigration(6, 7),
         AutoMigration(7, 8, spec = DatabaseHelper.MIGRATION_7_8::class),
         AutoMigration(8, 9, spec = DatabaseHelper.MIGRATION_8_9::class),
+        // Миграция 9→10 — была ручная
+        // Миграция 10→11 — тоже ручная, добавим ниже
     ],
     exportSchema = true
 )
+
 abstract class BookDatabase : RoomDatabase() {
     abstract val dao: BookDao
     abstract val categoryDao: CategoryDao
     abstract val bookCategoryDao: BookCategoryDao
+    abstract val bookmarkDao: BookmarkDao
+    abstract val noteDao: NoteDao
 }
 
 @Suppress("ClassName")
@@ -207,6 +216,41 @@ object DatabaseHelper {
         }
     }
 
+    val MIGRATION_10_11 = object : Migration(10, 11) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("""
+            CREATE TABLE IF NOT EXISTS `BookmarkEntity` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `bookId` INTEGER NOT NULL,
+                `chapterIndex` INTEGER NOT NULL,
+                `offset` INTEGER NOT NULL,
+                `label` TEXT,
+                `createdAt` INTEGER NOT NULL
+            )
+        """.trimIndent())
+
+            db.execSQL("""
+            CREATE TABLE IF NOT EXISTS `NoteEntity` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `bookId` INTEGER NOT NULL,
+                `chapterIndex` INTEGER NOT NULL,
+                `offsetStart` INTEGER NOT NULL,
+                `offsetEnd` INTEGER NOT NULL,
+                `content` TEXT NOT NULL,
+                `createdAt` INTEGER NOT NULL,
+                `bookmarkId` INTEGER,
+                FOREIGN KEY(`bookmarkId`) REFERENCES `BookmarkEntity`(`id`) ON DELETE SET NULL
+            )
+        """.trimIndent())
+
+            db.execSQL("""
+            CREATE INDEX IF NOT EXISTS `index_NoteEntity_bookmarkId` ON `NoteEntity`(`bookmarkId`)
+        """.trimIndent())
+        }
+    }
+
+
+
     /**
      * Callback, который вызывается при создании базы данных (fresh install).
      * Заполняет таблицу `CategoryEntity` четырьмя стандартными категориями, если она пуста.
@@ -236,4 +280,47 @@ object DatabaseHelper {
             }
         }
     }
+
+    val PREPOPULATE_BOOKS = object : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            insertDefaults(db)
+        }
+
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+            val cursor = db.query("SELECT COUNT(*) FROM BookEntity WHERE id IN (-100, -101)")
+            var count = 0
+            if (cursor.moveToFirst()) count = cursor.getInt(0)
+            cursor.close()
+            if (count < 2) {
+                insertDefaults(db)
+            }
+        }
+
+        private fun insertDefaults(db: SupportSQLiteDatabase) {
+            // Читательский дневник (закладки + заметки)
+            db.execSQL("""
+            INSERT OR IGNORE INTO BookEntity (
+                id, title, author, description, filePath,
+                scrollIndex, scrollOffset, progress, image, categoryId
+            ) VALUES (
+                -100, 'Читательский дневник', '', 'Автоматически создаётся для заметок к книгам', '',
+                0, 0, 0.0, null, 0
+            )
+        """)
+
+            // Мои заметки (независимая редактируемая книга)
+            db.execSQL("""
+            INSERT OR IGNORE INTO BookEntity (
+                id, title, author, description, filePath,
+                scrollIndex, scrollOffset, progress, image, categoryId
+            ) VALUES (
+                -101, 'Мои заметки', '', 'Записывайте мысли, идеи, черновики и личные заметки', '',
+                0, 0, 0.0, null, 0
+            )
+        """)
+        }
+    }
+
 }

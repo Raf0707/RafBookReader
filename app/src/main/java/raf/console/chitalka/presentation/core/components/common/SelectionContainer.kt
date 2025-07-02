@@ -12,6 +12,8 @@ package raf.console.chitalka.presentation.core.components.common
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
@@ -31,23 +33,31 @@ import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import raf.console.chitalka.R
+import raf.console.chitalka.presentation.reader.translator.TranslatorApp
+import raf.console.chitalka.ui.main.MainEvent
+import raf.console.chitalka.ui.main.MainModel
 
 
 private const val MENU_ITEM_COPY = 0
-private const val MENU_ITEM_SHARE = 1
-private const val MENU_ITEM_WEB = 2
-private const val MENU_ITEM_TRANSLATE = 3
-private const val MENU_ITEM_DICTIONARY = 4
+private const val MENU_ITEM_SOUND = 1
+private const val MENU_ITEM_BOOKMARK = 2
+private const val MENU_ITEM_SHARE = 3
+private const val MENU_ITEM_WEB = 4
+private const val MENU_ITEM_TRANSLATE = 5
+private const val MENU_ITEM_DICTIONARY = 6
 
 /**
  * Text ActionMode callback.
  * Used in pair with [SelectionToolbar]. Follow [TextToolbar] for more info.
  */
-private class TextActionModeCallback(
+/*private class TextActionModeCallback(
     private val context: Context,
     var rect: Rect = Rect.Zero,
     var onCopyRequested: (() -> Unit)? = null,
+    var onBookmarkRequested: (() -> Unit)? = null,
     var onShareRequested: (() -> Unit)? = null,
     var onWebSearchRequested: (() -> Unit)? = null,
     var onTranslateRequested: (() -> Unit)? = null,
@@ -62,23 +72,28 @@ private class TextActionModeCallback(
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         }
 
+        onBookmarkRequested?.let {
+            menu.add(0, MENU_ITEM_BOOKMARK, 1, context.getString(R.string.in_bookmark))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+
         onShareRequested?.let {
-            menu.add(0, MENU_ITEM_SHARE, 1, context.getString(R.string.share))
+            menu.add(0, MENU_ITEM_SHARE, 2, context.getString(R.string.share))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         }
 
         onWebSearchRequested?.let {
-            menu.add(0, MENU_ITEM_WEB, 2, context.getString(R.string.web_search))
+            menu.add(0, MENU_ITEM_WEB, 3, context.getString(R.string.web_search))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         }
 
         onTranslateRequested?.let {
-            menu.add(0, MENU_ITEM_TRANSLATE, 3, context.getString(R.string.translate))
+            menu.add(0, MENU_ITEM_TRANSLATE, 4, context.getString(R.string.translate))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         }
 
         onDictionaryRequested?.let {
-            menu.add(0, MENU_ITEM_DICTIONARY, 4, context.getString(R.string.dictionary))
+            menu.add(0, MENU_ITEM_DICTIONARY, 5, context.getString(R.string.dictionary))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         }
 
@@ -136,16 +151,95 @@ private class FloatingTextActionModeCallback(
             rect.bottom.toInt()
         )
     }
+}*/
+
+private class TextActionModeCallback(
+    private val context: Context,
+    var rect: Rect = Rect.Zero,
+    var onCopyRequested: (() -> Unit)? = null,
+    var onSoundRequested: (() -> Unit)? = null,
+    var onBookmarkRequested: (() -> Unit)? = null,
+    var onShareRequested: (() -> Unit)? = null,
+    var onWebSearchRequested: (() -> Unit)? = null,
+    var onTranslateRequested: (() -> Unit)? = null,
+    var onDictionaryRequested: (() -> Unit)? = null
+) : ActionMode.Callback {
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        requireNotNull(menu)
+        requireNotNull(mode)
+
+        onCopyRequested?.let {
+            menu.add(0, MENU_ITEM_COPY, 0, context.getString(R.string.copy))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+        onSoundRequested?.let {
+            menu.add(0, MENU_ITEM_SOUND, 1, context.getString(R.string.sound))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+        onBookmarkRequested?.let {
+            menu.add(0, MENU_ITEM_BOOKMARK, 2, context.getString(R.string.in_bookmark))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+        onShareRequested?.let {
+            menu.add(0, MENU_ITEM_SHARE, 3, context.getString(R.string.share))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+        onWebSearchRequested?.let {
+            menu.add(0, MENU_ITEM_WEB, 4, context.getString(R.string.web_search))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+        onTranslateRequested?.let {
+            menu.add(0, MENU_ITEM_TRANSLATE, 5, context.getString(R.string.translate))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+        onDictionaryRequested?.let {
+            menu.add(0, MENU_ITEM_DICTIONARY, 6, context.getString(R.string.dictionary))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+
+        return true
+    }
+
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = false
+
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            MENU_ITEM_COPY -> onCopyRequested?.invoke()
+            MENU_ITEM_SOUND -> onSoundRequested?.invoke()
+            MENU_ITEM_BOOKMARK -> onBookmarkRequested?.invoke()
+            MENU_ITEM_SHARE -> onShareRequested?.invoke()
+            MENU_ITEM_WEB -> onWebSearchRequested?.invoke()
+            MENU_ITEM_TRANSLATE -> onTranslateRequested?.invoke()
+            MENU_ITEM_DICTIONARY -> onDictionaryRequested?.invoke()
+            else -> return false
+        }
+        mode?.finish()
+        return true
+    }
+
+    override fun onDestroyActionMode(mode: ActionMode?) {}
+}
+
+private class FloatingTextActionModeCallback(val callback: TextActionModeCallback) : ActionMode.Callback2() {
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = callback.onActionItemClicked(mode, item)
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?) = callback.onCreateActionMode(mode, menu)
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = callback.onPrepareActionMode(mode, menu)
+    override fun onDestroyActionMode(mode: ActionMode?) = callback.onDestroyActionMode(mode)
+    override fun onGetContentRect(mode: ActionMode?, view: View?, outRect: android.graphics.Rect?) {
+        val rect = callback.rect
+        outRect?.set(rect.left.toInt(), rect.top.toInt(), rect.right.toInt(), rect.bottom.toInt())
+    }
 }
 
 /**
  * Selection Toolbar.
  * Used in pair with [SelectionContainer] to display custom toolbar.
  */
-private class SelectionToolbar(
+/*private class SelectionToolbar(
     private val view: View,
     context: Context,
     private val onCopyRequest: (() -> Unit)?,
+    private val onBookmarkRequested: (() -> Unit)?,
     private val onShareRequest: ((String) -> Unit)?,
     private val onWebSearchRequest: ((String) -> Unit)?,
     private val onTranslateRequest: ((String) -> Unit)?,
@@ -248,7 +342,115 @@ private class SelectionToolbar(
         actionMode?.finish()
         actionMode = null
     }
+}*/
+private class SelectionToolbar(
+    private val view: View,
+    context: Context,
+    private val selectedTranslator: TranslatorApp, // 👈 передаём выбранный переводчик
+    private val onCopyRequest: (() -> Unit)? = null,
+    private val onSoundRequested: ((String) -> Unit)? = null,
+    private val onBookmarkRequested: ((String) -> Unit)? = null,
+    private val onShareRequest: ((String) -> Unit)? = null,
+    private val onWebSearchRequest: ((String) -> Unit)? = null,
+    private val onTranslateRequest: ((String) -> Unit)? = null,
+    private val onDictionaryRequest: ((String) -> Unit)? = null
+) : TextToolbar {
+    private var actionMode: ActionMode? = null
+    private val callback = TextActionModeCallback(context)
+    private val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+    override var status: TextToolbarStatus by mutableStateOf(TextToolbarStatus.Hidden)
+
+    override fun showMenu(
+        rect: Rect,
+        onCopyRequested: (() -> Unit)?,
+        onPasteRequested: (() -> Unit)?,
+        onCutRequested: (() -> Unit)?,
+        onSelectAllRequested: (() -> Unit)?
+    ) {
+        callback.rect = rect
+
+        fun getText(): String {
+            val previousClipboard = clipboardManager.primaryClip
+            onCopyRequested?.invoke()
+            val selected = clipboardManager.text.toString()
+            previousClipboard?.let { clipboardManager.setPrimaryClip(it) }
+            return selected
+        }
+
+        val context = view.context
+
+        callback.onCopyRequested = {
+            onCopyRequested?.invoke()
+            onCopyRequest?.invoke()
+        }
+
+        callback.onSoundRequested = {
+            onSoundRequested?.invoke(getText())
+        }
+
+        callback.onBookmarkRequested = {
+            onBookmarkRequested?.invoke(getText())
+        }
+
+        callback.onShareRequested = {
+            onShareRequest?.invoke(getText())
+        }
+
+        callback.onWebSearchRequested = {
+            onWebSearchRequest?.invoke(getText())
+        }
+
+        callback.onTranslateRequested = {
+            onTranslateRequest?.invoke(getText())
+
+            val selectedText = getText()
+            val encodedText = Uri.encode(selectedText)
+
+            val urls = listOf(
+                "https://translate.google.com/?sl=auto&tl=auto&text=$encodedText",
+                "https://translate.yandex.com/?text=$encodedText",
+                "https://www.deepl.com/translator#auto/en/$encodedText"
+            )
+
+            val initialIntents = urls.map { url ->
+                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    .apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+            }.toTypedArray()
+
+            val fallbackIntent = Intent(Intent.ACTION_VIEW, Uri.parse(urls.first()))
+            val chooser = Intent.createChooser(fallbackIntent, context.getString(R.string.translate))
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, initialIntents)
+
+            try {
+                context.startActivity(chooser)
+            } catch (e: Exception) {
+                Log.e("TranslatorChooser", "No app found to handle translator URL", e)
+            }
+
+        }
+
+        callback.onDictionaryRequested = {
+            onDictionaryRequest?.invoke(getText())
+        }
+
+        if (actionMode == null) {
+            status = TextToolbarStatus.Shown
+            actionMode = view.startActionMode(FloatingTextActionModeCallback(callback), ActionMode.TYPE_FLOATING)
+        } else {
+            actionMode?.invalidate()
+        }
+    }
+
+    override fun hide() {
+        status = TextToolbarStatus.Hidden
+        actionMode?.finish()
+        actionMode = null
+    }
 }
+
 
 /**
  * Selection container.
@@ -260,24 +462,33 @@ private class SelectionToolbar(
  */
 
 @Composable
-fun SelectionContainer1(
+fun SelectionContainer(
     onCopyRequested: (() -> Unit),
+    onSoundRequested: ((String) -> Unit),
+    onBookmarkRequested: ((String) -> Unit),
     onShareRequested: ((String) -> Unit),
     onWebSearchRequested: ((String) -> Unit),
     onTranslateRequested: ((String) -> Unit),
     onDictionaryRequested: ((String) -> Unit),
+    selectedTranslator: TranslatorApp, // 👈 обязательно передаём выбранный переводчик
     content: @Composable (toolbarHidden: Boolean) -> Unit
 ) {
     val view = LocalView.current
     val context = LocalContext.current
 
-    val selectionToolbar = remember {
+    val selectionToolbar = remember(selectedTranslator) {
         SelectionToolbar(
             view = view,
             context = context,
-
+            selectedTranslator = selectedTranslator,
             onCopyRequest = {
                 onCopyRequested()
+            },
+            onSoundRequested = {
+                onSoundRequested(it)
+            },
+            onBookmarkRequested = {
+                onBookmarkRequested(it)
             },
             onShareRequest = {
                 onShareRequested(it)
@@ -293,20 +504,20 @@ fun SelectionContainer1(
             }
         )
     }
+
     val isToolbarHidden = remember(selectionToolbar.status) {
         derivedStateOf {
             selectionToolbar.status == TextToolbarStatus.Hidden
         }
     }
 
-    CompositionLocalProvider(
-        LocalTextToolbar provides selectionToolbar
-    ) {
-        SelectionContainer {
+    CompositionLocalProvider(LocalTextToolbar provides selectionToolbar) {
+        androidx.compose.foundation.text.selection.SelectionContainer {
             content(isToolbarHidden.value)
         }
     }
 }
+
 
 
 
@@ -350,8 +561,8 @@ fun SelectionContainer(
 
 }*/
 
-@Composable
-fun SelectionContainer(
+/*@Composable
+fun SelectionContainer1(
     onCopyRequested: (() -> Unit),
     onShareRequested: ((String) -> Unit),
     onWebSearchRequested: ((String) -> Unit),
@@ -426,7 +637,7 @@ fun SafeSelectionContainer(
             content(isToolbarHidden.value)
         }
     }
-}
+}*/
 
 
 

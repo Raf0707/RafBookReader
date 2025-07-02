@@ -7,6 +7,8 @@
 
 package raf.console.chitalka.ui.main
 
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.rememberDrawerState
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -42,6 +44,8 @@ import raf.console.chitalka.domain.ui.toDarkTheme
 import raf.console.chitalka.domain.ui.toPureDark
 import raf.console.chitalka.ui.theme.toTheme
 import raf.console.chitalka.domain.ui.toThemeContrast
+import raf.console.chitalka.presentation.reader.translator.TranslatorApp
+import raf.console.chitalka.ui.reader.ReaderScreen
 import javax.inject.Inject
 
 
@@ -528,6 +532,38 @@ class MainModel @Inject constructor(
                     it.copy(renderMath = this)
                 }
             )
+
+            is MainEvent.OnSelectTranslator -> {
+                /*handleDatastoreUpdate(
+                    key = DataStoreConstants.SELECTED_TRANSLATOR,
+                    value = event.app.name, // сохраняем имя как String
+                    updateState = {
+                        it.copy(selectedTranslator = TranslatorApp.valueOf(this))
+                    }
+                )*/
+                handleDatastoreUpdate(
+                    key = DataStoreConstants.DOUBLE_CLICK_TRANSLATION,
+                    value = event.value,
+                    updateState = {
+                        it.copy(doubleClickTranslation = this)
+                    }
+                )
+            }
+
+            is MainEvent.OnShowNotesBookmarksDrawer -> {
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(drawer = ReaderScreen(bookId = event.bookId.toInt())) // или передай нужный bookId
+                    }
+                }
+            }
+
+
+
+
+
+
+            else -> {}
         }
     }
 

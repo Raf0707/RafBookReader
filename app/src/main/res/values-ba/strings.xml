@@ -718,7 +718,11 @@
 
     <string name="all_tab">Барыһы</string>
     <string name="choose_categories">Категорияларҙы һайлағыҙ</string>
-
+    <string name="tts_content_desc">Text to Speech</string>
+    <string name="bookmarks_notes_content_desc">bookmarks and notes</string>
+    <string name="in_bookmark">Add bookmark</string>
+    <string name="select_translator">Select translator</string>
+    <string name="sound">voice over</string>
 
 
 </resources>

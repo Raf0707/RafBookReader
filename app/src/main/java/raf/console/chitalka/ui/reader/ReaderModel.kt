@@ -8,12 +8,15 @@
 package raf.console.chitalka.ui.reader
 
 import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,6 +30,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -37,8 +41,13 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import raf.console.chitalka.R
+import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.Checkpoint
+import raf.console.chitalka.domain.reader.Note
+import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
+import raf.console.chitalka.domain.repository.BookmarkRepository
+import raf.console.chitalka.domain.repository.NoteRepository
 import raf.console.chitalka.domain.ui.UIText
 import raf.console.chitalka.domain.use_case.book.GetBookById
 import raf.console.chitalka.domain.use_case.book.GetText
@@ -50,7 +59,9 @@ import raf.console.chitalka.presentation.core.util.setBrightness
 import raf.console.chitalka.presentation.core.util.showToast
 import raf.console.chitalka.ui.history.HistoryScreen
 import raf.console.chitalka.ui.library.LibraryScreen
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 import kotlin.math.roundToInt
 
 private const val READER = "READER, MODEL"
@@ -60,7 +71,9 @@ class ReaderModel @Inject constructor(
     private val getBookById: GetBookById,
     private val updateBook: UpdateBook,
     private val getText: GetText,
-    private val getLatestHistory: GetLatestHistory
+    private val getLatestHistory: GetLatestHistory,
+    private val bookmarkRepository: BookmarkRepository, // ← добавили
+    private val noteRepository: NoteRepository
 ) : ViewModel() {
 
     private val mutex = Mutex()
@@ -72,6 +85,14 @@ class ReaderModel @Inject constructor(
     private var resetJob: Job? = null
 
     private var scrollJob: Job? = null
+
+    private val _bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
+    val bookmarks: StateFlow<List<Bookmark>> = _bookmarks
+
+    private val _notes = MutableStateFlow<List<Note>>(emptyList())
+    val notes: StateFlow<List<Note>> = _notes
+
+
 
     fun onEvent(event: ReaderEvent) {
         viewModelScope.launch(eventJob + Dispatchers.Main) {
@@ -457,6 +478,33 @@ class ReaderModel @Inject constructor(
                         )
                     }
                 }
+
+                is ReaderEvent.OnStartTextToSpeech -> {
+                    // Запуск TTS
+                    startTTS(context = event.context)
+                }
+
+                is ReaderEvent.OnShowNotesBookmarksDrawer -> {
+                    _state.update {
+                        it.copy(drawer = ReaderScreen.NOTES_BOOKMARKS_DRAWER)
+                    }
+
+                    loadBookmarks(event.bookId)
+                    loadNotes(event.bookId)
+                }
+
+
+                /*is ReaderEvent.OnShowNotesDrawer -> {
+                    _state.update {
+                        it.copy(drawer = ReaderScreen.NOTES_BOOKMARKS_DRAWER)
+                    }
+
+                    loadBookmarks(event.bookId)
+                    loadNotes(event.bookId)
+                }*/
+
+
+                else -> {}
             }
         }
     }
@@ -493,6 +541,54 @@ class ReaderModel @Inject constructor(
             )
         }
     }
+
+    fun loadBookmarks(bookId: Long) {
+        viewModelScope.launch {
+            bookmarkRepository.observeBookmarksForBook(bookId).collect {
+                _bookmarks.value = it
+            }
+        }
+    }
+
+    fun loadNotes(bookId: Long) {
+        viewModelScope.launch {
+            noteRepository.observeNotesForBook(bookId).collect {
+                _notes.value = it
+            }
+        }
+    }
+
+    fun startTTS(context: Context) {
+        val currentText = state.value.text
+
+        val fullText = currentText
+            .filterIsInstance<ReaderText.Text>() // только текст
+            .joinToString(separator = "\n\n") { it.line.text }
+
+        if (fullText.isBlank()) {
+            Log.w("TTS", "Нет текста для озвучивания.")
+            return
+        }
+
+        lateinit var tts: TextToSpeech
+
+        tts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.getDefault())
+
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS", "Язык не поддерживается")
+                    return@TextToSpeech
+                }
+
+                tts.speak(fullText, TextToSpeech.QUEUE_FLUSH, null, "BOOK_TTS")
+            } else {
+                Log.e("TTS", "Инициализация TTS не удалась")
+            }
+        }
+    }
+
+
 
     @OptIn(FlowPreview::class)
     fun updateProgress(listState: LazyListState) {

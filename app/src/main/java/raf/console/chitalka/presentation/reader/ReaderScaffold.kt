@@ -37,6 +37,7 @@ import raf.console.chitalka.domain.reader.ReaderText.Chapter
 import raf.console.chitalka.domain.reader.ReaderTextAlignment
 import raf.console.chitalka.domain.util.HorizontalAlignment
 import raf.console.chitalka.presentation.core.components.common.AnimatedVisibility
+import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 import raf.console.chitalka.ui.reader.ReaderEvent
 import raf.console.chitalka.ui.settings.SettingsEvent
 
@@ -107,7 +108,10 @@ fun ReaderScaffold(
     showSettingsBottomSheet: (ReaderEvent.OnShowSettingsBottomSheet) -> Unit,
     showChaptersDrawer: (ReaderEvent.OnShowChaptersDrawer) -> Unit,
     navigateToBookInfo: (changePath: Boolean) -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    onStartTTS: () -> Unit,
+    OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit,
+    selectedTranslator: TranslatorApp,
 ) {
     Scaffold(
         Modifier
@@ -133,8 +137,11 @@ fun ReaderScaffold(
                     showSettingsBottomSheet = showSettingsBottomSheet,
                     showChaptersDrawer = showChaptersDrawer,
                     navigateBack = navigateBack,
-                    navigateToBookInfo = navigateToBookInfo
+                    navigateToBookInfo = navigateToBookInfo,
+                    onStartTTS = onStartTTS,
+                    OnShowNotesBookmarksDrawer = { OnShowNotesBookmarksDrawer (ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong())) }
                 )
+
             }
         },
         bottomBar = {
@@ -203,7 +210,8 @@ fun ReaderScaffold(
             openShareApp = openShareApp,
             openWebBrowser = openWebBrowser,
             openTranslator = openTranslator,
-            openDictionary = openDictionary
+            openDictionary = openDictionary,
+            selectedTranslator = selectedTranslator,
         )
 
         ReaderPerceptionExpander(

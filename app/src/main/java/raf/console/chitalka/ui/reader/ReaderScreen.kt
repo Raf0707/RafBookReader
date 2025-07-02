@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontStyle
@@ -66,11 +67,13 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
     companion object {
         const val CHAPTERS_DRAWER = "chapters_drawer"
         const val SETTINGS_BOTTOM_SHEET = "settings_bottom_sheet"
+        const val NOTES_BOOKMARKS_DRAWER = "notes_bookmarks_drawer"
     }
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Content() {
+        val context = LocalContext.current
         val navigator = LocalNavigator.current
         val screenModel = hiltViewModel<ReaderModel>()
         val mainModel = hiltViewModel<MainModel>()
@@ -484,7 +487,17 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
                     popping = true,
                     saveInBackStack = false
                 )
-            }
+            },
+            onShowNotesDrawer = {
+                screenModel.onEvent(ReaderEvent.OnShowNotesBookmarksDrawer(state.value.book.id.toLong()))
+            },
+            onStartTTS = {
+                screenModel.onEvent(ReaderEvent.OnStartTextToSpeech(context))
+            },
+            selectedTranslator = mainState.value.selectedTranslator
+
         )
+
+
     }
 }

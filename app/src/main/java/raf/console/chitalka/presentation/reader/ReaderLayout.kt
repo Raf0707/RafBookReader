@@ -42,12 +42,13 @@ import raf.console.chitalka.domain.reader.ReaderTextAlignment
 import raf.console.chitalka.domain.util.HorizontalAlignment
 import raf.console.chitalka.presentation.core.components.common.AnimatedVisibility
 import raf.console.chitalka.presentation.core.components.common.LazyColumnWithScrollbar
-import raf.console.chitalka.presentation.core.components.common.SafeSelectionContainer
+//import raf.console.chitalka.presentation.core.components.common.SafeSelectionContainer
 import raf.console.chitalka.presentation.core.components.common.SelectionContainer
 import raf.console.chitalka.presentation.core.components.common.SpacedItem
 import raf.console.chitalka.presentation.core.util.LocalActivity
 import raf.console.chitalka.presentation.core.util.noRippleClickable
 import raf.console.chitalka.presentation.core.util.showToast
+import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 import raf.console.chitalka.ui.reader.ReaderEvent
 
 @Composable
@@ -95,7 +96,8 @@ fun ReaderLayout(
     openShareApp: (ReaderEvent.OnOpenShareApp) -> Unit,
     openWebBrowser: (ReaderEvent.OnOpenWebBrowser) -> Unit,
     openTranslator: (ReaderEvent.OnOpenTranslator) -> Unit,
-    openDictionary: (ReaderEvent.OnOpenDictionary) -> Unit
+    openDictionary: (ReaderEvent.OnOpenDictionary) -> Unit,
+    selectedTranslator: TranslatorApp,
 ) {
     /*val activity = LocalActivity.current
     SelectionContainer(
@@ -349,12 +351,14 @@ fun ReaderLayout(
             }
         }*/
 
-        SafeSelectionContainer(
+        SelectionContainer(
             onCopyRequested = {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                     activity.getString(R.string.copied).showToast(context = activity)
                 }
             },
+            onSoundRequested = {}, // если не используется — оставь пустым
+            onBookmarkRequested = {}, // если не используется — оставь пустым
             onShareRequested = {
                 openShareApp(ReaderEvent.OnOpenShareApp(it, activity))
             },
@@ -366,7 +370,8 @@ fun ReaderLayout(
             },
             onDictionaryRequested = {
                 openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
-            }
+            },
+            selectedTranslator = selectedTranslator // 💡 новый аргумент
         ) { toolbarHidden ->
             LazyColumnWithScrollbar(
                 state = listState,
@@ -414,6 +419,7 @@ fun ReaderLayout(
                 }
             }
         }
+
 
         AnimatedVisibility(
             visible = !showMenu && progressBar,

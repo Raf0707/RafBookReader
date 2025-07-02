@@ -71,6 +71,9 @@ object DataStoreConstants {
     // Math renderer
     val RENDER_MATH = booleanPreferencesKey("render_math")
 
+    //Translator
+    val SELECTED_TRANSLATOR = stringPreferencesKey("selected_translator")
+
     // Browse settings
     val BROWSE_LAYOUT = stringPreferencesKey("browse_layout")
     val BROWSE_AUTO_GRID_SIZE = booleanPreferencesKey("browse_auto_grid_size")

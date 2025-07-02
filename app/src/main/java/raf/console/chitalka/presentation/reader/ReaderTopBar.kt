@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -54,12 +57,15 @@ fun ReaderTopBar(
     selectNextPreset: (SettingsEvent.OnSelectNextPreset) -> Unit,
     showSettingsBottomSheet: (ReaderEvent.OnShowSettingsBottomSheet) -> Unit,
     showChaptersDrawer: (ReaderEvent.OnShowChaptersDrawer) -> Unit,
+    onStartTTS: () -> Unit, // ✅ Добавлено
+    OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit, // ✅ Добавлено
     navigateToBookInfo: (changePath: Boolean) -> Unit,
     navigateBack: () -> Unit
 ) {
     val activity = LocalActivity.current
-    val animatedChapterProgress = animateFloatAsState(
-        targetValue = currentChapterProgress
+    val animatedChapterProgress by animateFloatAsState(
+        targetValue = currentChapterProgress,
+        label = "chapterProgress"
     )
 
     Column(
@@ -83,9 +89,7 @@ fun ReaderTopBar(
                     leave(
                         ReaderEvent.OnLeave(
                             activity = activity,
-                            navigate = {
-                                navigateBack()
-                            }
+                            navigate = { navigateBack() }
                         )
                     )
                 }
@@ -128,6 +132,7 @@ fun ReaderTopBar(
                 )
             },
             actions = {
+                // 📖 Главы (справа)
                 if (currentChapter != null) {
                     IconButton(
                         icon = Icons.Rounded.Menu,
@@ -139,11 +144,32 @@ fun ReaderTopBar(
                     }
                 }
 
+                // 🔊 Озвучка (TTS)
+                IconButton(
+                    icon = Icons.Default.PlayArrow,
+                    contentDescription = R.string.tts_content_desc,
+                    disableOnClick = false,
+                    enabled = !lockMenu
+                ) {
+                    onStartTTS()
+                }
+
+                // 📘 Заметки и закладки (Drawer слева)
+                IconButton(
+                    icon = Icons.Default.Bookmarks,
+                    contentDescription = R.string.bookmarks_notes_content_desc,
+                    disableOnClick = false,
+                    enabled = !lockMenu
+                ) {
+                    OnShowNotesBookmarksDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
+                }
+
+                // ⚙ Настройки
                 IconButton(
                     icon = Icons.Default.Settings,
                     contentDescription = R.string.open_reader_settings_content_desc,
                     disableOnClick = false,
-                    enabled = !lockMenu
+                    enabled = !lockMenu,
                 ) {
                     showSettingsBottomSheet(ReaderEvent.OnShowSettingsBottomSheet)
                 }
@@ -155,7 +181,7 @@ fun ReaderTopBar(
 
         if (currentChapter != null) {
             LinearProgressIndicator(
-                progress = { animatedChapterProgress.value },
+                progress = { animatedChapterProgress },
                 modifier = Modifier.fillMaxWidth()
             )
         }

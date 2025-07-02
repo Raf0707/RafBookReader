@@ -39,6 +39,15 @@ import raf.console.chitalka.data.mapper.category.CategoryMapper
 import raf.console.chitalka.data.mapper.category.CategoryMapperImpl
 import raf.console.chitalka.data.repository.CategoryRepositoryImpl
 import raf.console.chitalka.domain.repository.CategoryRepository
+import raf.console.chitalka.data.mapper.bookmark.BookmarkMapper
+import raf.console.chitalka.data.mapper.bookmark.BookmarkMapperImpl
+import raf.console.chitalka.data.mapper.note.NoteMapper
+import raf.console.chitalka.data.mapper.note.NoteMapperImpl
+import raf.console.chitalka.data.repository.BookmarkRepositoryImpl
+import raf.console.chitalka.data.repository.NoteRepositoryImpl
+import raf.console.chitalka.domain.repository.BookmarkRepository
+import raf.console.chitalka.domain.repository.NoteRepository
+
 import javax.inject.Singleton
 
 @Module
@@ -88,6 +97,19 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
+    abstract fun bindBookmarkRepository(
+        bookmarkRepositoryImpl: BookmarkRepositoryImpl
+    ): BookmarkRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNoteRepository(
+        noteRepositoryImpl: NoteRepositoryImpl
+    ): NoteRepository
+
+
+    @Binds
+    @Singleton
     abstract fun bindBookMapper(
         bookMapperImpl: BookMapperImpl
     ): BookMapper
@@ -127,4 +149,16 @@ abstract class RepositoryModule {
     abstract fun bindCategoryMapper(
         categoryMapperImpl: CategoryMapperImpl
     ): CategoryMapper
+
+    @Binds
+    @Singleton
+    abstract fun bindBookmarkMapper(
+        bookmarkMapperImpl: BookmarkMapperImpl
+    ): BookmarkMapper
+
+    @Binds
+    @Singleton
+    abstract fun bindNoteMapper(
+        noteMapperImpl: NoteMapperImpl
+    ): NoteMapper
 }

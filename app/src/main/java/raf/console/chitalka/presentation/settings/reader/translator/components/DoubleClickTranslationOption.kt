@@ -34,3 +34,22 @@ fun DoubleClickTranslationOption() {
         }
     )
 }
+
+@Composable
+fun DoubleClickTranslationOptionLambda() {
+    val mainModel = hiltViewModel<MainModel>()
+    val state = mainModel.state.collectAsStateWithLifecycle()
+
+    SwitchWithTitle(
+        selected = state.value.doubleClickTranslation,
+        title = stringResource(id = R.string.double_click_translation_option),
+        description = stringResource(id = R.string.double_click_translation_option_desc),
+        onClick = {
+            mainModel.onEvent(
+                MainEvent.OnChangeDoubleClickTranslation(
+                    !state.value.doubleClickTranslation
+                )
+            )
+        }
+    )
+}

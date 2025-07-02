@@ -8,6 +8,7 @@
 package raf.console.chitalka.ui.main
 
 import androidx.compose.runtime.Immutable
+import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 
 @Immutable
 sealed class MainEvent {
@@ -69,4 +70,7 @@ sealed class MainEvent {
     data class OnChangeHorizontalGestureAlphaAnim(val value: Boolean) : MainEvent()
     data class OnChangeHorizontalGesturePullAnim(val value: Boolean) : MainEvent()
     data class OnChangeRenderMath(val value: Boolean) : MainEvent()
+    data class OnSelectTranslator(val value: Boolean) : MainEvent()
+    data class OnShowNotesBookmarksDrawer(val bookId: Int) : MainEvent()
+
 }

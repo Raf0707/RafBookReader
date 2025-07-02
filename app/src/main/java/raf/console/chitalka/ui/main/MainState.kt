@@ -43,6 +43,8 @@ import raf.console.chitalka.domain.ui.toDarkTheme
 import raf.console.chitalka.domain.ui.toPureDark
 import raf.console.chitalka.ui.theme.toTheme
 import raf.console.chitalka.domain.ui.toThemeContrast
+import raf.console.chitalka.presentation.reader.translator.TranslatorApp
+import raf.console.chitalka.ui.reader.ReaderScreen
 import java.util.Locale
 
 /**
@@ -69,6 +71,11 @@ data class MainState(
     val themeContrast: ThemeContrast = provideDefaultValue { ThemeContrast.STANDARD },
     val showStartScreen: Boolean = provideDefaultValue { true },
     val doublePressExit: Boolean = provideDefaultValue { false },
+
+    //Translate
+    val selectedTranslator: TranslatorApp = TranslatorApp.GOOGLE,
+
+    val drawer: ReaderScreen? = null,
 
     // Reader Settings
     val fontFamily: String = provideDefaultValue { provideFonts()[0].id },

@@ -25,6 +25,8 @@ import raf.console.chitalka.data.local.room.CategoryDao
 import raf.console.chitalka.data.local.room.BookDatabase
 import raf.console.chitalka.data.local.room.DatabaseHelper
 import raf.console.chitalka.data.local.room.BookCategoryDao
+import raf.console.chitalka.data.local.room.BookmarkDao
+import raf.console.chitalka.data.local.room.NoteDao
 import javax.inject.Singleton
 
 @Module
@@ -65,8 +67,10 @@ object AppModule {
                 DatabaseHelper.MIGRATION_4_5, // creates ColorPresetEntity table(if does not exist)
                 DatabaseHelper.MIGRATION_5_6, // creates FavoriteDirectoryEntity table(if does not exist)
                 DatabaseHelper.MIGRATION_9_10, // структ. миграция и кастомные категории
+                DatabaseHelper.MIGRATION_10_11, // закладки в книгах, заметки к закладкам + заметки к книгам
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
+            .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
             .allowMainThreadQueries()
             .build()
             .dao
@@ -88,8 +92,10 @@ object AppModule {
                 DatabaseHelper.MIGRATION_4_5,
                 DatabaseHelper.MIGRATION_5_6,
                 DatabaseHelper.MIGRATION_9_10,
+                DatabaseHelper.MIGRATION_10_11, // закладки в книгах, заметки к закладкам + заметки к книгам
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
+            .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
             .allowMainThreadQueries()
             .build()
             .categoryDao
@@ -110,10 +116,59 @@ object AppModule {
                 DatabaseHelper.MIGRATION_4_5,
                 DatabaseHelper.MIGRATION_5_6,
                 DatabaseHelper.MIGRATION_9_10,
+                DatabaseHelper.MIGRATION_10_11, // закладки в книгах, заметки к закладкам + заметки к книгам
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
+            .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
             .allowMainThreadQueries()
             .build()
             .bookCategoryDao
     }
+
+    @Provides
+    @Singleton
+    fun provideNoteDao(app: Application): NoteDao {
+        DatabaseHelper.MIGRATION_7_8.removeBooksDir(app)
+        return Room.databaseBuilder(
+            app,
+            BookDatabase::class.java,
+            "book_db"
+        )
+            .addMigrations(
+                DatabaseHelper.MIGRATION_2_3,
+                DatabaseHelper.MIGRATION_4_5,
+                DatabaseHelper.MIGRATION_5_6,
+                DatabaseHelper.MIGRATION_9_10,
+                DatabaseHelper.MIGRATION_10_11,
+            )
+            .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
+            .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
+            .allowMainThreadQueries()
+            .build()
+            .noteDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookmarkDao(app: Application): BookmarkDao {
+        DatabaseHelper.MIGRATION_7_8.removeBooksDir(app)
+        return Room.databaseBuilder(
+            app,
+            BookDatabase::class.java,
+            "book_db"
+        )
+            .addMigrations(
+                DatabaseHelper.MIGRATION_2_3,
+                DatabaseHelper.MIGRATION_4_5,
+                DatabaseHelper.MIGRATION_5_6,
+                DatabaseHelper.MIGRATION_9_10,
+                DatabaseHelper.MIGRATION_10_11,
+            )
+            .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
+            .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
+            .allowMainThreadQueries()
+            .build()
+            .bookmarkDao
+    }
+
 }
