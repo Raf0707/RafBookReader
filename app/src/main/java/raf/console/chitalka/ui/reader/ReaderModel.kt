@@ -493,21 +493,75 @@ class ReaderModel @Inject constructor(
                     loadNotes(event.bookId)
                 }
 
+                is ReaderEvent.OnAddBookmark -> {
+                    val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
+                    viewModelScope.launch {
+                        bookmarkRepository.insertBookmark(
+                            Bookmark(
+                                id = 0L,
+                                bookId = currentBookId,
+                                chapterIndex = event.chapterIndex,
+                                offset = event.offset,
+                                label = event.text.takeIf { it.isNotBlank() },
+                                createdAt = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                }
 
-                /*is ReaderEvent.OnShowNotesDrawer -> {
-                    _state.update {
-                        it.copy(drawer = ReaderScreen.NOTES_BOOKMARKS_DRAWER)
+                is ReaderEvent.OnScrollToBookmark -> {
+                    viewModelScope.launch {
+
+                        _state.update {
+                            it.copy(
+                                checkpoint = Checkpoint(
+                                    index = event.chapterIndex,
+                                    offset = event.offset.toInt()
+                                ),
+                                highlightedText = event.text
+                            )
+                        }
+                        delay(100) // дать время обновиться LazyList
+                        /*onScrollToBookmark(
+                            offset = event.offset,
+                            chapterIndex = event.chapterIndex,
+                            text = event.text,
+                            listState = listState // ← вот тут передаём UI-объект
+                        )*/
                     }
 
-                    loadBookmarks(event.bookId)
-                    loadNotes(event.bookId)
-                }*/
+
+                }
+
 
 
                 else -> {}
             }
         }
     }
+
+    fun onScrollToBookmark(
+        offset: Long,
+        chapterIndex: Long,
+        text: String,
+        listState: LazyListState
+    ) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    checkpoint = Checkpoint(
+                        index = chapterIndex.toInt(),
+                        offset = offset.toInt()
+                    ),
+                    highlightedText = text
+                )
+            }
+            delay(100)
+            listState.scrollToItem(offset.toInt())
+        }
+    }
+
+
 
     fun init(
         bookId: Int,
@@ -533,6 +587,10 @@ class ReaderModel @Inject constructor(
                 ReaderState(book = book)
             }
 
+            // ✅ Загрузим закладки и заметки
+            loadBookmarks(book.id.toLong())
+            loadNotes(book.id.toLong())
+
             onEvent(
                 ReaderEvent.OnLoadText(
                     activity = activity,
@@ -542,7 +600,7 @@ class ReaderModel @Inject constructor(
         }
     }
 
-    fun loadBookmarks(bookId: Long) {
+    /*fun loadBookmarks(bookId: Long) {
         viewModelScope.launch {
             bookmarkRepository.observeBookmarksForBook(bookId).collect {
                 _bookmarks.value = it
@@ -556,7 +614,24 @@ class ReaderModel @Inject constructor(
                 _notes.value = it
             }
         }
+    }*/
+
+    fun loadBookmarks(bookId: Long) {
+        viewModelScope.launch {
+            bookmarkRepository.observeBookmarksForBook(bookId).collect { bookmarkList ->
+                _state.update { it.copy(bookmarks = bookmarkList) }
+            }
+        }
     }
+
+    fun loadNotes(bookId: Long) {
+        viewModelScope.launch {
+            noteRepository.observeNotesForBook(bookId).collect { noteList ->
+                _state.update { it.copy(notes = noteList) }
+            }
+        }
+    }
+
 
     fun startTTS(context: Context) {
         val currentText = state.value.text

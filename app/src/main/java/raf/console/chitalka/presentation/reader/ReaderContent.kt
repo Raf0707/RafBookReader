@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.Checkpoint
@@ -40,9 +42,9 @@ import raf.console.chitalka.domain.util.Drawer
 import raf.console.chitalka.domain.util.HorizontalAlignment
 import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 import raf.console.chitalka.ui.reader.ReaderEvent
+import raf.console.chitalka.ui.reader.ReaderModel
 import raf.console.chitalka.ui.reader.ReaderScreen
 import raf.console.chitalka.ui.settings.SettingsEvent
-
 
 @Composable
 fun ReaderContent(
@@ -121,27 +123,33 @@ fun ReaderContent(
     onStartTTS: () -> Unit,
     selectedTranslator: TranslatorApp,
     bookmarks: List<Bookmark> = emptyList(),
-    notes: List<Note> = emptyList()
+    notes: List<Note> = emptyList(),
+    onEvent: (ReaderEvent) -> Unit
 ) {
     val chaptersDrawerState = rememberDrawerState(DrawerValue.Closed)
     val notesDrawerState = rememberDrawerState(DrawerValue.Closed)
 
+    val readerModel: ReaderModel = hiltViewModel()
+
     LaunchedEffect(drawer) {
         when (drawer) {
             ReaderScreen.CHAPTERS_DRAWER -> {
-                notesDrawerState.close()
-                chaptersDrawerState.open()
+                launch { notesDrawerState.snapTo(DrawerValue.Closed) }
+                launch { chaptersDrawerState.snapTo(DrawerValue.Open) }
             }
             ReaderScreen.NOTES_BOOKMARKS_DRAWER -> {
-                chaptersDrawerState.close()
-                notesDrawerState.open()
+                launch { chaptersDrawerState.snapTo(DrawerValue.Closed) }
+                launch { notesDrawerState.snapTo(DrawerValue.Open) }
             }
             else -> {
-                chaptersDrawerState.close()
-                notesDrawerState.close()
+                launch { chaptersDrawerState.snapTo(DrawerValue.Closed) }
+                launch { notesDrawerState.snapTo(DrawerValue.Closed) }
             }
         }
     }
+
+
+
 
     ModalNavigationDrawer(
         drawerState = chaptersDrawerState,
@@ -159,135 +167,131 @@ fun ReaderContent(
         ModalNavigationDrawer(
             drawerState = notesDrawerState,
             drawerContent = {
+
+                val scope = rememberCoroutineScope()
+
                 ReaderNotesBookmarksDrawer(
                     show = notesDrawerState.isOpen,
                     bookmarks = bookmarks,
                     notes = notes,
-                    dismissDrawer = dismissDrawer
+                    dismissDrawer = dismissDrawer,
+                    onEvent = {
+                        when (it) {
+                            is ReaderEvent.OnScrollToBookmark -> {
+                                // Сначала передаём событие в ViewModel для обновления checkpoint и highlightedText
+                                readerModel.onEvent(it)
+
+                                // Затем прокручиваем UI
+                                scope.launch {
+                                    // ⏱ подождём чуть-чуть, чтобы ViewModel успел обновиться
+                                    kotlinx.coroutines.delay(100)
+                                    listState.scrollToItem(it.offset.toInt())
+                                }
+                            }
+
+                            else -> readerModel.onEvent(it)
+                        }
+                    },
+                    listState = listState
                 )
+
+
             }
         ) {
+            // Main content
+            ReaderBottomSheet(
+                bottomSheet = bottomSheet,
+                fullscreenMode = fullscreenMode,
+                menuVisibility = menuVisibility,
+                dismissBottomSheet = dismissBottomSheet
+            )
 
+            if (isLoading || errorMessage == null) {
+                ReaderScaffold(
+                    book = book,
+                    text = text,
+                    listState = listState,
+                    currentChapter = currentChapter,
+                    nestedScrollConnection = nestedScrollConnection,
+                    fastColorPresetChange = fastColorPresetChange,
+                    perceptionExpander = perceptionExpander,
+                    perceptionExpanderPadding = perceptionExpanderPadding,
+                    perceptionExpanderThickness = perceptionExpanderThickness,
+                    currentChapterProgress = currentChapterProgress,
+                    isLoading = isLoading,
+                    checkpoint = checkpoint,
+                    showMenu = showMenu,
+                    lockMenu = lockMenu,
+                    contentPadding = contentPadding,
+                    verticalPadding = verticalPadding,
+                    horizontalGesture = horizontalGesture,
+                    horizontalGestureScroll = horizontalGestureScroll,
+                    horizontalGestureSensitivity = horizontalGestureSensitivity,
+                    horizontalGestureAlphaAnim = horizontalGestureAlphaAnim,
+                    horizontalGesturePullAnim = horizontalGesturePullAnim,
+                    highlightedReading = highlightedReading,
+                    highlightedReadingThickness = highlightedReadingThickness,
+                    progress = progress,
+                    progressBar = progressBar,
+                    progressBarPadding = progressBarPadding,
+                    progressBarAlignment = progressBarAlignment,
+                    progressBarFontSize = progressBarFontSize,
+                    paragraphHeight = paragraphHeight,
+                    sidePadding = sidePadding,
+                    bottomBarPadding = bottomBarPadding,
+                    backgroundColor = backgroundColor,
+                    fontColor = fontColor,
+                    images = images,
+                    imagesCornersRoundness = imagesCornersRoundness,
+                    imagesAlignment = imagesAlignment,
+                    imagesWidth = imagesWidth,
+                    imagesColorEffects = imagesColorEffects,
+                    fontFamily = fontFamily,
+                    lineHeight = lineHeight,
+                    fontThickness = fontThickness,
+                    fontStyle = fontStyle,
+                    chapterTitleAlignment = chapterTitleAlignment,
+                    textAlignment = textAlignment,
+                    horizontalAlignment = horizontalAlignment,
+                    fontSize = fontSize,
+                    letterSpacing = letterSpacing,
+                    paragraphIndentation = paragraphIndentation,
+                    doubleClickTranslation = doubleClickTranslation,
+                    fullscreenMode = fullscreenMode,
+                    selectPreviousPreset = selectPreviousPreset,
+                    selectNextPreset = selectNextPreset,
+                    menuVisibility = menuVisibility,
+                    leave = leave,
+                    restoreCheckpoint = restoreCheckpoint,
+                    scroll = scroll,
+                    changeProgress = changeProgress,
+                    openShareApp = openShareApp,
+                    openWebBrowser = openWebBrowser,
+                    openTranslator = openTranslator,
+                    openDictionary = openDictionary,
+                    showSettingsBottomSheet = showSettingsBottomSheet,
+                    showChaptersDrawer = showChaptersDrawer,
+                    navigateBack = navigateBack,
+                    navigateToBookInfo = navigateToBookInfo,
+                    OnShowNotesBookmarksDrawer = {
+                        onShowNotesDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
+                    },
+                    onStartTTS = onStartTTS,
+                    selectedTranslator = selectedTranslator,
+                    onEvent = onEvent
+                )
+            } else {
+                ReaderErrorPlaceholder(
+                    errorMessage = errorMessage,
+                    leave = leave,
+                    navigateToBookInfo = navigateToBookInfo,
+                    navigateBack = navigateBack
+                )
+            }
 
-            RightDrawerScaffold(
-                drawerVisible = (drawer == ReaderScreen.NOTES_BOOKMARKS_DRAWER),
-                onCloseDrawer = { dismissDrawer(ReaderEvent.OnDismissDrawer) },
-                drawerContent = {
-                    ReaderNotesBookmarks(
-                        bookmarks = bookmarks,
-                        notes = notes,
-                        onBookmarkClick = { /* TODO */ },
-                        onNoteClick = { /* TODO */ },
-                        onNoteAdd = { /* TODO */ },
-                        onNoteEdit = { /* TODO */ },
-                        onNoteDelete = { /* TODO */ }
-                    )
-                },
-                mainContent = {
-                    // ✅ Левый дравер (главы) остаётся внутри mainContent!
-                    ReaderDrawer(
-                        drawer = drawer,
-                        chapters = remember(text) { text.filterIsInstance<Chapter>() },
-                        currentChapter = currentChapter,
-                        currentChapterProgress = currentChapterProgress,
-                        scrollToChapter = scrollToChapter,
-                        dismissDrawer = dismissDrawer
-                    )
-
-                    ReaderBottomSheet(
-                        bottomSheet = bottomSheet,
-                        fullscreenMode = fullscreenMode,
-                        menuVisibility = menuVisibility,
-                        dismissBottomSheet = dismissBottomSheet
-                    )
-
-                    if (isLoading || errorMessage == null) {
-                        ReaderScaffold(
-                            book = book,
-                            text = text,
-                            listState = listState,
-                            currentChapter = currentChapter,
-                            nestedScrollConnection = nestedScrollConnection,
-                            fastColorPresetChange = fastColorPresetChange,
-                            perceptionExpander = perceptionExpander,
-                            perceptionExpanderPadding = perceptionExpanderPadding,
-                            perceptionExpanderThickness = perceptionExpanderThickness,
-                            currentChapterProgress = currentChapterProgress,
-                            isLoading = isLoading,
-                            checkpoint = checkpoint,
-                            showMenu = showMenu,
-                            lockMenu = lockMenu,
-                            contentPadding = contentPadding,
-                            verticalPadding = verticalPadding,
-                            horizontalGesture = horizontalGesture,
-                            horizontalGestureScroll = horizontalGestureScroll,
-                            horizontalGestureSensitivity = horizontalGestureSensitivity,
-                            horizontalGestureAlphaAnim = horizontalGestureAlphaAnim,
-                            horizontalGesturePullAnim = horizontalGesturePullAnim,
-                            highlightedReading = highlightedReading,
-                            highlightedReadingThickness = highlightedReadingThickness,
-                            progress = progress,
-                            progressBar = progressBar,
-                            progressBarPadding = progressBarPadding,
-                            progressBarAlignment = progressBarAlignment,
-                            progressBarFontSize = progressBarFontSize,
-                            paragraphHeight = paragraphHeight,
-                            sidePadding = sidePadding,
-                            bottomBarPadding = bottomBarPadding,
-                            backgroundColor = backgroundColor,
-                            fontColor = fontColor,
-                            images = images,
-                            imagesCornersRoundness = imagesCornersRoundness,
-                            imagesAlignment = imagesAlignment,
-                            imagesWidth = imagesWidth,
-                            imagesColorEffects = imagesColorEffects,
-                            fontFamily = fontFamily,
-                            lineHeight = lineHeight,
-                            fontThickness = fontThickness,
-                            fontStyle = fontStyle,
-                            chapterTitleAlignment = chapterTitleAlignment,
-                            textAlignment = textAlignment,
-                            horizontalAlignment = horizontalAlignment,
-                            fontSize = fontSize,
-                            letterSpacing = letterSpacing,
-                            paragraphIndentation = paragraphIndentation,
-                            doubleClickTranslation = doubleClickTranslation,
-                            fullscreenMode = fullscreenMode,
-                            selectPreviousPreset = selectPreviousPreset,
-                            selectNextPreset = selectNextPreset,
-                            menuVisibility = menuVisibility,
-                            leave = leave,
-                            restoreCheckpoint = restoreCheckpoint,
-                            scroll = scroll,
-                            changeProgress = changeProgress,
-                            openShareApp = openShareApp,
-                            openWebBrowser = openWebBrowser,
-                            openTranslator = openTranslator,
-                            openDictionary = openDictionary,
-                            showSettingsBottomSheet = showSettingsBottomSheet,
-                            showChaptersDrawer = showChaptersDrawer,
-                            navigateBack = navigateBack,
-                            navigateToBookInfo = navigateToBookInfo,
-                            OnShowNotesBookmarksDrawer = {
-                                onShowNotesDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
-                            },
-                            onStartTTS = onStartTTS,
-                            selectedTranslator = selectedTranslator
-                        )
-                    } else {
-                        ReaderErrorPlaceholder(
-                            errorMessage = errorMessage,
-                            leave = leave,
-                            navigateToBookInfo = navigateToBookInfo,
-                            navigateBack = navigateBack
-                        )
-                    }
-
-                    ReaderBackHandler(
-                        leave = leave,
-                        navigateBack = navigateBack
-                    )
-                }
+            ReaderBackHandler(
+                leave = leave,
+                navigateBack = navigateBack
             )
         }
     }

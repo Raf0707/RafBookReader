@@ -112,6 +112,7 @@ fun ReaderScaffold(
     onStartTTS: () -> Unit,
     OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit,
     selectedTranslator: TranslatorApp,
+    onEvent: (ReaderEvent) -> Unit // ← добавлен
 ) {
     Scaffold(
         Modifier
@@ -139,9 +140,10 @@ fun ReaderScaffold(
                     navigateBack = navigateBack,
                     navigateToBookInfo = navigateToBookInfo,
                     onStartTTS = onStartTTS,
-                    OnShowNotesBookmarksDrawer = { OnShowNotesBookmarksDrawer (ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong())) }
+                    OnShowNotesBookmarksDrawer = {
+                        OnShowNotesBookmarksDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
+                    }
                 )
-
             }
         },
         bottomBar = {
@@ -166,6 +168,10 @@ fun ReaderScaffold(
             }
         }
     ) {
+        val currentChapterIndex = text.indexOfFirst {
+            it is ReaderText.Chapter && it.id == currentChapter?.id
+        }.coerceAtLeast(0)
+
         ReaderLayout(
             text = text,
             listState = listState,
@@ -212,6 +218,12 @@ fun ReaderScaffold(
             openTranslator = openTranslator,
             openDictionary = openDictionary,
             selectedTranslator = selectedTranslator,
+
+            // 👇 передача для закладок
+            onEvent = onEvent,
+            currentChapterIndex = currentChapterIndex,
+            currentOffset = checkpoint.offset.toLong(),
+            bookId = book.id.toLong()
         )
 
         ReaderPerceptionExpander(

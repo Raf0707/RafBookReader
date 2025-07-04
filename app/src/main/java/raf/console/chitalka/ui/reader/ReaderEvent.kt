@@ -10,6 +10,7 @@ package raf.console.chitalka.ui.reader
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Immutable
+import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
 
 @Immutable
@@ -80,4 +81,21 @@ sealed class ReaderEvent {
     data object OnDismissDrawer : ReaderEvent()
 
     data class OnStartTextToSpeech(val context: Context) : ReaderEvent()
+
+    data class OnAddBookmark(
+        val bookId: Long,
+        val text: String,              // Выделенный текст для label
+        val chapterIndex: Long,        // Индекс главы (например, из currentChapter?.index)
+        val offset: Long               // Смещение курсора (или позиция в тексте)
+    ) : ReaderEvent()
+
+    data class OnScrollToBookmark(
+        val chapterIndex: Int,
+        val offset: Long,
+        val text: String
+    ) : ReaderEvent()
+
+    data class OnDeleteBookmark(val bookmark: Bookmark) : ReaderEvent()
+
+
 }

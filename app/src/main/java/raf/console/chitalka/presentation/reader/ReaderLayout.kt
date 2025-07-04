@@ -98,156 +98,13 @@ fun ReaderLayout(
     openTranslator: (ReaderEvent.OnOpenTranslator) -> Unit,
     openDictionary: (ReaderEvent.OnOpenDictionary) -> Unit,
     selectedTranslator: TranslatorApp,
-) {
-    /*val activity = LocalActivity.current
-    SelectionContainer(
-        onCopyRequested = {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-                activity.getString(R.string.copied)
-                    .showToast(context = activity, longToast = false)
-            }
-        },
-        onShareRequested = { textToShare ->
-            openShareApp(
-                ReaderEvent.OnOpenShareApp(
-                    textToShare = textToShare,
-                    activity = activity
-                )
-            )
-        },
-        onWebSearchRequested = { textToSearch ->
-            openWebBrowser(
-                ReaderEvent.OnOpenWebBrowser(
-                    textToSearch = textToSearch,
-                    activity = activity
-                )
-            )
-        },
-        onTranslateRequested = { textToTranslate ->
-            openTranslator(
-                ReaderEvent.OnOpenTranslator(
-                    textToTranslate = textToTranslate,
-                    translateWholeParagraph = false,
-                    activity = activity
-                )
-            )
-        },
-        onDictionaryRequested = { textToDefine ->
-            openDictionary(
-                ReaderEvent.OnOpenDictionary(
-                    textToDefine,
-                    activity = activity
-                )
-            )
-        }
-    ) { toolbarHidden ->
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
-                .then(
-                    if (!isLoading && toolbarHidden) {
-                        Modifier.noRippleClickable(
-                            onClick = {
-                                menuVisibility(
-                                    ReaderEvent.OnMenuVisibility(
-                                        show = !showMenu,
-                                        fullscreenMode = fullscreenMode,
-                                        saveCheckpoint = true,
-                                        activity = activity
-                                    )
-                                )
-                            }
-                        )
-                    } else Modifier
-                )
-                .padding(contentPadding)
-                .padding(vertical = verticalPadding)
-                .readerHorizontalGesture(
-                    listState = listState,
-                    horizontalGesture = horizontalGesture,
-                    horizontalGestureScroll = horizontalGestureScroll,
-                    horizontalGestureSensitivity = horizontalGestureSensitivity,
-                    horizontalGestureAlphaAnim = horizontalGestureAlphaAnim,
-                    horizontalGesturePullAnim = horizontalGesturePullAnim,
-                    isLoading = isLoading
-                )
-        ) {
-            LazyColumnWithScrollbar(
-                state = listState,
-                enableScrollbar = false,
-                parentModifier = Modifier.weight(1f),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    top = (WindowInsets.displayCutout.asPaddingValues()
-                        .calculateTopPadding() + paragraphHeight)
-                        .coerceAtLeast(18.dp),
-                    bottom = (WindowInsets.displayCutout.asPaddingValues()
-                        .calculateBottomPadding() + paragraphHeight)
-                        .coerceAtLeast(18.dp),
-                )
-            ) {
-                itemsIndexed(
-                    text,
-                    key = { index, _ -> index }
-                ) { index, entry ->
-                    when {
-                        !images && entry is ReaderText.Image -> return@itemsIndexed
-                        else -> {
-                            SpacedItem(
-                                index = index,
-                                spacing = paragraphHeight
-                            ) {
-                                ReaderLayoutText(
-                                    activity = activity,
-                                    showMenu = showMenu,
-                                    entry = entry,
-                                    imagesCornersRoundness = imagesCornersRoundness,
-                                    imagesAlignment = imagesAlignment,
-                                    imagesWidth = imagesWidth,
-                                    imagesColorEffects = imagesColorEffects,
-                                    fontFamily = fontFamily,
-                                    fontColor = fontColor,
-                                    lineHeight = lineHeight,
-                                    fontThickness = fontThickness,
-                                    fontStyle = fontStyle,
-                                    chapterTitleAlignment = chapterTitleAlignment,
-                                    textAlignment = textAlignment,
-                                    horizontalAlignment = horizontalAlignment,
-                                    fontSize = fontSize,
-                                    letterSpacing = letterSpacing,
-                                    sidePadding = sidePadding,
-                                    paragraphIndentation = paragraphIndentation,
-                                    fullscreenMode = fullscreenMode,
-                                    doubleClickTranslation = doubleClickTranslation,
-                                    highlightedReading = highlightedReading,
-                                    highlightedReadingThickness = highlightedReadingThickness,
-                                    toolbarHidden = toolbarHidden,
-                                    openTranslator = openTranslator,
-                                    menuVisibility = menuVisibility
-                                )
-                            }
-                        }
-                    }
-                }
-            }
 
-            AnimatedVisibility(
-                visible = !showMenu && progressBar,
-                enter = slideInVertically { it } + expandVertically(),
-                exit = slideOutVertically { it } + shrinkVertically()
-            ) {
-                ReaderProgressBar(
-                    progress = progress,
-                    progressBarPadding = progressBarPadding,
-                    progressBarAlignment = progressBarAlignment,
-                    progressBarFontSize = progressBarFontSize,
-                    fontColor = fontColor,
-                    sidePadding = sidePadding
-                )
-            }
-        }
-    }*/
+    // 🆕 новые аргументы:
+    bookId: Long,
+    currentChapterIndex: Int,
+    currentOffset: Long,
+    onEvent: (ReaderEvent) -> Unit,
+) {
 
     val activity = LocalActivity.current
 
@@ -281,84 +138,20 @@ fun ReaderLayout(
                 isLoading = isLoading
             )
     ) {
-        /*LazyColumnWithScrollbar(
-            state = listState,
-            enableScrollbar = false,
-            parentModifier = Modifier.weight(1f),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                top = (WindowInsets.displayCutout.asPaddingValues().calculateTopPadding() + paragraphHeight).coerceAtLeast(18.dp),
-                bottom = (WindowInsets.displayCutout.asPaddingValues().calculateBottomPadding() + paragraphHeight).coerceAtLeast(18.dp),
-            )
-        ) {
-            itemsIndexed(text, key = { index, _ -> index }) { index, entry ->
-                if (!images && entry is ReaderText.Image) return@itemsIndexed
-
-                SpacedItem(index = index, spacing = paragraphHeight) {
-                    SafeSelectionContainer(
-                        onCopyRequested = {
-                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-                                activity.getString(R.string.copied).showToast(context = activity)
-                            }
-                        },
-                        onShareRequested = {
-                            openShareApp(ReaderEvent.OnOpenShareApp(it, activity))
-                        },
-                        onWebSearchRequested = {
-                            openWebBrowser(ReaderEvent.OnOpenWebBrowser(it, activity))
-                        },
-                        onTranslateRequested = {
-                            openTranslator(
-                                ReaderEvent.OnOpenTranslator(
-                                    it, false, activity
-                                )
-                            )
-                        },
-                        onDictionaryRequested = {
-                            openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
-                        }
-                    ) { toolbarHidden ->
-                        ReaderLayoutText(
-                            activity = activity,
-                            showMenu = showMenu,
-                            entry = entry,
-                            imagesCornersRoundness = imagesCornersRoundness,
-                            imagesAlignment = imagesAlignment,
-                            imagesWidth = imagesWidth,
-                            imagesColorEffects = imagesColorEffects,
-                            fontFamily = fontFamily,
-                            fontColor = fontColor,
-                            lineHeight = lineHeight,
-                            fontThickness = fontThickness,
-                            fontStyle = fontStyle,
-                            chapterTitleAlignment = chapterTitleAlignment,
-                            textAlignment = textAlignment,
-                            horizontalAlignment = horizontalAlignment,
-                            fontSize = fontSize,
-                            letterSpacing = letterSpacing,
-                            sidePadding = sidePadding,
-                            paragraphIndentation = paragraphIndentation,
-                            fullscreenMode = fullscreenMode,
-                            doubleClickTranslation = doubleClickTranslation,
-                            highlightedReading = highlightedReading,
-                            highlightedReadingThickness = highlightedReadingThickness,
-                            toolbarHidden = toolbarHidden,
-                            openTranslator = openTranslator,
-                            menuVisibility = menuVisibility
-                        )
-                    }
-                }
-            }
-        }*/
 
         SelectionContainer(
+            selectedTranslator = selectedTranslator,
+            bookId = bookId,
+            getCurrentChapterIndex = { currentChapterIndex },
+            getCurrentOffset = { currentOffset },
+            onEvent = onEvent,
+
             onCopyRequested = {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                     activity.getString(R.string.copied).showToast(context = activity)
                 }
             },
-            onSoundRequested = {}, // если не используется — оставь пустым
-            onBookmarkRequested = {}, // если не используется — оставь пустым
+            onSoundRequested = {},
             onShareRequested = {
                 openShareApp(ReaderEvent.OnOpenShareApp(it, activity))
             },
@@ -370,9 +163,10 @@ fun ReaderLayout(
             },
             onDictionaryRequested = {
                 openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
-            },
-            selectedTranslator = selectedTranslator // 💡 новый аргумент
-        ) { toolbarHidden ->
+            }
+        )
+
+        { toolbarHidden ->
             LazyColumnWithScrollbar(
                 state = listState,
                 enableScrollbar = false,

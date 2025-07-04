@@ -10,7 +10,9 @@ package raf.console.chitalka.ui.reader
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Immutable
 import raf.console.chitalka.domain.library.book.Book
+import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.Checkpoint
+import raf.console.chitalka.domain.reader.Note
 import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
 import raf.console.chitalka.domain.ui.UIText
@@ -35,5 +37,12 @@ data class ReaderState(
     val lockMenu: Boolean = false,
 
     val bottomSheet: BottomSheet? = null,
-    val drawer: Drawer? = null
+    val drawer: Drawer? = null,
+
+    // ✅ Новые поля
+    val bookmarks: List<Bookmark> = emptyList(),
+    val notes: List<Note> = emptyList(),
+
+    val highlightedText: String? = null
+
 )
