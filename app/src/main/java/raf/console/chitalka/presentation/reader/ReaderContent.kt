@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.reader.Bookmark
@@ -124,12 +125,34 @@ fun ReaderContent(
     selectedTranslator: TranslatorApp,
     bookmarks: List<Bookmark> = emptyList(),
     notes: List<Note> = emptyList(),
-    onEvent: (ReaderEvent) -> Unit
+    onEvent: (ReaderEvent) -> Unit,
 ) {
     val chaptersDrawerState = rememberDrawerState(DrawerValue.Closed)
     val notesDrawerState = rememberDrawerState(DrawerValue.Closed)
 
     val readerModel: ReaderModel = hiltViewModel()
+
+    val scope = rememberCoroutineScope()
+
+    val onEventHandler: (ReaderEvent) -> Unit = { event ->
+        when (event) {
+            is ReaderEvent.OnScrollToBookmark -> {
+                readerModel.onEvent(event)
+                scope.launch {
+                    delay(100)
+                    val targetIndex = readerModel.findGlobalIndexForBookmark(
+                        chapterIndex = event.chapterIndex,
+                        offset = event.offset.toInt()
+                    )
+                    if (targetIndex >= 0) {
+                        listState.animateScrollToItem(targetIndex)
+                    }
+                }
+            }
+            else -> readerModel.onEvent(event)
+        }
+    }
+
 
     LaunchedEffect(drawer) {
         when (drawer) {
@@ -147,7 +170,6 @@ fun ReaderContent(
             }
         }
     }
-
 
 
 
@@ -185,7 +207,8 @@ fun ReaderContent(
                                 scope.launch {
                                     // ⏱ подождём чуть-чуть, чтобы ViewModel успел обновиться
                                     kotlinx.coroutines.delay(100)
-                                    listState.scrollToItem(it.offset.toInt())
+                                    val index = listState.firstVisibleItemIndex
+                                    listState.scrollToItem(index)
                                 }
                             }
 
@@ -278,7 +301,7 @@ fun ReaderContent(
                     },
                     onStartTTS = onStartTTS,
                     selectedTranslator = selectedTranslator,
-                    onEvent = onEvent
+                    onEvent = onEventHandler
                 )
             } else {
                 ReaderErrorPlaceholder(

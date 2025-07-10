@@ -245,7 +245,7 @@ fun SelectionContainer(
     onWebSearchRequested: ((String) -> Unit),
     onTranslateRequested: ((String) -> Unit),
     onDictionaryRequested: ((String) -> Unit),
-    content: @Composable (toolbarHidden: Boolean) -> Unit
+    content: @Composable (toolbarHidden: Boolean) -> Unit,
 ) {
     val view = LocalView.current
     val context = LocalContext.current

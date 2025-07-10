@@ -43,6 +43,9 @@ data class ReaderState(
     val bookmarks: List<Bookmark> = emptyList(),
     val notes: List<Note> = emptyList(),
 
-    val highlightedText: String? = null
+    val highlightedText: String? = null,
+
+    val blinkingHighlightIndex: Int? = null
+
 
 )

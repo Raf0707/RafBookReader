@@ -732,4 +732,16 @@
     <string name="select_translator">Select translator</string>
     <string name="sound">voice over</string>
 
+    <string name="drag_to_reorder">Drag to reorder</string>
+    <string name="reorder_categories">Reorder categories</string>
+    <string name="reordering_mode">Reordering Mode</string>
+    <string name="save_order">Save changes</string>
+    <string name="order_saved">Categories order saved</string>
+    <string name="categories_title">Categories</string>
+    <string name="create_category_dialog_title">New Category</string>
+    <string name="edit_category_dialog_title">Edit Category Name</string>
+    <string name="category_name_placeholder">Enter category name…</string>
+    <string name="create_category_dialog_desc">Enter a name for the new category</string>
+    <string name="edit_category_dialog_desc">Change the category name</string>
+
 </resources>

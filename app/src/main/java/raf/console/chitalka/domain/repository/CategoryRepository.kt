@@ -23,4 +23,6 @@ interface CategoryRepository {
     suspend fun reorderCategories(order: List<Int>)
 
     suspend fun toggleCategoryVisibility(id: Int, visible: Boolean)
+
+    suspend fun updateCategoriesPositions(idToPositionMap: Map<Int, Int>)
 } 

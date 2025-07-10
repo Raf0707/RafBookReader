@@ -10,6 +10,8 @@ package raf.console.chitalka.presentation.settings.library
 import androidx.compose.foundation.lazy.LazyListScope
 import raf.console.chitalka.domain.library.custom_category.Category
 import raf.console.chitalka.presentation.settings.library.subcategory.CategoriesSubcategory
+import raf.console.chitalka.presentation.settings.library.subcategory.ReorderableCategoriesSubcategory
+import sh.calvin.reorderable.ReorderableLazyListState
 
 /*fun LazyListScope.LibrarySettingsCategory(
     categories: List<Category>,
@@ -44,3 +46,4 @@ fun LazyListScope.LibrarySettingsCategory(
         isEditMode = isEditMode // 👈 передаётся дальше
     )
 }
+

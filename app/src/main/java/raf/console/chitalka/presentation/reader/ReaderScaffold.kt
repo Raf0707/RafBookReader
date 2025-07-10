@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.reader.Checkpoint
 import raf.console.chitalka.domain.reader.FontWithName
@@ -39,6 +43,7 @@ import raf.console.chitalka.domain.util.HorizontalAlignment
 import raf.console.chitalka.presentation.core.components.common.AnimatedVisibility
 import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 import raf.console.chitalka.ui.reader.ReaderEvent
+import raf.console.chitalka.ui.reader.ReaderModel
 import raf.console.chitalka.ui.settings.SettingsEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -112,8 +117,8 @@ fun ReaderScaffold(
     onStartTTS: () -> Unit,
     OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit,
     selectedTranslator: TranslatorApp,
-    onEvent: (ReaderEvent) -> Unit // ← добавлен
-) {
+    onEvent: (ReaderEvent) -> Unit, // ← добавлен
+    ) {
     Scaffold(
         Modifier
             .fillMaxSize()
@@ -172,6 +177,30 @@ fun ReaderScaffold(
             it is ReaderText.Chapter && it.id == currentChapter?.id
         }.coerceAtLeast(0)
 
+        val scope = rememberCoroutineScope()
+        val readerModel: ReaderModel = hiltViewModel()
+
+        val onEventHandler: (ReaderEvent) -> Unit = { event ->
+            when (event) {
+                is ReaderEvent.OnScrollToBookmark -> {
+                    readerModel.onEvent(event)
+                    scope.launch {
+                        delay(100)
+                        val targetIndex = readerModel.findGlobalIndexForBookmark(
+                            chapterIndex = event.chapterIndex,
+                            offset = event.offset.toInt()
+                        )
+                        if (targetIndex >= 0) {
+                            listState.animateScrollToItem(targetIndex)
+                        }
+                    }
+                }
+                else -> readerModel.onEvent(event)
+            }
+        }
+
+
+
         ReaderLayout(
             text = text,
             listState = listState,
@@ -220,10 +249,10 @@ fun ReaderScaffold(
             selectedTranslator = selectedTranslator,
 
             // 👇 передача для закладок
-            onEvent = onEvent,
+            onEvent = onEventHandler,
             currentChapterIndex = currentChapterIndex,
             currentOffset = checkpoint.offset.toLong(),
-            bookId = book.id.toLong()
+            bookId = book.id.toLong(),
         )
 
         ReaderPerceptionExpander(

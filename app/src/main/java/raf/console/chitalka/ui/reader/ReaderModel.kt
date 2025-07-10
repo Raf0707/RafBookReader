@@ -522,17 +522,14 @@ class ReaderModel @Inject constructor(
                             )
                         }
                         delay(100) // дать время обновиться LazyList
-                        /*onScrollToBookmark(
-                            offset = event.offset,
-                            chapterIndex = event.chapterIndex,
-                            text = event.text,
-                            listState = listState // ← вот тут передаём UI-объект
-                        )*/
                     }
-
-
                 }
 
+                is ReaderEvent.OnDeleteBookmark -> {
+                    viewModelScope.launch {
+                        bookmarkRepository.deleteBookmark(event.bookmark)
+                    }
+                }
 
 
                 else -> {}
@@ -823,4 +820,56 @@ class ReaderModel @Inject constructor(
             this.value = function(this.value)
         }
     }
+
+    fun findGlobalIndexForBookmark(chapterIndex: Int, offset: Int): Int {
+        val text = state.value.text
+        var index = 0
+        var chapterCount = -1
+
+        while (index < text.size) {
+            val item = text[index]
+            if (item is ReaderText.Chapter) {
+                chapterCount++
+                if (chapterCount == chapterIndex) {
+                    // Найдена нужная глава
+                    var offsetCount = 0
+                    var searchIndex = index + 1
+                    while (searchIndex < text.size) {
+                        val current = text[searchIndex]
+                        // Считаем только текстовые абзацы как offset
+                        if (current is ReaderText.Text) {
+                            if (offsetCount == offset) {
+                                return searchIndex
+                            }
+                            offsetCount++
+                        }
+                        // Прекратить поиск при следующей главе
+                        if (current is ReaderText.Chapter) {
+                            break
+                        }
+                        searchIndex++
+                    }
+                    // Если offset больше количества абзацев — вернём последнее возможное место
+                    return searchIndex.coerceAtMost(text.lastIndex)
+                }
+            }
+            index++
+        }
+
+        return 0
+    }
+
+
+
+    fun onBlinkingHighlight(index: Int) {
+        viewModelScope.launch {
+            repeat(3) {
+                _state.update { it.copy(blinkingHighlightIndex = index) }
+                delay(300)
+                _state.update { it.copy(blinkingHighlightIndex = null) }
+                delay(300)
+            }
+        }
+    }
+
 }

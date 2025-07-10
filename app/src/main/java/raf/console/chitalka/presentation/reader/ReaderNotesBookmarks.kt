@@ -376,9 +376,9 @@ fun ReaderNotesBookmarksDrawer(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     StyledText(
-                        text = bookmark.label?.take(64) ?: "",
+                        text = bookmark.label.toString(),//?.take(64) ?: "",
                         modifier = Modifier.weight(1f),
-                        maxLines = 2
+                        //maxLines = 2
                     )
                     IconButton(onClick = {
                         // Удаление закладки
@@ -390,6 +390,7 @@ fun ReaderNotesBookmarksDrawer(
                         )
                     }
                 }
+                //onEvent(ReaderEvent.OnScrollToBookmark(bookmark.chapterIndex.toInt(), bookmark.offset, bookmark.label.toString()))
             }
         }
 

@@ -104,7 +104,8 @@ fun ReaderLayout(
     currentChapterIndex: Int,
     currentOffset: Long,
     onEvent: (ReaderEvent) -> Unit,
-) {
+
+    ) {
 
     val activity = LocalActivity.current
 
@@ -163,7 +164,8 @@ fun ReaderLayout(
             },
             onDictionaryRequested = {
                 openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
-            }
+            },
+
         )
 
         { toolbarHidden ->
@@ -207,7 +209,7 @@ fun ReaderLayout(
                             highlightedReadingThickness = highlightedReadingThickness,
                             toolbarHidden = toolbarHidden,
                             openTranslator = openTranslator,
-                            menuVisibility = menuVisibility
+                            menuVisibility = menuVisibility,
                         )
                     }
                 }

@@ -12,6 +12,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import raf.console.chitalka.data.local.dto.CategoryEntity
 import kotlinx.coroutines.flow.Flow
@@ -53,4 +54,19 @@ interface CategoryDao {
     @Query("SELECT MAX(position) FROM CategoryEntity")
     suspend fun getMaxPosition(): Int?
 
+    /**
+     * Обновляет позицию категории по её ID.
+     */
+    @Query("UPDATE CategoryEntity SET position = :position WHERE id = :id")
+    suspend fun updatePosition(id: Int, position: Int)
+
+    /**
+     * Массовое обновление позиций в рамках одной транзакции.
+     */
+    @Transaction
+    suspend fun updatePositions(updates: Map<Int, Int>) {
+        updates.forEach { (id, position) ->
+            updatePosition(id, position)
+        }
+    }
 } 

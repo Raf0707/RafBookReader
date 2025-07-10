@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Dehaze
+import androidx.compose.material.icons.outlined.DragIndicator
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Label
@@ -45,200 +46,41 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import raf.console.chitalka.R
 import raf.console.chitalka.domain.library.custom_category.Category
+import sh.calvin.reorderable.ReorderableCollectionItemScope
+import kotlin.math.truncate
 
-
-/*@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CategoryItem(
+fun ReorderableCollectionItemScope.DraggableCategoryItem(
     category: Category,
     onToggleVisibility: () -> Unit,
-    onEdit: () -> Unit,
+    onEdit: () -> Unit
 ) {
-    ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize(),
-        elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = if (category.isDefault) 1.dp else 2.dp
-        ),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = if (category.isDefault) {
-                MaterialTheme.colorScheme.surfaceContainerLowest
-            } else {
-                MaterialTheme.colorScheme.surfaceContainerLowest
-            }
-        ),
-        shape = RoundedCornerShape(0.dp)
-    ) {
-        ListItem(
-            headlineContent = {
-                Text(text = category.title.asString())
+    val hapticFeedback = LocalHapticFeedback.current
+
+    CategoryItem(
+        category = category,
+        onToggleVisibility = onToggleVisibility,
+        onEdit = onEdit,
+        onDelete = {},
+        isDragging = true,
+        isEditMode = true,
+        dragModifier = Modifier.longPressDraggableHandle(
+            onDragStarted = {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             },
-            supportingContent = {
-                if (category.isDefault) {
-                    Text(text = stringResource(id = R.string.default_category_label))
-                }
-            },
-            leadingContent = {
-                CategoryIcon(category.isDefault)
-            },
-            trailingContent = {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    VisibilityButton(category.isVisible, onToggleVisibility)
-                    if (!category.isDefault) {
-                        SmallIconButton(Icons.Outlined.Edit, R.string.edit_category, onEdit)
-                    }
-                }
+            onDragStopped = {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
             }
         )
-    }
-}
-
-@Composable
-private fun CategoryIcon(isDefault: Boolean) {
-    androidx.compose.material3.Surface(
-        shape = CircleShape,
-        color = if (isDefault) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
-        modifier = Modifier.size(48.dp)
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Icon(
-                imageVector = Icons.Outlined.Label,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = if (isDefault) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        }
-    }
-}
-
-@Composable
-private fun VisibilityButton(visible: Boolean, onClick: () -> Unit) {
-    FilledTonalIconButton(
-        onClick = onClick,
-        modifier = Modifier.size(40.dp),
-        colors = IconButtonDefaults.filledTonalIconButtonColors(
-            containerColor = if (visible) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (visible) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    ) {
-        Icon(
-            imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-            contentDescription = if (visible) stringResource(id = R.string.hide_category) else stringResource(id = R.string.show_category),
-            modifier = Modifier.size(20.dp)
-        )
-    }
-}
-
-@Composable
-private fun SmallIconButton(icon: ImageVector, descRes: Int, onClick: () -> Unit, isError: Boolean = false) {
-    FilledTonalIconButton(
-        onClick = onClick,
-        modifier = Modifier.size(40.dp),
-        colors = IconButtonDefaults.filledTonalIconButtonColors(
-            containerColor = if (isError) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (isError) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    ) {
-        Icon(imageVector = icon, contentDescription = stringResource(id = descRes), modifier = Modifier.size(20.dp))
-    }
-}*/
-
-
-
-/*---------------------*/
-
-
-/*@Composable
-fun CategoryItem(
-    category: Category,
-    onToggleVisibility: () -> Unit,
-    onEdit: () -> Unit,
-    onDelete: (() -> Unit)? = null,
-    dragHandle: (@Composable () -> Unit)? = null,
-    isDragging: Boolean = false
-) {
-    val dragAlpha by animateFloatAsState(
-        targetValue = if (isDragging) 0.5f else 1f,
-        label = "dragAlpha"
     )
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .alpha(dragAlpha),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.LocalOffer,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .graphicsLayer { scaleX = -1f },
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-
-            Text(
-                text = category.title.asString(),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            IconButton(
-                onClick = {}, // не нужен onClick — перетаскивание по удержанию
-                modifier = Modifier.size(36.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Dehaze,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                dragHandle?.invoke()
-            }
-
-
-            SmallIconButton(
-                icon = if (category.isVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                contentDesc = if (category.isVisible) R.string.hide_category else R.string.show_category,
-                onClick = onToggleVisibility
-            )
-
-            SmallIconButton(
-                icon = Icons.Outlined.Edit,
-                contentDesc = R.string.edit_category,
-                onClick = onEdit
-            )
-
-            onDelete?.let {
-                SmallIconButton(
-                    icon = Icons.Outlined.Close,
-                    contentDesc = R.string.delete_category,
-                    onClick = it,
-                    isError = true
-                )
-            }
-        }
-    }
-}*/
+}
 
 @Composable
 fun CategoryItem(
@@ -248,12 +90,15 @@ fun CategoryItem(
     onDelete: (() -> Unit)? = null,
     dragHandle: (@Composable () -> Unit)? = null,
     isDragging: Boolean = false,
-    isEditMode: Boolean
+    isEditMode: Boolean,
+    dragModifier: Modifier = Modifier,
 ) {
     val dragAlpha by animateFloatAsState(
         targetValue = if (isDragging) 0.5f else 1f,
         label = "dragAlpha"
     )
+
+    //var dragHandle = DragHandle(dragModifier)
 
     Row(
         modifier = Modifier
@@ -300,6 +145,7 @@ fun CategoryItem(
                         modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    //dragHandle?.invoke()
                     dragHandle?.invoke()
                 }
             }
@@ -331,6 +177,26 @@ fun CategoryItem(
         }
     }
 }
+
+/*@Composable
+private fun DragHandle(modifier: Modifier = Modifier) {
+    FilledTonalIconButton(
+        onClick = { /* будет перехвачено draggableHandle модификатором */ },
+        modifier = modifier
+            .size(40.dp)
+            .clearAndSetSemantics { },
+        colors = IconButtonDefaults.filledTonalIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.DragIndicator,
+            contentDescription = stringResource(id = R.string.drag_content_desc),
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}*/
 
 
 @Composable

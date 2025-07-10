@@ -497,7 +497,7 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
             selectedTranslator = mainState.value.selectedTranslator,
             onEvent = screenModel::onEvent,
             bookmarks = state.value.bookmarks,
-            notes = state.value.notes
+            notes = state.value.notes,
 
             )
 
