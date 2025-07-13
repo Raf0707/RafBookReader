@@ -511,7 +511,6 @@ class ReaderModel @Inject constructor(
 
                 is ReaderEvent.OnScrollToBookmark -> {
                     viewModelScope.launch {
-
                         _state.update {
                             it.copy(
                                 checkpoint = Checkpoint(
@@ -521,9 +520,9 @@ class ReaderModel @Inject constructor(
                                 highlightedText = event.text
                             )
                         }
-                        delay(100) // дать время обновиться LazyList
                     }
                 }
+
 
                 is ReaderEvent.OnDeleteBookmark -> {
                     viewModelScope.launch {
@@ -761,6 +760,21 @@ class ReaderModel @Inject constructor(
         }
     }
 
+    fun findChapterIndexForGlobalIndex(
+        text: List<ReaderText>,
+        globalIndex: Int
+    ): Int {
+        var chapterIndex = -1
+        for (i in 0..globalIndex.coerceAtMost(text.lastIndex)) {
+            val item = text[i]
+            if (item is ReaderText.Chapter) {
+                chapterIndex++
+            }
+        }
+        return chapterIndex
+    }
+
+
     private fun calculateProgress(firstVisibleItemIndex: Int? = null): Float {
         return _state.value.run {
             if (
@@ -823,41 +837,43 @@ class ReaderModel @Inject constructor(
 
     fun findGlobalIndexForBookmark(chapterIndex: Int, offset: Int): Int {
         val text = state.value.text
-        var index = 0
-        var chapterCount = -1
+        var currentChapterIndex = -1
 
-        while (index < text.size) {
-            val item = text[index]
+        text.forEachIndexed { index, item ->
             if (item is ReaderText.Chapter) {
-                chapterCount++
-                if (chapterCount == chapterIndex) {
-                    // Найдена нужная глава
-                    var offsetCount = 0
-                    var searchIndex = index + 1
-                    while (searchIndex < text.size) {
-                        val current = text[searchIndex]
-                        // Считаем только текстовые абзацы как offset
-                        if (current is ReaderText.Text) {
-                            if (offsetCount == offset) {
-                                return searchIndex
-                            }
-                            offsetCount++
-                        }
-                        // Прекратить поиск при следующей главе
-                        if (current is ReaderText.Chapter) {
-                            break
-                        }
-                        searchIndex++
-                    }
-                    // Если offset больше количества абзацев — вернём последнее возможное место
-                    return searchIndex.coerceAtMost(text.lastIndex)
-                }
+                currentChapterIndex++
             }
-            index++
+
+            if (currentChapterIndex == chapterIndex) {
+                println("🔔 FOUND CHAPTER at index=$index for chapterIndex=$chapterIndex")
+
+                var offsetCount = 0
+                for (i in index + 1 until text.size) {
+                    val element = text[i]
+                    if (element is ReaderText.Chapter) {
+                        break
+                    }
+
+                    if (element is ReaderText.Text) {
+                        println("🔹 offset=$offsetCount, i=$i, offset target=$offset")
+                        if (offsetCount == offset) {
+                            println("✅ Found exact match at i=$i")
+                            return i
+                        }
+                        offsetCount++
+                    }
+                }
+
+                println("⚠️ Offset not found, fallback return ${(index + 1).coerceAtMost(text.lastIndex)}")
+                return (index + 1).coerceAtMost(text.lastIndex)
+            }
         }
 
+        println("❗ CHAPTER NOT FOUND, returning 0")
         return 0
     }
+
+
 
 
 

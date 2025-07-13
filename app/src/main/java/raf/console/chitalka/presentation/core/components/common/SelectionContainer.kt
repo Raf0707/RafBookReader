@@ -19,6 +19,7 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -36,6 +37,7 @@ import androidx.compose.ui.platform.TextToolbarStatus
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import raf.console.chitalka.R
+import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 import raf.console.chitalka.ui.main.MainEvent
 import raf.console.chitalka.ui.main.MainModel
@@ -141,7 +143,9 @@ private class SelectionToolbar(
     private val onShareRequest: ((String) -> Unit)? = null,
     private val onWebSearchRequest: ((String) -> Unit)? = null,
     private val onTranslateRequest: ((String) -> Unit)? = null,
-    private val onDictionaryRequest: ((String) -> Unit)? = null
+    private val onDictionaryRequest: ((String) -> Unit)? = null,
+    private val listState: LazyListState,
+    private val text: List<ReaderText>
 ) : TextToolbar {
     private var actionMode: ActionMode? = null
     private val callback = TextActionModeCallback(context)
@@ -178,13 +182,17 @@ private class SelectionToolbar(
         callback.onBookmarkRequested = {
             val selectedText = getText()
             val chapterIndex = getCurrentChapterIndex()
-            val offset = getCurrentOffset()
+            val targetIndex = listState.firstVisibleItemIndex
+
+            val offset = calculateOffsetInChapter(text, chapterIndex, targetIndex)
+
+
 
             onEvent(
                 ReaderEvent.OnAddBookmark(
                     bookId = bookId,
                     chapterIndex = chapterIndex.toLong(),
-                    offset = offset,
+                    offset = offset.toLong(),
                     text = selectedText
                 )
             )
@@ -221,6 +229,73 @@ private class SelectionToolbar(
     }
 }
 
+/*un calculateOffsetInChapter(
+    text: List<ReaderText>,
+    chapterIndex: Int,
+    targetIndex: Int
+): Int {
+    var index = 0
+    var chapterCount = -1
+    var offsetCount = 0
+
+    while (index < text.size) {
+        val item = text[index]
+        if (item is ReaderText.Chapter) {
+            chapterCount++
+            if (chapterCount == chapterIndex) {
+                // Начинаем отсчёт offset внутри этой главы
+                offsetCount = 0
+                index++ // Перейдём на следующий элемент после заголовка
+                while (index < text.size && text[index] !is ReaderText.Chapter) {
+                    if (text[index] is ReaderText.Text) {
+                        if (index == targetIndex) {
+                            return offsetCount
+                        }
+                        offsetCount++
+                    }
+                    index++
+                }
+            }
+        }
+        index++
+    }
+    return 0
+}*/
+
+fun calculateOffsetInChapter(
+    text: List<ReaderText>,
+    chapterIndex: Int,
+    globalIndex: Int
+): Int {
+    var chapterCount = -1
+    var currentOffset = 0
+    var foundChapterStartIndex = -1
+
+    for (i in 0 until text.size) {
+        val item = text[i]
+        if (item is ReaderText.Chapter) {
+            chapterCount++
+            if (chapterCount == chapterIndex) {
+                foundChapterStartIndex = i
+                break
+            }
+        }
+    }
+
+    if (foundChapterStartIndex == -1) return 0
+
+    // От начала найденной главы до globalIndex считаем только Text
+    for (i in (foundChapterStartIndex + 1)..globalIndex) {
+        if (i < text.size && text[i] is ReaderText.Text) {
+            currentOffset++
+        }
+    }
+
+    return currentOffset
+}
+
+
+
 
 
 /**
@@ -246,6 +321,8 @@ fun SelectionContainer(
     onTranslateRequested: ((String) -> Unit),
     onDictionaryRequested: ((String) -> Unit),
     content: @Composable (toolbarHidden: Boolean) -> Unit,
+    listState: LazyListState,
+    text: List<ReaderText>
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -264,7 +341,9 @@ fun SelectionContainer(
             onShareRequest = onShareRequested,
             onWebSearchRequest = onWebSearchRequested,
             onTranslateRequest = onTranslateRequested,
-            onDictionaryRequest = onDictionaryRequested
+            onDictionaryRequest = onDictionaryRequested,
+            listState = listState,
+            text = text
         )
     }
 

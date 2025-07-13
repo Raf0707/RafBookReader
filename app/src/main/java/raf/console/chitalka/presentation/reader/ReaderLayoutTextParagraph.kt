@@ -67,12 +67,13 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
     highlightedReadingThickness: FontWeight,
     toolbarHidden: Boolean,
     openTranslator: (ReaderEvent.OnOpenTranslator) -> Unit,
-    menuVisibility: (ReaderEvent.OnMenuVisibility) -> Unit
+    menuVisibility: (ReaderEvent.OnMenuVisibility) -> Unit,
+    highlightedText: String? // 👈 Добавляем сюда параметр для подсвечиваемого текста
 ) {
     val rawText = paragraph.line.text
     val matches = INLINE_REGEX.findAll(rawText).toList()
 
-    // Если формул нет или рендер выключен – используем прежний вывод
+    // Если формул нет — используем обычный вывод
     if (matches.isEmpty() || !raf.console.chitalka.math.MathConfig.enabled) {
         Column(
             modifier = Modifier
@@ -82,51 +83,22 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = horizontalAlignment
         ) {
-            /*StyledText(
-                text = paragraph.line,
-                modifier = Modifier.then(
-                    if (doubleClickTranslation && toolbarHidden) {
-                        Modifier.noRippleClickable(
-                            onDoubleClick = {
-                                openTranslator(
-                                    ReaderEvent.OnOpenTranslator(
-                                        textToTranslate = paragraph.line.text,
-                                        translateWholeParagraph = true,
-                                        activity = activity
-                                    )
-                                )
-                            },
-                            onClick = {
-                                menuVisibility(
-                                    ReaderEvent.OnMenuVisibility(
-                                        show = !showMenu,
-                                        fullscreenMode = fullscreenMode,
-                                        saveCheckpoint = true,
-                                        activity = activity
-                                    )
-                                )
-                            }
+            val annotatedString = buildAnnotatedString {
+                append(rawText)
+                highlightedText?.let { highlight ->
+                    val start = rawText.indexOf(highlight)
+                    if (start >= 0) {
+                        addStyle(
+                            SpanStyle(background = Color.Yellow),
+                            start,
+                            start + highlight.length
                         )
-                    } else Modifier
-                ),
-                style = TextStyle(
-                    fontFamily = fontFamily.font,
-                    fontWeight = fontThickness.thickness,
-                    textAlign = textAlignment.textAlignment,
-                    textIndent = TextIndent(firstLine = paragraphIndentation),
-                    fontStyle = fontStyle,
-                    letterSpacing = letterSpacing,
-                    fontSize = fontSize,
-                    lineHeight = lineHeight,
-                    color = fontColor,
-                    lineBreak = LineBreak.Paragraph
-                ),
-                highlightText = highlightedReading,
-                highlightThickness = highlightedReadingThickness
-            )*/
+                    }
+                }
+            }
 
             SelectableParagraph(
-                text = paragraph.line.text,
+                text = annotatedString.text,
                 style = TextStyle(
                     fontFamily = fontFamily.font,
                     fontWeight = fontThickness.thickness,
@@ -162,7 +134,6 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                 highlightText = highlightedReading,
                 highlightThickness = highlightedReadingThickness
             )
-
         }
         return
     }
@@ -180,7 +151,7 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
         fun isLongFormula(latex: String): Boolean {
             // Формулы с этими командами всегда выносим в отдельную строку
             val blockCommands = listOf(
-                "\\frac", "\\sum", "\\int", "\\prod", "\\lim", 
+                "\\frac", "\\sum", "\\int", "\\prod", "\\lim",
                 "\\matrix", "\\pmatrix", "\\bmatrix", "\\cases",
                 "\\begin{", "\\end{"
             )
@@ -252,7 +223,7 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                     inline = false,
                     textAlign = textAlignment.textAlignment
                 )
-                
+
                 // Вертикальный отступ после блочной формулы
                 if (blockIndex < blocks.size - 1) {
                     val density = androidx.compose.ui.platform.LocalDensity.current
@@ -303,7 +274,7 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                                     textBuilder.append(block[j].content)
                                     j++
                                 }
-                                
+
                                 // Рендерим объединенный текст
                                 BasicText(
                                     text = textBuilder.toString(),

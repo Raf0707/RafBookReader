@@ -11,6 +11,7 @@ import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Immutable
 import raf.console.chitalka.domain.reader.Bookmark
+import raf.console.chitalka.domain.reader.Note
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
 
 @Immutable
@@ -97,5 +98,19 @@ sealed class ReaderEvent {
 
     data class OnDeleteBookmark(val bookmark: Bookmark) : ReaderEvent()
 
+    data class OnAddNote(
+        val bookId: Long,
+        val chapterIndex: Long,
+        val offsetStart: Long,
+        val offsetEnd: Long,
+        val content: String
+    ) : ReaderEvent()
+
+    object OnShowCreateNoteDialog : ReaderEvent()
+
+
+    data class OnJumpToNote(val note: Note) : ReaderEvent()
+
+    data class OnDeleteNote(val note: Note) : ReaderEvent()
 
 }

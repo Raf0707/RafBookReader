@@ -155,14 +155,14 @@ fun ReaderTopBar(
                 }
 
                 // 📘 Заметки и закладки (Drawer слева)
-                IconButton(
+                /*IconButton(
                     icon = Icons.Default.Bookmarks,
                     contentDescription = R.string.bookmarks_notes_content_desc,
                     disableOnClick = false,
                     enabled = !lockMenu
                 ) {
                     OnShowNotesBookmarksDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
-                }
+                }*/
 
                 // ⚙ Настройки
                 IconButton(

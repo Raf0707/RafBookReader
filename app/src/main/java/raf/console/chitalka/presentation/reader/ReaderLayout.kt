@@ -104,6 +104,7 @@ fun ReaderLayout(
     currentChapterIndex: Int,
     currentOffset: Long,
     onEvent: (ReaderEvent) -> Unit,
+    highlightedText: String?,
 
     ) {
 
@@ -153,6 +154,7 @@ fun ReaderLayout(
                 }
             },
             onSoundRequested = {},
+            listState = listState,
             onShareRequested = {
                 openShareApp(ReaderEvent.OnOpenShareApp(it, activity))
             },
@@ -166,55 +168,56 @@ fun ReaderLayout(
                 openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
             },
 
-        )
+            content = { toolbarHidden ->
+                LazyColumnWithScrollbar(
+                    state = listState,
+                    enableScrollbar = false,
+                    parentModifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        top = (WindowInsets.displayCutout.asPaddingValues().calculateTopPadding() + paragraphHeight).coerceAtLeast(18.dp),
+                        bottom = (WindowInsets.displayCutout.asPaddingValues().calculateBottomPadding() + paragraphHeight).coerceAtLeast(18.dp),
+                    )
+                ) {
+                    itemsIndexed(text, key = { index, _ -> index }) { index, entry ->
+                        if (!images && entry is ReaderText.Image) return@itemsIndexed
 
-        { toolbarHidden ->
-            LazyColumnWithScrollbar(
-                state = listState,
-                enableScrollbar = false,
-                parentModifier = Modifier.weight(1f),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    top = (WindowInsets.displayCutout.asPaddingValues().calculateTopPadding() + paragraphHeight).coerceAtLeast(18.dp),
-                    bottom = (WindowInsets.displayCutout.asPaddingValues().calculateBottomPadding() + paragraphHeight).coerceAtLeast(18.dp),
-                )
-            ) {
-                itemsIndexed(text, key = { index, _ -> index }) { index, entry ->
-                    if (!images && entry is ReaderText.Image) return@itemsIndexed
-
-                    SpacedItem(index = index, spacing = paragraphHeight) {
-                        ReaderLayoutText(
-                            activity = activity,
-                            showMenu = showMenu,
-                            entry = entry,
-                            imagesCornersRoundness = imagesCornersRoundness,
-                            imagesAlignment = imagesAlignment,
-                            imagesWidth = imagesWidth,
-                            imagesColorEffects = imagesColorEffects,
-                            fontFamily = fontFamily,
-                            fontColor = fontColor,
-                            lineHeight = lineHeight,
-                            fontThickness = fontThickness,
-                            fontStyle = fontStyle,
-                            chapterTitleAlignment = chapterTitleAlignment,
-                            textAlignment = textAlignment,
-                            horizontalAlignment = horizontalAlignment,
-                            fontSize = fontSize,
-                            letterSpacing = letterSpacing,
-                            sidePadding = sidePadding,
-                            paragraphIndentation = paragraphIndentation,
-                            fullscreenMode = fullscreenMode,
-                            doubleClickTranslation = doubleClickTranslation,
-                            highlightedReading = highlightedReading,
-                            highlightedReadingThickness = highlightedReadingThickness,
-                            toolbarHidden = toolbarHidden,
-                            openTranslator = openTranslator,
-                            menuVisibility = menuVisibility,
-                        )
+                        SpacedItem(index = index, spacing = paragraphHeight) {
+                            ReaderLayoutText(
+                                activity = activity,
+                                showMenu = showMenu,
+                                entry = entry,
+                                imagesCornersRoundness = imagesCornersRoundness,
+                                imagesAlignment = imagesAlignment,
+                                imagesWidth = imagesWidth,
+                                imagesColorEffects = imagesColorEffects,
+                                fontFamily = fontFamily,
+                                fontColor = fontColor,
+                                lineHeight = lineHeight,
+                                fontThickness = fontThickness,
+                                fontStyle = fontStyle,
+                                chapterTitleAlignment = chapterTitleAlignment,
+                                textAlignment = textAlignment,
+                                horizontalAlignment = horizontalAlignment,
+                                fontSize = fontSize,
+                                letterSpacing = letterSpacing,
+                                sidePadding = sidePadding,
+                                paragraphIndentation = paragraphIndentation,
+                                fullscreenMode = fullscreenMode,
+                                doubleClickTranslation = doubleClickTranslation,
+                                highlightedReading = highlightedReading,
+                                highlightedReadingThickness = highlightedReadingThickness,
+                                toolbarHidden = toolbarHidden,
+                                openTranslator = openTranslator,
+                                menuVisibility = menuVisibility,
+                                highlightedText = highlightedText // 👈 сюда добавляем новый аргумент
+                            )
+                        }
                     }
                 }
-            }
-        }
+            },
+            text = text
+        )
 
 
         AnimatedVisibility(

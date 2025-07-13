@@ -9,13 +9,20 @@ package raf.console.chitalka.presentation.reader
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -126,6 +133,7 @@ fun ReaderContent(
     bookmarks: List<Bookmark> = emptyList(),
     notes: List<Note> = emptyList(),
     onEvent: (ReaderEvent) -> Unit,
+    highlightedText: String?,
 ) {
     val chaptersDrawerState = rememberDrawerState(DrawerValue.Closed)
     val notesDrawerState = rememberDrawerState(DrawerValue.Closed)
@@ -134,25 +142,9 @@ fun ReaderContent(
 
     val scope = rememberCoroutineScope()
 
-    val onEventHandler: (ReaderEvent) -> Unit = { event ->
-        when (event) {
-            is ReaderEvent.OnScrollToBookmark -> {
-                readerModel.onEvent(event)
-                scope.launch {
-                    delay(100)
-                    val targetIndex = readerModel.findGlobalIndexForBookmark(
-                        chapterIndex = event.chapterIndex,
-                        offset = event.offset.toInt()
-                    )
-                    if (targetIndex >= 0) {
-                        listState.animateScrollToItem(targetIndex)
-                    }
-                }
-            }
-            else -> readerModel.onEvent(event)
-        }
-    }
+    var showCreateNoteDialog by remember { mutableStateOf(false) }
 
+    var noteContent by remember { mutableStateOf("") }
 
     LaunchedEffect(drawer) {
         when (drawer) {
@@ -179,13 +171,69 @@ fun ReaderContent(
             ReaderChaptersDrawer(
                 show = chaptersDrawerState.isOpen,
                 chapters = text.filterIsInstance<Chapter>(),
+                bookmarks = bookmarks,
+                notes = notes,
                 currentChapter = currentChapter,
                 currentChapterProgress = currentChapterProgress,
                 scrollToChapter = scrollToChapter,
-                dismissDrawer = dismissDrawer
+                dismissDrawer = dismissDrawer,
+                scrollToBookmark = { bookmark ->
+                    scope.launch {
+                        delay(100)
+                        val targetIndex = readerModel.findGlobalIndexForBookmark(
+                            chapterIndex = bookmark.chapterIndex.toInt(),
+                            offset = bookmark.offset.toInt()
+                        )
+                        if (targetIndex >= 0) {
+                            listState.animateScrollToItem(targetIndex)
+                        }
+                    }
+                },
+                scrollToNote = { note: Note ->
+                    scope.launch {
+                        delay(100)
+                        val targetIndex = readerModel.findGlobalIndexForBookmark(
+                            chapterIndex = note.chapterIndex.toInt(),
+                            offset = note.offsetStart.toInt()
+                        )
+                        if (targetIndex >= 0) {
+                            listState.animateScrollToItem(targetIndex)
+                        }
+                    }
+                },
+                onDeleteBookmark = { bookmark ->
+                    onEvent(ReaderEvent.OnDeleteBookmark(bookmark))
+                },
+                onDeleteNote = { note ->
+                    onEvent(ReaderEvent.OnDeleteNote(note))
+                },
+                onEvent = { event: ReaderEvent ->
+                    when (event) {
+                        is ReaderEvent.OnScrollToBookmark -> {
+                            readerModel.onEvent(event)
+                            scope.launch {
+                                delay(100)
+                                val targetIndex = readerModel.findGlobalIndexForBookmark(
+                                    chapterIndex = event.chapterIndex,
+                                    offset = event.offset.toInt()
+                                )
+                                if (targetIndex >= 0) {
+                                    listState.animateScrollToItem(targetIndex)
+                                }
+                            }
+                        }
+                        is ReaderEvent.OnShowCreateNoteDialog -> {
+                            showCreateNoteDialog = true
+                        }
+                        else -> readerModel.onEvent(event)
+                    }
+                } as (ReaderEvent) -> Any
+
+
             )
         }
-    ) {
+    )
+    {
         ModalNavigationDrawer(
             drawerState = notesDrawerState,
             drawerContent = {
@@ -197,28 +245,29 @@ fun ReaderContent(
                     bookmarks = bookmarks,
                     notes = notes,
                     dismissDrawer = dismissDrawer,
-                    onEvent = {
-                        when (it) {
+                    onEvent = { event ->
+                        when (event) {
                             is ReaderEvent.OnScrollToBookmark -> {
-                                // Сначала передаём событие в ViewModel для обновления checkpoint и highlightedText
-                                readerModel.onEvent(it)
-
-                                // Затем прокручиваем UI
+                                readerModel.onEvent(event)
                                 scope.launch {
-                                    // ⏱ подождём чуть-чуть, чтобы ViewModel успел обновиться
-                                    kotlinx.coroutines.delay(100)
-                                    val index = listState.firstVisibleItemIndex
-                                    listState.scrollToItem(index)
+                                    delay(100)
+                                    val targetIndex = readerModel.findGlobalIndexForBookmark(
+                                        chapterIndex = event.chapterIndex,
+                                        offset = event.offset.toInt()
+                                    )
+                                    if (targetIndex >= 0) {
+                                        listState.animateScrollToItem(targetIndex)
+                                    }
                                 }
                             }
-
-                            else -> readerModel.onEvent(it)
+                            is ReaderEvent.OnShowCreateNoteDialog -> {
+                                showCreateNoteDialog = true
+                            }
+                            else -> readerModel.onEvent(event)
                         }
                     },
                     listState = listState
                 )
-
-
             }
         ) {
             // Main content
@@ -301,7 +350,28 @@ fun ReaderContent(
                     },
                     onStartTTS = onStartTTS,
                     selectedTranslator = selectedTranslator,
-                    onEvent = onEventHandler
+                    highlightedText = highlightedText,
+                    onEvent = { event ->
+                        when (event) {
+                            is ReaderEvent.OnScrollToBookmark -> {
+                                readerModel.onEvent(event)
+                                scope.launch {
+                                    delay(100)
+                                    val targetIndex = readerModel.findGlobalIndexForBookmark(
+                                        chapterIndex = event.chapterIndex,
+                                        offset = event.offset.toInt()
+                                    )
+                                    if (targetIndex >= 0) {
+                                        listState.animateScrollToItem(targetIndex)
+                                    }
+                                }
+                            }
+                            is ReaderEvent.OnShowCreateNoteDialog -> {
+                                showCreateNoteDialog = true
+                            }
+                            else -> readerModel.onEvent(event)
+                        }
+                    },
                 )
             } else {
                 ReaderErrorPlaceholder(
@@ -318,4 +388,86 @@ fun ReaderContent(
             )
         }
     }
+    if (showCreateNoteDialog) {
+        AlertDialog(
+            onDismissRequest = { showCreateNoteDialog = false },
+            title = { Text("Новая заметка") },
+            text = {
+                TextField(
+                    value = noteContent,
+                    onValueChange = { noteContent = it },
+                    placeholder = { Text("Введите текст заметки") }
+                )
+            },
+            confirmButton = {
+                val visibleItemIndex = listState.firstVisibleItemIndex
+                val visibleItemOffset = listState.firstVisibleItemScrollOffset
+                val chapterIndex = readerModel.findChapterIndexForGlobalIndex(text, visibleItemIndex)
+
+                TextButton(onClick = {
+                    onEvent(
+                        ReaderEvent.OnAddNote(
+                            bookId = book.id.toLong(),
+                            content = noteContent.trim(),
+                            chapterIndex = readerModel.findChapterIndexForGlobalIndex(text, listState.firstVisibleItemIndex).toLong(),
+                            offsetStart = 0L, // Можешь заменить на реальное смещение в тексте
+                            offsetEnd = 0L    // Если не поддерживается range selection — можно дублировать offsetStart
+                        )
+                    )
+                    showCreateNoteDialog = false
+                    noteContent = ""
+                }) {
+                    Text("Сохранить")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showCreateNoteDialog = false
+                }) {
+                    Text("Отмена")
+                }
+            }
+        )
+    }
 }
+
+
+
+
+/*fun findGlobalIndexForBookmarkLocal(
+    text: List<ReaderText>,
+    chapterIndex: Int,
+    offset: Int
+): Int {
+    var index = 0
+    var chapterCount = -1
+
+    while (index < text.size) {
+        val item = text[index]
+        if (item is ReaderText.Chapter) {
+            chapterCount++
+            if (chapterCount == chapterIndex) {
+                // Найдена нужная глава
+                var offsetCount = 0
+                var searchIndex = index + 1
+                while (searchIndex < text.size) {
+                    val current = text[searchIndex]
+                    if (current is ReaderText.Text) {
+                        if (offsetCount == offset) {
+                            return searchIndex
+                        }
+                        offsetCount++
+                    }
+                    if (current is ReaderText.Chapter) {
+                        break
+                    }
+                    searchIndex++
+                }
+                return searchIndex.coerceAtMost(text.lastIndex)
+            }
+        }
+        index++
+    }
+    return 0
+}*/
+

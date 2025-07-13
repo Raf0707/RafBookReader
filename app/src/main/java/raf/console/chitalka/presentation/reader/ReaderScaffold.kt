@@ -118,6 +118,7 @@ fun ReaderScaffold(
     OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit,
     selectedTranslator: TranslatorApp,
     onEvent: (ReaderEvent) -> Unit, // ← добавлен
+    highlightedText: String?,
     ) {
     Scaffold(
         Modifier
@@ -173,9 +174,14 @@ fun ReaderScaffold(
             }
         }
     ) {
-        val currentChapterIndex = text.indexOfFirst {
+        /*val currentChapterIndex = text.indexOfFirst {
             it is ReaderText.Chapter && it.id == currentChapter?.id
-        }.coerceAtLeast(0)
+        }.coerceAtLeast(0)*/
+        val chapterOrdinalIndex = text
+            .filterIsInstance<ReaderText.Chapter>()
+            .indexOfFirst { it.id == currentChapter?.id }
+            .coerceAtLeast(0)
+
 
         val scope = rememberCoroutineScope()
         val readerModel: ReaderModel = hiltViewModel()
@@ -185,14 +191,12 @@ fun ReaderScaffold(
                 is ReaderEvent.OnScrollToBookmark -> {
                     readerModel.onEvent(event)
                     scope.launch {
-                        delay(100)
-                        val targetIndex = readerModel.findGlobalIndexForBookmark(
+                        delay(100) // дождаться update в стейте
+                        val index = readerModel.findGlobalIndexForBookmark(
                             chapterIndex = event.chapterIndex,
                             offset = event.offset.toInt()
                         )
-                        if (targetIndex >= 0) {
-                            listState.animateScrollToItem(targetIndex)
-                        }
+                        listState.animateScrollToItem(index)
                     }
                 }
                 else -> readerModel.onEvent(event)
@@ -250,9 +254,10 @@ fun ReaderScaffold(
 
             // 👇 передача для закладок
             onEvent = onEventHandler,
-            currentChapterIndex = currentChapterIndex,
+            currentChapterIndex = chapterOrdinalIndex,
             currentOffset = checkpoint.offset.toLong(),
             bookId = book.id.toLong(),
+            highlightedText = highlightedText
         )
 
         ReaderPerceptionExpander(

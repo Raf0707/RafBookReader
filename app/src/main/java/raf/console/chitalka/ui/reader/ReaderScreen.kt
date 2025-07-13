@@ -498,6 +498,7 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
             onEvent = screenModel::onEvent,
             bookmarks = state.value.bookmarks,
             notes = state.value.notes,
+            highlightedText = state.value.highlightedText
 
             )
 
