@@ -181,13 +181,22 @@ fun ReaderContent(
                 currentChapterProgress = currentChapterProgress,
                 scrollToChapter = scrollToChapter,
                 dismissDrawer = dismissDrawer,
-                scrollToBookmark = { bookmark ->
+                /*scrollToBookmark = { bookmark ->
                     scope.launch {
                         delay(100)
                         val targetProgress = bookmark.progress ?: 0f
                         readerModel.onEvent(
                             ReaderEvent.OnScroll(targetProgress)
                         )
+                        dismissDrawer(ReaderEvent.OnDismissDrawer)
+                    }
+                },*/
+                scrollToBookmark = { bookmark ->
+                    scope.launch {
+                        delay(100)
+                        val progress = bookmark.progress ?: 0f
+                        val index = (progress * listState.layoutInfo.totalItemsCount).toInt().coerceAtLeast(0)
+                        listState.animateScrollToItem(index)
                         dismissDrawer(ReaderEvent.OnDismissDrawer)
                     }
                 },
@@ -424,6 +433,7 @@ fun ReaderContent(
                 TextButton(onClick = {
                     val content = noteContent.trim()
                     if (content.isNotEmpty()) {
+                        println("✅ Saving note for bookId=${book.id}")
                         onEvent(
                             ReaderEvent.OnAddNote(
                                 bookId = book.id.toLong(),

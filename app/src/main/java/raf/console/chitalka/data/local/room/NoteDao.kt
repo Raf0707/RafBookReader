@@ -35,7 +35,7 @@ interface NoteDao {
     suspend fun getAll(): List<NoteEntity>
 
     @Query("SELECT * FROM NoteEntity WHERE bookId = :bookId ORDER BY chapterIndex, offsetStart")
-    suspend fun getForBook(bookId: Long): List<NoteEntity>
+    fun getForBook(bookId: Long): Flow<List<NoteEntity>>
 
     @Query("SELECT * FROM NoteEntity WHERE bookmarkId = :bookmarkId")
     suspend fun getForBookmark(bookmarkId: Long): List<NoteEntity>

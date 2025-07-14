@@ -10,7 +10,7 @@ interface NoteRepository {
     suspend fun upsertNote(note: Note)
 
     suspend fun getNoteById(id: Long): Note?
-    suspend fun getNotesForBook(bookId: Long): List<Note>
+    fun getNotesForBook(bookId: Long): Flow<List<Note>>
     suspend fun getNotesForBookmark(bookmarkId: Long): List<Note>
     suspend fun getAllNotes(): List<Note>
     suspend fun countNotes(): Long

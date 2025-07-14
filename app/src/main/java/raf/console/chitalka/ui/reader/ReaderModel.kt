@@ -8,6 +8,8 @@
 package raf.console.chitalka.ui.reader
 
 import android.app.SearchManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -24,6 +26,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -86,8 +89,11 @@ class ReaderModel @Inject constructor(
 
     private var scrollJob: Job? = null
 
+    private var notesJob: Job? = null
+
     private val _bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
     val bookmarks: StateFlow<List<Bookmark>> = _bookmarks
+
 
     /*private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes*/
@@ -162,7 +168,9 @@ class ReaderModel @Inject constructor(
                                 return@collectLatest
                             }
                         }
+
                     }
+                    //observeNotes(state.value.book.id.toLong())
                 }
 
                 is ReaderEvent.OnMenuVisibility -> {
@@ -470,7 +478,13 @@ class ReaderModel @Inject constructor(
                         )
                     }
 
-                    startObservingNotes(_state.value.book.id.toLong())
+                    noteRepository.getNotesForBook(state.value.book.id.toLong()).collect { notes ->
+                        println("🔥 NOTES OBSERVED: $notes")
+                        _state.update { it.copy(notes = notes) }
+                    }
+
+                    //startObservingNotes(_state.value.book.id.toLong())
+                    //observeNotesIfNeeded(state.value.book.id.toLong())
                 }
 
                 is ReaderEvent.OnDismissDrawer -> {
@@ -493,7 +507,8 @@ class ReaderModel @Inject constructor(
 
                     loadBookmarks(event.bookId)
                     //loadNotes(event.bookId)
-                    startObservingNotes(event.bookId.toLong())
+                    //startObservingNotes(event.bookId)
+                    //observeNotes(event.bookId)
                 }
 
                 is ReaderEvent.OnAddBookmark -> {
@@ -515,115 +530,12 @@ class ReaderModel @Inject constructor(
                     }
                 }
 
-
-                /*is ReaderEvent.OnScrollToBookmark -> {
-                    viewModelScope.launch {
-                        _state.update {
-                            it.copy(
-                                checkpoint = Checkpoint(
-                                    index = event.chapterIndex,
-                                    offset = event.offset.toInt()
-                                ),
-                                highlightedText = event.text
-                            )
-                        }
-                    }
-                }*/
-
-                /*is ReaderEvent.OnScrollToBookmark -> {
-                    launch {
-                        _state.value.apply {
-                            val globalIndex = findGlobalIndexForBookmark(
-                                chapterIndex = event.chapterIndex,
-                                offset = event.offset.toInt()
-                            ).takeIf { it >= 0 } ?: return@launch
-
-                            listState.requestScrollToItem(globalIndex)
-                            updateChapter(globalIndex)
-
-                            onEvent(
-                                ReaderEvent.OnChangeProgress(
-                                    progress = calculateProgress(globalIndex),
-                                    firstVisibleItemIndex = globalIndex,
-                                    firstVisibleItemOffset = 0
-                                )
-                            )
-
-                            _state.update {
-                                it.copy(
-                                    checkpoint = Checkpoint(
-                                        index = event.chapterIndex,
-                                        offset = event.offset.toInt()
-                                    ),
-                                    highlightedText = event.text
-                                )
-                            }
-                        }
-                    }
-                }*/
-
-                /*is ReaderEvent.OnScrollToBookmark -> {
-                    launch {
-                        _state.value.apply {
-                            // 1️⃣ Найдём индекс главы в text по chapterIndex
-                            var currentChapterIdx = -1
-                            var chapterGlobalIndex = -1
-                            for (i in text.indices) {
-                                val item = text[i]
-                                if (item is ReaderText.Chapter) {
-                                    currentChapterIdx++
-                                    if (currentChapterIdx == event.chapterIndex) {
-                                        chapterGlobalIndex = i
-                                        break
-                                    }
-                                }
-                            }
-                            if (chapterGlobalIndex == -1) return@launch
-
-                            // 2️⃣ Прокрутим сначала до начала нужной главы
-                            listState.scrollToItem(chapterGlobalIndex)
-                            updateChapter(chapterGlobalIndex)
-
-                            onEvent(
-                                ReaderEvent.OnChangeProgress(
-                                    progress = calculateProgress(chapterGlobalIndex),
-                                    firstVisibleItemIndex = chapterGlobalIndex,
-                                    firstVisibleItemOffset = 0
-                                )
-                            )
-
-                            // 3️⃣ Потом прокрутим точно до нужного места внутри главы
-                            val bookmarkGlobalIndex = findGlobalIndexForBookmark(
-                                chapterIndex = event.chapterIndex,
-                                offset = event.offset.toInt()
-                            ).takeIf { it >= 0 } ?: return@launch
-
-                            delay(50)
-                            listState.animateScrollToItem(bookmarkGlobalIndex)
-
-                            _state.update {
-                                it.copy(
-                                    checkpoint = Checkpoint(
-                                        index = event.chapterIndex,
-                                        offset = event.offset.toInt()
-                                    ),
-                                    highlightedText = event.text
-                                )
-                            }
-                        }
-                    }
-                }*/
-
                 is ReaderEvent.OnScrollToBookmark -> {
                     launch {
                         val progress = event.progress ?: 0f
                         onEvent(ReaderEvent.OnScroll(progress))
                     }
                 }
-
-
-
-
 
                 is ReaderEvent.OnDeleteBookmark -> {
                     viewModelScope.launch {
@@ -634,6 +546,7 @@ class ReaderModel @Inject constructor(
                 is ReaderEvent.OnAddNote -> {
                     val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
                     viewModelScope.launch {
+                        println("✅ ADD NOTE: bookId=${event.bookId}, content=${event.content}")
                         noteRepository.insertNote(
                             Note(
                                 bookId = currentBookId,//event.bookId,
@@ -644,14 +557,26 @@ class ReaderModel @Inject constructor(
                                 createdAt = System.currentTimeMillis()
                             )
                         )
-                        // После вставки нужно перезагрузить notes
-                        _state.update { it.copy(
-                            notes = noteRepository.getNotesForBook(event.bookId)
-                        ) }
-                        startObservingNotes(_state.value.book.id.toLong())
-                        //startObservingNotes(state.value.book.id.toLong())
+                        //observeNotesIfNeeded(currentBookId)
+                        noteRepository.getNotesForBook(event.bookId).collect { notes ->
+                            println("🔥 NOTES OBSERVED: $notes")
+                            _state.update { it.copy(notes = notes) }
+                        }
                     }
                 }
+
+                is ReaderEvent.OnDeleteNote -> {
+                    viewModelScope.launch {
+                        noteRepository.deleteNote(event.note)
+                        //observeNotesIfNeeded(state.value.book.id.toLong())
+                        noteRepository.getNotesForBook(event.note.bookId).collect { notes ->
+                            println("🔥 NOTES OBSERVED: $notes")
+                            _state.update { it.copy(notes = notes) }
+                        }
+                    }
+
+                }
+
 
 
                 else -> {}
@@ -663,6 +588,7 @@ class ReaderModel @Inject constructor(
         viewModelScope.launch {
             noteRepository.observeNotesForBook(bookId)
                 .collect { notes ->
+                    println("🔥 NOTES OBSERVED: $notes")
                     _state.update { it.copy(notes = notes) }
                 }
         }
@@ -729,7 +655,7 @@ class ReaderModel @Inject constructor(
             // ✅ Загрузим закладки и заметки
             loadBookmarks(book.id.toLong())
             //loadNotes(book.id.toLong())
-            startObservingNotes(book.id.toLong())
+
 
             onEvent(
                 ReaderEvent.OnLoadText(
@@ -737,25 +663,31 @@ class ReaderModel @Inject constructor(
                     fullscreenMode = fullscreenMode
                 )
             )
+
+            observeNotes(book.id.toLong())
         }
     }
 
 
-    /*fun loadBookmarks(bookId: Long) {
-        viewModelScope.launch {
-            bookmarkRepository.observeBookmarksForBook(bookId).collect {
-                _bookmarks.value = it
+    fun observeNotes(bookId: Long) {
+        notesJob?.cancel()
+        notesJob = viewModelScope.launch {
+            noteRepository.getNotesForBook(bookId).collect { notes ->
+                println("🔥 NOTES OBSERVED: $notes")
+                _state.update { it.copy(notes = notes) }
             }
         }
     }
 
-    fun loadNotes(bookId: Long) {
-        viewModelScope.launch {
-            noteRepository.observeNotesForBook(bookId).collect {
-                _notes.value = it
+    fun observeNotesIfNeeded(bookId: Long) {
+        if (notesJob != null) return // чтобы не запускать повторно
+        notesJob = viewModelScope.launch {
+            noteRepository.getNotesForBook(bookId).collect { notes ->
+                println("🔥 NOTES OBSERVED: $notes")
+                _state.update { it.copy(notes = notes) }
             }
         }
-    }*/
+    }
 
     fun loadBookmarks(bookId: Long) {
         viewModelScope.launch {

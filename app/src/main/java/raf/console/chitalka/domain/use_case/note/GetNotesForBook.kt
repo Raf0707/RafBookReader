@@ -8,5 +8,5 @@ import javax.inject.Inject
 class GetNotesForBook @Inject constructor(
     private val repository: NoteRepository
 ) {
-    suspend operator fun invoke(bookId: Long): List<Note> = repository.getNotesForBook(bookId)
+    suspend operator fun invoke(bookId: Long): Flow<List<Note>> = repository.getNotesForBook(bookId)
 }

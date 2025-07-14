@@ -109,6 +109,8 @@ sealed class ReaderEvent {
 
     object OnShowCreateNoteDialog : ReaderEvent()
 
+    data class OnCopyNote(val note: Note) : ReaderEvent()
+
     data class OnJumpToNote(val note: Note) : ReaderEvent()
 
     data class OnDeleteNote(val note: Note) : ReaderEvent()

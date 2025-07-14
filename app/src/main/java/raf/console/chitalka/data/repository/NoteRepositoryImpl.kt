@@ -35,8 +35,10 @@ class NoteRepositoryImpl @Inject constructor(
         return noteDao.getById(id)?.let { mapper.toDomain(it) }
     }
 
-    override suspend fun getNotesForBook(bookId: Long): List<Note> {
-        return noteDao.getForBook(bookId).map { mapper.toDomain(it) }
+    override fun getNotesForBook(bookId: Long): Flow<List<Note>> {
+        return noteDao.getForBook(bookId).map { list ->
+            list.map { mapper.toDomain(it) }
+        }
     }
 
     override suspend fun getNotesForBookmark(bookmarkId: Long): List<Note> {
