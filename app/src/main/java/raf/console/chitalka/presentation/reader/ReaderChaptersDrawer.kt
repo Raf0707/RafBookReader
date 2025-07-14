@@ -61,7 +61,8 @@ fun ReaderChaptersDrawer(
     currentChapter: Chapter?,
     currentChapterProgress: Float,
     scrollToChapter: (ReaderEvent.OnScrollToChapter) -> Unit,
-    scrollToBookmark: (ReaderEvent.OnScrollToBookmark) -> Unit,
+    //scrollToBookmark: (ReaderEvent.OnScrollToBookmark) -> Unit,
+    scrollToBookmark: (ReaderEvent.OnScroll) -> Unit,
     //scrollToNote: (ReaderEvent.OnJumpToNote) -> Unit,
     onEvent: (ReaderEvent) -> Any,
     scrollToNote: (Note) -> Unit,
@@ -217,11 +218,12 @@ fun ReaderChaptersDrawer(
                             selected = false,
                             onClick = {
                                 scrollToBookmark(
-                                    ReaderEvent.OnScrollToBookmark(
+                                    /*ReaderEvent.OnScrollToBookmark(
                                         chapterIndex = bookmark.chapterIndex.toInt(),
                                         offset = bookmark.offset,
                                         text = bookmark.label.orEmpty()
-                                    )
+                                    )*/
+                                    ReaderEvent.OnScroll(bookmark.progress ?: 0f)
                                 )
                                 dismissDrawer(ReaderEvent.OnDismissDrawer)
                             }
@@ -247,12 +249,11 @@ fun ReaderChaptersDrawer(
                         )
                     }
                 } else {
-                    items(notes) { note ->
+                    items(notes) { note ->  // <- вот здесь всё правильно
                         ModalDrawerSelectableItem(
                             selected = false,
                             onClick = {
-                                scrollToNote(note)
-                                dismissDrawer(ReaderEvent.OnDismissDrawer)
+                                /*копировать заметку*/
                             }
                         ) {
                             StyledText(
@@ -276,7 +277,7 @@ fun ReaderChaptersDrawer(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Button(
-                            onClick = { ReaderEvent.OnShowCreateNoteDialog },
+                            onClick = { onEvent(ReaderEvent.OnShowCreateNoteDialog) },
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(text = "Добавить заметку")
@@ -284,9 +285,8 @@ fun ReaderChaptersDrawer(
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
-
-
             }
+
         }
     }
 }

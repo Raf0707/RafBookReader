@@ -13,7 +13,7 @@ interface NoteRepository {
     suspend fun getNotesForBook(bookId: Long): List<Note>
     suspend fun getNotesForBookmark(bookmarkId: Long): List<Note>
     suspend fun getAllNotes(): List<Note>
-    suspend fun countNotes(): Int
+    suspend fun countNotes(): Long
     fun observeAllNotes(): Flow<List<Note>>
     fun observeNotesForBook(bookId: Long): Flow<List<Note>>
     fun observeNotesForBookmark(bookmarkId: Long): Flow<List<Note>>

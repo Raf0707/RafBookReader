@@ -18,6 +18,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -127,24 +128,27 @@ fun ReaderContent(
     dismissDrawer: (ReaderEvent.OnDismissDrawer) -> Unit,
     navigateToBookInfo: (changePath: Boolean) -> Unit,
     navigateBack: () -> Unit,
-    onShowNotesDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit,
+    onShowNotesDrawer: (ReaderEvent.OnShowChaptersDrawer) -> Unit,
     onStartTTS: () -> Unit,
     selectedTranslator: TranslatorApp,
     bookmarks: List<Bookmark> = emptyList(),
     notes: List<Note> = emptyList(),
     onEvent: (ReaderEvent) -> Unit,
     highlightedText: String?,
+    readerModel: ReaderModel
 ) {
     val chaptersDrawerState = rememberDrawerState(DrawerValue.Closed)
     val notesDrawerState = rememberDrawerState(DrawerValue.Closed)
 
-    val readerModel: ReaderModel = hiltViewModel()
+    //val readerModel: ReaderModel = hiltViewModel()
 
     val scope = rememberCoroutineScope()
 
     var showCreateNoteDialog by remember { mutableStateOf(false) }
 
     var noteContent by remember { mutableStateOf("") }
+
+    val state by readerModel.state.collectAsState()
 
     LaunchedEffect(drawer) {
         when (drawer) {
@@ -172,7 +176,7 @@ fun ReaderContent(
                 show = chaptersDrawerState.isOpen,
                 chapters = text.filterIsInstance<Chapter>(),
                 bookmarks = bookmarks,
-                notes = notes,
+                notes = state.notes,
                 currentChapter = currentChapter,
                 currentChapterProgress = currentChapterProgress,
                 scrollToChapter = scrollToChapter,
@@ -180,13 +184,11 @@ fun ReaderContent(
                 scrollToBookmark = { bookmark ->
                     scope.launch {
                         delay(100)
-                        val targetIndex = readerModel.findGlobalIndexForBookmark(
-                            chapterIndex = bookmark.chapterIndex.toInt(),
-                            offset = bookmark.offset.toInt()
+                        val targetProgress = bookmark.progress ?: 0f
+                        readerModel.onEvent(
+                            ReaderEvent.OnScroll(targetProgress)
                         )
-                        if (targetIndex >= 0) {
-                            listState.animateScrollToItem(targetIndex)
-                        }
+                        dismissDrawer(ReaderEvent.OnDismissDrawer)
                     }
                 },
                 scrollToNote = { note: Note ->
@@ -243,7 +245,7 @@ fun ReaderContent(
                 ReaderNotesBookmarksDrawer(
                     show = notesDrawerState.isOpen,
                     bookmarks = bookmarks,
-                    notes = notes,
+                    notes = state.notes,
                     dismissDrawer = dismissDrawer,
                     onEvent = { event ->
                         when (event) {
@@ -346,7 +348,7 @@ fun ReaderContent(
                     navigateBack = navigateBack,
                     navigateToBookInfo = navigateToBookInfo,
                     OnShowNotesBookmarksDrawer = {
-                        onShowNotesDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
+                        onShowNotesDrawer(ReaderEvent.OnShowChaptersDrawer)
                     },
                     onStartTTS = onStartTTS,
                     selectedTranslator = selectedTranslator,
@@ -404,7 +406,7 @@ fun ReaderContent(
                 val visibleItemOffset = listState.firstVisibleItemScrollOffset
                 val chapterIndex = readerModel.findChapterIndexForGlobalIndex(text, visibleItemIndex)
 
-                TextButton(onClick = {
+                /*TextButton(onClick = {
                     onEvent(
                         ReaderEvent.OnAddNote(
                             bookId = book.id.toLong(),
@@ -416,6 +418,24 @@ fun ReaderContent(
                     )
                     showCreateNoteDialog = false
                     noteContent = ""
+                }) {
+                    Text("Сохранить")
+                }*/
+                TextButton(onClick = {
+                    val content = noteContent.trim()
+                    if (content.isNotEmpty()) {
+                        onEvent(
+                            ReaderEvent.OnAddNote(
+                                bookId = book.id.toLong(),
+                                content = content,
+                                chapterIndex = chapterIndex.toLong(),
+                                offsetStart = 0L,
+                                offsetEnd = 0L
+                            )
+                        )
+                        showCreateNoteDialog = false
+                        noteContent = ""
+                    }
                 }) {
                     Text("Сохранить")
                 }

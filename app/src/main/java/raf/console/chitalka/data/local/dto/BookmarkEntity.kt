@@ -11,5 +11,6 @@ data class BookmarkEntity(
     val chapterIndex: Long,
     val offset: Long,
     val label: String?,
-    val createdAt: Long
+    val createdAt: Long,
+    val progress: Float
 )

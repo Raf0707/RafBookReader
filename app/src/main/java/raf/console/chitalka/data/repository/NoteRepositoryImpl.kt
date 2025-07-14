@@ -32,22 +32,22 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNoteById(id: Long): Note? {
-        return noteDao.getById(id.toInt())?.let { mapper.toDomain(it) }
+        return noteDao.getById(id)?.let { mapper.toDomain(it) }
     }
 
     override suspend fun getNotesForBook(bookId: Long): List<Note> {
-        return noteDao.getForBook(bookId.toInt()).map { mapper.toDomain(it) }
+        return noteDao.getForBook(bookId).map { mapper.toDomain(it) }
     }
 
     override suspend fun getNotesForBookmark(bookmarkId: Long): List<Note> {
-        return noteDao.getForBookmark(bookmarkId.toInt()).map { mapper.toDomain(it) }
+        return noteDao.getForBookmark(bookmarkId).map { mapper.toDomain(it) }
     }
 
     override suspend fun getAllNotes(): List<Note> {
         return noteDao.getAll().map { mapper.toDomain(it) }
     }
 
-    override suspend fun countNotes(): Int {
+    override suspend fun countNotes(): Long {
         return noteDao.count()
     }
 
@@ -56,10 +56,10 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override fun observeNotesForBook(bookId: Long): Flow<List<Note>> {
-        return noteDao.observeForBookmark(bookId.toInt()).map { list -> list.map { mapper.toDomain(it) } }
+        return noteDao.observeForBookmark(bookId).map { list -> list.map { mapper.toDomain(it) } }
     }
 
     override fun observeNotesForBookmark(bookmarkId: Long): Flow<List<Note>> {
-        return noteDao.observeForBookmark(bookmarkId.toInt()).map { list -> list.map { mapper.toDomain(it) } }
+        return noteDao.observeForBookmark(bookmarkId).map { list -> list.map { mapper.toDomain(it) } }
     }
 }

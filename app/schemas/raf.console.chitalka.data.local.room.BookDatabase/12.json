@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 11,
-    "identityHash": "ff66f97aa78e8feed3b5902e9f87358c",
+    "identityHash": "dq351hj76a67d872ghkj540sdf88wf",
     "entities": [
       {
         "tableName": "BookEntity",
@@ -281,7 +281,7 @@
             "fieldPath": "progress",
             "columnName": "progress",
             "affinity": "REAL",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {

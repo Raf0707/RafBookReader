@@ -89,8 +89,8 @@ class ReaderModel @Inject constructor(
     private val _bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
     val bookmarks: StateFlow<List<Bookmark>> = _bookmarks
 
-    private val _notes = MutableStateFlow<List<Note>>(emptyList())
-    val notes: StateFlow<List<Note>> = _notes
+    /*private val _notes = MutableStateFlow<List<Note>>(emptyList())
+    val notes: StateFlow<List<Note>> = _notes*/
 
 
 
@@ -469,6 +469,8 @@ class ReaderModel @Inject constructor(
                             bottomSheet = null
                         )
                     }
+
+                    startObservingNotes(_state.value.book.id.toLong())
                 }
 
                 is ReaderEvent.OnDismissDrawer -> {
@@ -490,11 +492,14 @@ class ReaderModel @Inject constructor(
                     }
 
                     loadBookmarks(event.bookId)
-                    loadNotes(event.bookId)
+                    //loadNotes(event.bookId)
+                    startObservingNotes(event.bookId.toLong())
                 }
 
                 is ReaderEvent.OnAddBookmark -> {
                     val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
+                    val currentProgress = state.value.book.progress
+
                     viewModelScope.launch {
                         bookmarkRepository.insertBookmark(
                             Bookmark(
@@ -503,13 +508,15 @@ class ReaderModel @Inject constructor(
                                 chapterIndex = event.chapterIndex,
                                 offset = event.offset,
                                 label = event.text.takeIf { it.isNotBlank() },
-                                createdAt = System.currentTimeMillis()
+                                createdAt = System.currentTimeMillis(),
+                                progress = currentProgress // <--- сохраняем текущий прогресс
                             )
                         )
                     }
                 }
 
-                is ReaderEvent.OnScrollToBookmark -> {
+
+                /*is ReaderEvent.OnScrollToBookmark -> {
                     viewModelScope.launch {
                         _state.update {
                             it.copy(
@@ -521,7 +528,101 @@ class ReaderModel @Inject constructor(
                             )
                         }
                     }
+                }*/
+
+                /*is ReaderEvent.OnScrollToBookmark -> {
+                    launch {
+                        _state.value.apply {
+                            val globalIndex = findGlobalIndexForBookmark(
+                                chapterIndex = event.chapterIndex,
+                                offset = event.offset.toInt()
+                            ).takeIf { it >= 0 } ?: return@launch
+
+                            listState.requestScrollToItem(globalIndex)
+                            updateChapter(globalIndex)
+
+                            onEvent(
+                                ReaderEvent.OnChangeProgress(
+                                    progress = calculateProgress(globalIndex),
+                                    firstVisibleItemIndex = globalIndex,
+                                    firstVisibleItemOffset = 0
+                                )
+                            )
+
+                            _state.update {
+                                it.copy(
+                                    checkpoint = Checkpoint(
+                                        index = event.chapterIndex,
+                                        offset = event.offset.toInt()
+                                    ),
+                                    highlightedText = event.text
+                                )
+                            }
+                        }
+                    }
+                }*/
+
+                /*is ReaderEvent.OnScrollToBookmark -> {
+                    launch {
+                        _state.value.apply {
+                            // 1️⃣ Найдём индекс главы в text по chapterIndex
+                            var currentChapterIdx = -1
+                            var chapterGlobalIndex = -1
+                            for (i in text.indices) {
+                                val item = text[i]
+                                if (item is ReaderText.Chapter) {
+                                    currentChapterIdx++
+                                    if (currentChapterIdx == event.chapterIndex) {
+                                        chapterGlobalIndex = i
+                                        break
+                                    }
+                                }
+                            }
+                            if (chapterGlobalIndex == -1) return@launch
+
+                            // 2️⃣ Прокрутим сначала до начала нужной главы
+                            listState.scrollToItem(chapterGlobalIndex)
+                            updateChapter(chapterGlobalIndex)
+
+                            onEvent(
+                                ReaderEvent.OnChangeProgress(
+                                    progress = calculateProgress(chapterGlobalIndex),
+                                    firstVisibleItemIndex = chapterGlobalIndex,
+                                    firstVisibleItemOffset = 0
+                                )
+                            )
+
+                            // 3️⃣ Потом прокрутим точно до нужного места внутри главы
+                            val bookmarkGlobalIndex = findGlobalIndexForBookmark(
+                                chapterIndex = event.chapterIndex,
+                                offset = event.offset.toInt()
+                            ).takeIf { it >= 0 } ?: return@launch
+
+                            delay(50)
+                            listState.animateScrollToItem(bookmarkGlobalIndex)
+
+                            _state.update {
+                                it.copy(
+                                    checkpoint = Checkpoint(
+                                        index = event.chapterIndex,
+                                        offset = event.offset.toInt()
+                                    ),
+                                    highlightedText = event.text
+                                )
+                            }
+                        }
+                    }
+                }*/
+
+                is ReaderEvent.OnScrollToBookmark -> {
+                    launch {
+                        val progress = event.progress ?: 0f
+                        onEvent(ReaderEvent.OnScroll(progress))
+                    }
                 }
+
+
+
 
 
                 is ReaderEvent.OnDeleteBookmark -> {
@@ -530,11 +631,53 @@ class ReaderModel @Inject constructor(
                     }
                 }
 
+                is ReaderEvent.OnAddNote -> {
+                    val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
+                    viewModelScope.launch {
+                        noteRepository.insertNote(
+                            Note(
+                                bookId = currentBookId,//event.bookId,
+                                chapterIndex = event.chapterIndex,
+                                offsetStart = event.offsetStart,
+                                offsetEnd = event.offsetEnd,
+                                content = event.content,
+                                createdAt = System.currentTimeMillis()
+                            )
+                        )
+                        // После вставки нужно перезагрузить notes
+                        _state.update { it.copy(
+                            notes = noteRepository.getNotesForBook(event.bookId)
+                        ) }
+                        startObservingNotes(_state.value.book.id.toLong())
+                        //startObservingNotes(state.value.book.id.toLong())
+                    }
+                }
+
 
                 else -> {}
             }
         }
     }
+
+    fun startObservingNotes(bookId: Long) {
+        viewModelScope.launch {
+            noteRepository.observeNotesForBook(bookId)
+                .collect { notes ->
+                    _state.update { it.copy(notes = notes) }
+                }
+        }
+    }
+
+    fun startObservingAllNotes() {
+        viewModelScope.launch {
+            noteRepository.observeAllNotes()
+                .collect { notes ->
+                    _state.update { it.copy(notes = notes) }
+                }
+        }
+    }
+
+
 
     fun onScrollToBookmark(
         offset: Long,
@@ -585,7 +728,8 @@ class ReaderModel @Inject constructor(
 
             // ✅ Загрузим закладки и заметки
             loadBookmarks(book.id.toLong())
-            loadNotes(book.id.toLong())
+            //loadNotes(book.id.toLong())
+            startObservingNotes(book.id.toLong())
 
             onEvent(
                 ReaderEvent.OnLoadText(
@@ -595,6 +739,7 @@ class ReaderModel @Inject constructor(
             )
         }
     }
+
 
     /*fun loadBookmarks(bookId: Long) {
         viewModelScope.launch {

@@ -8,5 +8,5 @@ import javax.inject.Inject
 class CountNotes @Inject constructor(
     private val repository: NoteRepository
 ) {
-    suspend operator fun invoke(): Int = repository.countNotes()
+    suspend operator fun invoke(): Long = repository.countNotes()
 }

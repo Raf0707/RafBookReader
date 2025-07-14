@@ -12,7 +12,8 @@ class BookmarkMapperImpl @Inject constructor() : BookmarkMapper {
             chapterIndex = bookmark.chapterIndex,
             offset = bookmark.offset,
             label = bookmark.label,
-            createdAt = bookmark.createdAt
+            createdAt = bookmark.createdAt,
+            progress = bookmark.progress
         )
     }
 
@@ -23,7 +24,8 @@ class BookmarkMapperImpl @Inject constructor() : BookmarkMapper {
             chapterIndex = entity.chapterIndex,
             offset = entity.offset,
             label = entity.label,
-            createdAt = entity.createdAt
+            createdAt = entity.createdAt,
+            progress = entity.progress
         )
     }
 }

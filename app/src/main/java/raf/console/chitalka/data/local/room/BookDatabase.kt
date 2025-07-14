@@ -35,7 +35,7 @@ import java.io.File
         BookmarkEntity::class, // 🆕
         NoteEntity::class      // 🆕
     ],
-    version = 11, // ⬆️ обновлено
+    version = 12, // ⬆️ обновлено
     autoMigrations = [
         AutoMigration(1, 2),
         AutoMigration(2, 3),
@@ -246,6 +246,14 @@ object DatabaseHelper {
             db.execSQL("""
             CREATE INDEX IF NOT EXISTS `index_NoteEntity_bookmarkId` ON `NoteEntity`(`bookmarkId`)
         """.trimIndent())
+        }
+    }
+
+    val MIGRATION_11_12 = object : Migration(11, 12) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("""
+                ALTER TABLE `BookmarkEntity` ADD COLUMN `progress` REAL NOT NULL DEFAULT 0.0
+            """.trimIndent())
         }
     }
 

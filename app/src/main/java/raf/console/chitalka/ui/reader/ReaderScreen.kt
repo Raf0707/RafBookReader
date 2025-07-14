@@ -91,6 +91,7 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
         ) {
             state.value.listState
         }
+
         val nestedScrollConnection = remember {
             derivedStateOf {
                 object : NestedScrollConnection {
@@ -342,6 +343,11 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
             "${bookProgress}${chapterProgress}"
         }
 
+        LaunchedEffect(bookId) {
+            screenModel.startObservingNotes(bookId.toLong())
+            //screenModel.startObservingAllNotes()
+        }
+
         LaunchedEffect(Unit) {
             screenModel.init(
                 bookId = bookId,
@@ -498,7 +504,8 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
             onEvent = screenModel::onEvent,
             bookmarks = state.value.bookmarks,
             notes = state.value.notes,
-            highlightedText = state.value.highlightedText
+            highlightedText = state.value.highlightedText,
+            readerModel = screenModel
 
             )
 

@@ -93,7 +93,8 @@ sealed class ReaderEvent {
     data class OnScrollToBookmark(
         val chapterIndex: Int,
         val offset: Long,
-        val text: String
+        val text: String,
+        val progress: Float? = null // ✅ Добавляем сюда progress
     ) : ReaderEvent()
 
     data class OnDeleteBookmark(val bookmark: Bookmark) : ReaderEvent()
@@ -107,7 +108,6 @@ sealed class ReaderEvent {
     ) : ReaderEvent()
 
     object OnShowCreateNoteDialog : ReaderEvent()
-
 
     data class OnJumpToNote(val note: Note) : ReaderEvent()
 

@@ -6,5 +6,6 @@ data class Bookmark(
     val chapterIndex: Long,
     val offset: Long,
     val label: String? = null,
-    val createdAt: Long
+    val createdAt: Long,
+    val progress: Float
 )

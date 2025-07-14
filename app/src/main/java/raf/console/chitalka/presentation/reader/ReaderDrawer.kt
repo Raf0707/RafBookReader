@@ -25,7 +25,7 @@ fun ReaderDrawer(
     currentChapter: Chapter?,
     currentChapterProgress: Float,
     scrollToChapter: (ReaderEvent.OnScrollToChapter) -> Unit,
-    scrollToBookmark: (ReaderEvent.OnScrollToBookmark) -> Unit,
+    scrollToBookmark: (ReaderEvent.OnScroll) -> Unit,
     scrollToNote: (Note) -> Unit,
     onDeleteBookmark: (Bookmark) -> Unit,
     onDeleteNote: (Note) -> Unit,

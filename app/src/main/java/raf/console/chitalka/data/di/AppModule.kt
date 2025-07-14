@@ -68,6 +68,7 @@ object AppModule {
                 DatabaseHelper.MIGRATION_5_6, // creates FavoriteDirectoryEntity table(if does not exist)
                 DatabaseHelper.MIGRATION_9_10, // структ. миграция и кастомные категории
                 DatabaseHelper.MIGRATION_10_11, // закладки в книгах, заметки к закладкам + заметки к книгам
+                DatabaseHelper.MIGRATION_11_12, // Прогрес в закладках
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
             .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
@@ -92,7 +93,8 @@ object AppModule {
                 DatabaseHelper.MIGRATION_4_5,
                 DatabaseHelper.MIGRATION_5_6,
                 DatabaseHelper.MIGRATION_9_10,
-                DatabaseHelper.MIGRATION_10_11, // закладки в книгах, заметки к закладкам + заметки к книгам
+                DatabaseHelper.MIGRATION_10_11,
+                DatabaseHelper.MIGRATION_11_12,
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
             .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
@@ -116,7 +118,8 @@ object AppModule {
                 DatabaseHelper.MIGRATION_4_5,
                 DatabaseHelper.MIGRATION_5_6,
                 DatabaseHelper.MIGRATION_9_10,
-                DatabaseHelper.MIGRATION_10_11, // закладки в книгах, заметки к закладкам + заметки к книгам
+                DatabaseHelper.MIGRATION_10_11,
+                DatabaseHelper.MIGRATION_11_12,
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
             .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
@@ -140,6 +143,7 @@ object AppModule {
                 DatabaseHelper.MIGRATION_5_6,
                 DatabaseHelper.MIGRATION_9_10,
                 DatabaseHelper.MIGRATION_10_11,
+                DatabaseHelper.MIGRATION_11_12,
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
             .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
@@ -163,6 +167,7 @@ object AppModule {
                 DatabaseHelper.MIGRATION_5_6,
                 DatabaseHelper.MIGRATION_9_10,
                 DatabaseHelper.MIGRATION_10_11,
+                DatabaseHelper.MIGRATION_11_12,
             )
             .addCallback(DatabaseHelper.PREPOPULATE_CATEGORIES)
             .addCallback(DatabaseHelper.PREPOPULATE_BOOKS)
