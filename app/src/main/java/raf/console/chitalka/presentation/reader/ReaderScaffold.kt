@@ -39,6 +39,7 @@ import raf.console.chitalka.domain.reader.ReaderHorizontalGesture
 import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
 import raf.console.chitalka.domain.reader.ReaderTextAlignment
+import raf.console.chitalka.domain.translation.BookTranslationStatus
 import raf.console.chitalka.domain.util.HorizontalAlignment
 import raf.console.chitalka.presentation.core.components.common.AnimatedVisibility
 import raf.console.chitalka.presentation.reader.translator.TranslatorApp
@@ -115,6 +116,15 @@ fun ReaderScaffold(
     navigateToBookInfo: (changePath: Boolean) -> Unit,
     navigateBack: () -> Unit,
     onStartTTS: () -> Unit,
+    isBookTranslationRunning: Boolean,
+    bookTranslationStatus: BookTranslationStatus,
+    bookTranslationProgress: Float,
+    bookTranslationMessage: String?,
+    bookTranslationElapsedSeconds: Long,
+    bookTranslationProgressInBottomBar: Boolean,
+    bookTranslationPartialNotice: Boolean,
+    cancelBookTranslation: (ReaderEvent.OnCancelBookTranslation) -> Unit,
+    showBookTranslationDialog: (ReaderEvent.OnShowBookTranslationDialog) -> Unit,
     OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit,
     selectedTranslator: TranslatorApp,
     onEvent: (ReaderEvent) -> Unit, // ← добавлен
@@ -146,6 +156,7 @@ fun ReaderScaffold(
                     navigateBack = navigateBack,
                     navigateToBookInfo = navigateToBookInfo,
                     onStartTTS = onStartTTS,
+                    showBookTranslationDialog = showBookTranslationDialog,
                     OnShowNotesBookmarksDrawer = {
                         OnShowNotesBookmarksDrawer(ReaderEvent.OnShowNotesBookmarksDrawer(book.id.toLong()))
                     }
@@ -167,6 +178,14 @@ fun ReaderScaffold(
                     lockMenu = lockMenu,
                     checkpoint = checkpoint,
                     bottomBarPadding = bottomBarPadding,
+                    isBookTranslationRunning = isBookTranslationRunning,
+                    bookTranslationStatus = bookTranslationStatus,
+                    bookTranslationProgress = bookTranslationProgress,
+                    bookTranslationMessage = bookTranslationMessage,
+                    bookTranslationElapsedSeconds = bookTranslationElapsedSeconds,
+                    bookTranslationProgressInBottomBar = bookTranslationProgressInBottomBar,
+                    bookTranslationPartialNotice = bookTranslationPartialNotice,
+                    cancelBookTranslation = cancelBookTranslation,
                     restoreCheckpoint = restoreCheckpoint,
                     scroll = scroll,
                     changeProgress = changeProgress

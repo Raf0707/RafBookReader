@@ -15,6 +15,8 @@ import raf.console.chitalka.domain.reader.Checkpoint
 import raf.console.chitalka.domain.reader.Note
 import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
+import raf.console.chitalka.domain.translation.BookTranslationLanguage
+import raf.console.chitalka.domain.translation.BookTranslationStatus
 import raf.console.chitalka.domain.ui.UIText
 import raf.console.chitalka.domain.util.BottomSheet
 import raf.console.chitalka.domain.util.Drawer
@@ -24,6 +26,8 @@ import raf.console.chitalka.presentation.core.constants.provideEmptyBook
 data class ReaderState(
     val book: Book = provideEmptyBook(),
     val text: List<ReaderText> = emptyList(),
+    val originalText: List<ReaderText> = emptyList(),
+    val translatedText: List<ReaderText>? = null,
     val listState: LazyListState = LazyListState(),
 
     val currentChapter: Chapter? = null,
@@ -45,7 +49,21 @@ data class ReaderState(
 
     val highlightedText: String? = null,
 
-    val blinkingHighlightIndex: Int? = null
+    val blinkingHighlightIndex: Int? = null,
+
+    val translationLanguages: List<BookTranslationLanguage> = emptyList(),
+    val selectedSourceTranslationLanguage: BookTranslationLanguage? = null,
+    val selectedTargetTranslationLanguage: BookTranslationLanguage? = null,
+    val showBookTranslationDialog: Boolean = false,
+    val isBookTranslationRunning: Boolean = false,
+    val bookTranslationProgress: Float = 0f,
+    val bookTranslationStatus: BookTranslationStatus = BookTranslationStatus.Idle,
+    val bookTranslationMessage: String? = null,
+    val bookTranslationElapsedSeconds: Long = 0L,
+    val bookTranslationError: UIText? = null,
+    val bookTranslationNotice: UIText? = null,
+    val keepPartialBookTranslationOnCancel: Boolean = false,
+    val showTranslatedText: Boolean = false
 
 
 )

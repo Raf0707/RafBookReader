@@ -501,6 +501,9 @@ data class ReaderScreen(val bookId: Int) : Screen, Parcelable {
                 screenModel.onEvent(ReaderEvent.OnStartTextToSpeech(context))
             },
             selectedTranslator = mainState.value.selectedTranslator,
+            bookTranslationProgressInBottomBar = mainState.value.bookTranslationProgressInBottomBar,
+            bookTranslationPartialNotice = mainState.value.bookTranslationPartialNotice,
+            bookTranslationKeepPartialOnCancel = mainState.value.bookTranslationKeepPartialOnCancel,
             onEvent = screenModel::onEvent,
             bookmarks = state.value.bookmarks,
             notes = state.value.notes,
