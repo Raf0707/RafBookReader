@@ -16,11 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import raf.console.chitalka.R
 import raf.console.chitalka.presentation.settings.components.SettingsSubcategory
-import raf.console.chitalka.presentation.settings.reader.translator.components.BookTranslationKeepPartialOnCancelOption
-import raf.console.chitalka.presentation.settings.reader.translator.components.BookTranslationPartialNoticeOption
-import raf.console.chitalka.presentation.settings.reader.translator.components.BookTranslationProgressInBottomBarOption
-import raf.console.chitalka.presentation.settings.reader.translator.components.BookTranslationSourceLanguageOption
-import raf.console.chitalka.presentation.settings.reader.translator.components.BookTranslationTargetLanguageOption
 import raf.console.chitalka.presentation.settings.reader.translator.components.DoubleClickTranslationOption
 
 fun LazyListScope.TranslatorSubcategory(
@@ -37,21 +32,6 @@ fun LazyListScope.TranslatorSubcategory(
     ) {
         item {
             DoubleClickTranslationOption()
-        }
-        item {
-            BookTranslationSourceLanguageOption()
-        }
-        item {
-            BookTranslationTargetLanguageOption()
-        }
-        item {
-            BookTranslationProgressInBottomBarOption()
-        }
-        item {
-            BookTranslationPartialNoticeOption()
-        }
-        item {
-            BookTranslationKeepPartialOnCancelOption()
         }
     }
 }

@@ -188,46 +188,6 @@ class MainModel @Inject constructor(
                 }
             )
 
-            is MainEvent.OnChangeBookTranslationSourceLanguage -> handleDatastoreUpdate(
-                key = DataStoreConstants.BOOK_TRANSLATION_SOURCE_LANGUAGE,
-                value = event.value,
-                updateState = {
-                    it.copy(bookTranslationSourceLanguage = this)
-                }
-            )
-
-            is MainEvent.OnChangeBookTranslationTargetLanguage -> handleDatastoreUpdate(
-                key = DataStoreConstants.BOOK_TRANSLATION_TARGET_LANGUAGE,
-                value = event.value,
-                updateState = {
-                    it.copy(bookTranslationTargetLanguage = this)
-                }
-            )
-
-            is MainEvent.OnChangeBookTranslationProgressInBottomBar -> handleDatastoreUpdate(
-                key = DataStoreConstants.BOOK_TRANSLATION_PROGRESS_IN_BOTTOM_BAR,
-                value = event.value,
-                updateState = {
-                    it.copy(bookTranslationProgressInBottomBar = this)
-                }
-            )
-
-            is MainEvent.OnChangeBookTranslationPartialNotice -> handleDatastoreUpdate(
-                key = DataStoreConstants.BOOK_TRANSLATION_PARTIAL_NOTICE,
-                value = event.value,
-                updateState = {
-                    it.copy(bookTranslationPartialNotice = this)
-                }
-            )
-
-            is MainEvent.OnChangeBookTranslationKeepPartialOnCancel -> handleDatastoreUpdate(
-                key = DataStoreConstants.BOOK_TRANSLATION_KEEP_PARTIAL_ON_CANCEL,
-                value = event.value,
-                updateState = {
-                    it.copy(bookTranslationKeepPartialOnCancel = this)
-                }
-            )
-
             is MainEvent.OnChangeFastColorPresetChange -> handleDatastoreUpdate(
                 key = DataStoreConstants.FAST_COLOR_PRESET_CHANGE,
                 value = event.value,

@@ -24,14 +24,12 @@ import raf.console.chitalka.data.parser.FileParserImpl
 import raf.console.chitalka.data.parser.TextParser
 import raf.console.chitalka.data.parser.TextParserImpl
 import raf.console.chitalka.data.repository.BookRepositoryImpl
-import raf.console.chitalka.data.repository.BookTranslationRepositoryImpl
 import raf.console.chitalka.data.repository.ColorPresetRepositoryImpl
 import raf.console.chitalka.data.repository.DataStoreRepositoryImpl
 import raf.console.chitalka.data.repository.FileSystemRepositoryImpl
 import raf.console.chitalka.data.repository.HistoryRepositoryImpl
 import raf.console.chitalka.data.repository.PermissionRepositoryImpl
 import raf.console.chitalka.domain.repository.BookRepository
-import raf.console.chitalka.domain.repository.BookTranslationRepository
 import raf.console.chitalka.domain.repository.ColorPresetRepository
 import raf.console.chitalka.domain.repository.DataStoreRepository
 import raf.console.chitalka.domain.repository.FileSystemRepository
@@ -66,12 +64,6 @@ abstract class RepositoryModule {
     abstract fun bindBookRepository(
         bookRepositoryImpl: BookRepositoryImpl
     ): BookRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindBookTranslationRepository(
-        bookTranslationRepositoryImpl: BookTranslationRepositoryImpl
-    ): BookTranslationRepository
 
     @Binds
     @Singleton

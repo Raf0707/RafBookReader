@@ -74,14 +74,6 @@ data class MainState(
 
     //Translate
     val selectedTranslator: TranslatorApp = TranslatorApp.GOOGLE,
-    val bookTranslationSourceLanguage: String = provideDefaultValue { "en" },
-    val bookTranslationTargetLanguage: String = provideDefaultValue {
-        val locale = Locale.getDefault().language.take(2)
-        if (locale != "en") locale else "ru"
-    },
-    val bookTranslationProgressInBottomBar: Boolean = provideDefaultValue { true },
-    val bookTranslationPartialNotice: Boolean = provideDefaultValue { true },
-    val bookTranslationKeepPartialOnCancel: Boolean = provideDefaultValue { false },
 
     val drawer: ReaderScreen? = null,
 
@@ -223,26 +215,6 @@ data class MainState(
                     doubleClickTranslation = provideValue(
                         DOUBLE_CLICK_TRANSLATION
                     ) { doubleClickTranslation },
-
-                    bookTranslationSourceLanguage = provideValue(
-                        BOOK_TRANSLATION_SOURCE_LANGUAGE
-                    ) { bookTranslationSourceLanguage },
-
-                    bookTranslationTargetLanguage = provideValue(
-                        BOOK_TRANSLATION_TARGET_LANGUAGE
-                    ) { bookTranslationTargetLanguage },
-
-                    bookTranslationProgressInBottomBar = provideValue(
-                        BOOK_TRANSLATION_PROGRESS_IN_BOTTOM_BAR
-                    ) { bookTranslationProgressInBottomBar },
-
-                    bookTranslationPartialNotice = provideValue(
-                        BOOK_TRANSLATION_PARTIAL_NOTICE
-                    ) { bookTranslationPartialNotice },
-
-                    bookTranslationKeepPartialOnCancel = provideValue(
-                        BOOK_TRANSLATION_KEEP_PARTIAL_ON_CANCEL
-                    ) { bookTranslationKeepPartialOnCancel },
 
                     fastColorPresetChange = provideValue(
                         FAST_COLOR_PRESET_CHANGE

@@ -13,7 +13,6 @@ import androidx.compose.runtime.Immutable
 import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.Note
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
-import raf.console.chitalka.domain.translation.BookTranslationLanguage
 
 @Immutable
 sealed class ReaderEvent {
@@ -81,30 +80,6 @@ sealed class ReaderEvent {
     data object OnShowChaptersDrawer : ReaderEvent()
 
     data object OnDismissDrawer : ReaderEvent()
-
-    data object OnShowBookTranslationDialog : ReaderEvent()
-
-    data object OnDismissBookTranslationDialog : ReaderEvent()
-
-    data class OnSelectSourceBookTranslationLanguage(
-        val language: BookTranslationLanguage
-    ) : ReaderEvent()
-
-    data class OnSelectTargetBookTranslationLanguage(
-        val language: BookTranslationLanguage
-    ) : ReaderEvent()
-
-    data class OnStartBookTranslation(
-        val keepPartialOnCancel: Boolean
-    ) : ReaderEvent()
-
-    data object OnCancelBookTranslation : ReaderEvent()
-
-    data object OnRestoreOriginalText : ReaderEvent()
-
-    data object OnShowTranslatedText : ReaderEvent()
-
-    data object OnDismissBookTranslationNotice : ReaderEvent()
 
     data class OnStartTextToSpeech(val context: Context) : ReaderEvent()
 

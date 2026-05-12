@@ -18,7 +18,6 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -59,7 +58,6 @@ fun ReaderTopBar(
     showSettingsBottomSheet: (ReaderEvent.OnShowSettingsBottomSheet) -> Unit,
     showChaptersDrawer: (ReaderEvent.OnShowChaptersDrawer) -> Unit,
     onStartTTS: () -> Unit, // ✅ Добавлено
-    showBookTranslationDialog: (ReaderEvent.OnShowBookTranslationDialog) -> Unit,
     OnShowNotesBookmarksDrawer: (ReaderEvent.OnShowNotesBookmarksDrawer) -> Unit, // ✅ Добавлено
     navigateToBookInfo: (changePath: Boolean) -> Unit,
     navigateBack: () -> Unit
@@ -154,15 +152,6 @@ fun ReaderTopBar(
                     enabled = !lockMenu
                 ) {
                     onStartTTS()
-                }
-
-                IconButton(
-                    icon = Icons.Default.Translate,
-                    contentDescription = R.string.book_translation_content_desc,
-                    disableOnClick = false,
-                    enabled = !lockMenu
-                ) {
-                    showBookTranslationDialog(ReaderEvent.OnShowBookTranslationDialog)
                 }
 
                 // 📘 Заметки и закладки (Drawer слева)

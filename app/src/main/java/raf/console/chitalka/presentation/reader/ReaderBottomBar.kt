@@ -22,9 +22,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +34,6 @@ import raf.console.chitalka.R
 import raf.console.chitalka.domain.library.book.Book
 import raf.console.chitalka.domain.reader.Checkpoint
 import raf.console.chitalka.domain.reader.ReaderText
-import raf.console.chitalka.domain.translation.BookTranslationStatus
 import raf.console.chitalka.domain.util.Direction
 import raf.console.chitalka.presentation.core.components.common.IconButton
 import raf.console.chitalka.presentation.core.components.common.StyledText
@@ -54,14 +51,6 @@ fun ReaderBottomBar(
     lockMenu: Boolean,
     checkpoint: Checkpoint,
     bottomBarPadding: Dp,
-    isBookTranslationRunning: Boolean,
-    bookTranslationStatus: BookTranslationStatus,
-    bookTranslationProgress: Float,
-    bookTranslationMessage: String?,
-    bookTranslationElapsedSeconds: Long,
-    bookTranslationProgressInBottomBar: Boolean,
-    bookTranslationPartialNotice: Boolean,
-    cancelBookTranslation: (ReaderEvent.OnCancelBookTranslation) -> Unit,
     restoreCheckpoint: (ReaderEvent.OnRestoreCheckpoint) -> Unit,
     scroll: (ReaderEvent.OnScroll) -> Unit,
     changeProgress: (ReaderEvent.OnChangeProgress) -> Unit
@@ -109,19 +98,6 @@ fun ReaderBottomBar(
         )
 
         Spacer(Modifier.height(6.dp))
-
-        BookTranslationBottomStatus(
-            isRunning = isBookTranslationRunning,
-            status = bookTranslationStatus,
-            progress = bookTranslationProgress,
-            message = bookTranslationMessage,
-            elapsedSeconds = bookTranslationElapsedSeconds,
-            showProgress = bookTranslationProgressInBottomBar,
-            showPartialNotice = bookTranslationPartialNotice,
-            onCancel = {
-                cancelBookTranslation(ReaderEvent.OnCancelBookTranslation)
-            }
-        )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             HorizontalExpandingTransition(
@@ -173,97 +149,5 @@ fun ReaderBottomBar(
         }
 
         Spacer(Modifier.height(8.dp + bottomBarPadding))
-    }
-}
-
-@Composable
-private fun BookTranslationBottomStatus(
-    isRunning: Boolean,
-    status: BookTranslationStatus,
-    progress: Float,
-    message: String?,
-    elapsedSeconds: Long,
-    showProgress: Boolean,
-    showPartialNotice: Boolean,
-    onCancel: () -> Unit
-) {
-    if (!isRunning) return
-
-    val normalizedProgress = progress.coerceIn(0f, 1f)
-    val displayMessage = message ?: when (status) {
-        BookTranslationStatus.CheckingModels -> "Проверка языковых моделей"
-        BookTranslationStatus.DownloadingModel -> "Загрузка языковой модели"
-        BookTranslationStatus.Translating -> "Перевод книги"
-        BookTranslationStatus.Idle -> "Подготовка перевода"
-    }
-    val detail = when (status) {
-        BookTranslationStatus.Translating -> "${(normalizedProgress * 100).toInt()}%"
-        BookTranslationStatus.DownloadingModel -> "${elapsedSeconds} с"
-        BookTranslationStatus.CheckingModels -> "${elapsedSeconds} с"
-        BookTranslationStatus.Idle -> ""
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            StyledText(
-                text = if (detail.isBlank()) displayMessage else "$displayMessage · $detail",
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                ),
-                maxLines = 1
-            )
-
-            TextButton(
-                modifier = Modifier.padding(start = 8.dp),
-                onClick = onCancel
-            ) {
-                StyledText(
-                    text = "Отмена",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.primary
-                    ),
-                    maxLines = 1
-                )
-            }
-        }
-
-        if (showProgress) {
-            if (
-                status == BookTranslationStatus.CheckingModels ||
-                status == BookTranslationStatus.DownloadingModel
-            ) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            } else {
-                LinearProgressIndicator(
-                    progress = { normalizedProgress },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
-
-        if (
-            showPartialNotice &&
-            status == BookTranslationStatus.Translating &&
-            normalizedProgress < 1f
-        ) {
-            Spacer(Modifier.height(4.dp))
-            StyledText(
-                text = "Часть текста ещё оригинальная",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                ),
-                maxLines = 1
-            )
-        }
-
-        Spacer(Modifier.height(4.dp))
     }
 }

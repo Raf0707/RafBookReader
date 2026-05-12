@@ -73,11 +73,6 @@ object DataStoreConstants {
 
     //Translator
     val SELECTED_TRANSLATOR = stringPreferencesKey("selected_translator")
-    val BOOK_TRANSLATION_SOURCE_LANGUAGE = stringPreferencesKey("book_translation_source_language")
-    val BOOK_TRANSLATION_TARGET_LANGUAGE = stringPreferencesKey("book_translation_target_language")
-    val BOOK_TRANSLATION_PROGRESS_IN_BOTTOM_BAR = booleanPreferencesKey("book_translation_progress_in_bottom_bar")
-    val BOOK_TRANSLATION_PARTIAL_NOTICE = booleanPreferencesKey("book_translation_partial_notice")
-    val BOOK_TRANSLATION_KEEP_PARTIAL_ON_CANCEL = booleanPreferencesKey("book_translation_keep_partial_on_cancel")
 
     // Browse settings
     val BROWSE_LAYOUT = stringPreferencesKey("browse_layout")

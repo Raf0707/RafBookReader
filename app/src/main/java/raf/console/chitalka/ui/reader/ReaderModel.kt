@@ -50,16 +50,12 @@ import raf.console.chitalka.domain.reader.Note
 import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.domain.reader.ReaderText.Chapter
 import raf.console.chitalka.domain.repository.BookmarkRepository
-import raf.console.chitalka.domain.repository.DataStoreRepository
 import raf.console.chitalka.domain.repository.NoteRepository
-import raf.console.chitalka.domain.translation.BookTranslationStatus
 import raf.console.chitalka.domain.ui.UIText
 import raf.console.chitalka.domain.use_case.book.GetBookById
 import raf.console.chitalka.domain.use_case.book.GetText
 import raf.console.chitalka.domain.use_case.book.UpdateBook
 import raf.console.chitalka.domain.use_case.history.GetLatestHistory
-import raf.console.chitalka.domain.use_case.translation.GetBookTranslationLanguages
-import raf.console.chitalka.domain.use_case.translation.TranslateBook
 import raf.console.chitalka.presentation.core.util.coerceAndPreventNaN
 import raf.console.chitalka.presentation.core.util.launchActivity
 import raf.console.chitalka.presentation.core.util.setBrightness
@@ -72,7 +68,6 @@ import kotlin.coroutines.coroutineContext
 import kotlin.math.roundToInt
 
 private const val READER = "READER, MODEL"
-private const val BOOK_TRANSLATION_UI = "BOOK_TRANSLATION_UI"
 
 @HiltViewModel
 class ReaderModel @Inject constructor(
@@ -80,9 +75,6 @@ class ReaderModel @Inject constructor(
     private val updateBook: UpdateBook,
     private val getText: GetText,
     private val getLatestHistory: GetLatestHistory,
-    private val getBookTranslationLanguages: GetBookTranslationLanguages,
-    private val translateBook: TranslateBook,
-    private val dataStoreRepository: DataStoreRepository,
     private val bookmarkRepository: BookmarkRepository, // ← добавили
     private val noteRepository: NoteRepository
 ) : ViewModel() {
@@ -98,8 +90,6 @@ class ReaderModel @Inject constructor(
     private var scrollJob: Job? = null
 
     private var notesJob: Job? = null
-    private var translationJob: Job? = null
-    private var translationTimerJob: Job? = null
 
     private val _bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
     val bookmarks: StateFlow<List<Bookmark>> = _bookmarks
@@ -143,10 +133,7 @@ class ReaderModel @Inject constructor(
                                 book = it.book.copy(
                                     lastOpened = lastOpened
                                 ),
-                                text = text,
-                                originalText = text,
-                                translatedText = null,
-                                showTranslatedText = false
+                                text = text
                             )
                         }
 
@@ -508,115 +495,6 @@ class ReaderModel @Inject constructor(
                     }
                 }
 
-                is ReaderEvent.OnShowBookTranslationDialog -> {
-                    Log.i(BOOK_TRANSLATION_UI, "Show book translation dialog")
-                    _state.update {
-                        it.copy(
-                            showBookTranslationDialog = true,
-                            bookTranslationError = null
-                        )
-                    }
-                }
-
-                is ReaderEvent.OnDismissBookTranslationDialog -> {
-                    _state.update {
-                        it.copy(
-                            showBookTranslationDialog = false,
-                            bookTranslationError = null
-                        )
-                    }
-                }
-
-                is ReaderEvent.OnSelectSourceBookTranslationLanguage -> {
-                    Log.i(
-                        BOOK_TRANSLATION_UI,
-                        "Select source language ${event.language.languageTag}/${event.language.mlKitTag}"
-                    )
-                    _state.update {
-                        it.copy(selectedSourceTranslationLanguage = event.language)
-                    }
-                }
-
-                is ReaderEvent.OnSelectTargetBookTranslationLanguage -> {
-                    Log.i(
-                        BOOK_TRANSLATION_UI,
-                        "Select target language ${event.language.languageTag}/${event.language.mlKitTag}"
-                    )
-                    _state.update {
-                        it.copy(selectedTargetTranslationLanguage = event.language)
-                    }
-                }
-
-                is ReaderEvent.OnStartBookTranslation -> {
-                    startBookTranslation(
-                        keepPartialOnCancel = event.keepPartialOnCancel
-                    )
-                }
-
-                is ReaderEvent.OnCancelBookTranslation -> {
-                    Log.i(BOOK_TRANSLATION_UI, "Cancel book translation")
-                    translationJob?.cancel()
-                    translationTimerJob?.cancel()
-                    translationJob = null
-                    translationTimerJob = null
-                    _state.update {
-                        val translated = it.translatedText
-                        it.copy(
-                            isBookTranslationRunning = false,
-                            bookTranslationProgress = 0f,
-                            bookTranslationStatus = BookTranslationStatus.Idle,
-                            bookTranslationMessage = null,
-                            bookTranslationElapsedSeconds = 0L,
-                            showTranslatedText = it.keepPartialBookTranslationOnCancel && translated != null,
-                            text = if (it.keepPartialBookTranslationOnCancel && translated != null) {
-                                translated
-                            } else {
-                                it.originalText
-                            }
-                        )
-                    }
-                }
-
-                is ReaderEvent.OnRestoreOriginalText -> {
-                    Log.i(BOOK_TRANSLATION_UI, "Restore original text")
-                    translationJob?.cancel()
-                    translationTimerJob?.cancel()
-                    translationJob = null
-                    translationTimerJob = null
-                    _state.update {
-                        it.copy(
-                            showTranslatedText = false,
-                            text = it.originalText,
-                            isBookTranslationRunning = false,
-                            bookTranslationStatus = BookTranslationStatus.Idle,
-                            bookTranslationProgress = 0f,
-                            bookTranslationMessage = null,
-                            bookTranslationElapsedSeconds = 0L,
-                            bookTranslationError = null
-                        )
-                    }
-                    updateChapter(_state.value.listState.firstVisibleItemIndex)
-                }
-
-                is ReaderEvent.OnShowTranslatedText -> {
-                    Log.i(BOOK_TRANSLATION_UI, "Show translated text")
-                    _state.update {
-                        val translated = it.translatedText ?: return@update it
-                        it.copy(
-                            showTranslatedText = true,
-                            text = translated,
-                            bookTranslationError = null
-                        )
-                    }
-                    updateChapter(_state.value.listState.firstVisibleItemIndex)
-                }
-
-                is ReaderEvent.OnDismissBookTranslationNotice -> {
-                    _state.update {
-                        it.copy(bookTranslationNotice = null)
-                    }
-                }
-
                 is ReaderEvent.OnStartTextToSpeech -> {
                     // Запуск TTS
                     startTTS(context = event.context)
@@ -770,27 +648,8 @@ class ReaderModel @Inject constructor(
             resetJob?.join()
             eventJob = SupervisorJob()
 
-            val languages = getBookTranslationLanguages.execute()
-            val settings = dataStoreRepository.getAllSettings()
-            val defaultSource = languages.firstOrNull {
-                it.languageTag == settings.bookTranslationSourceLanguage
-            } ?: languages.firstOrNull { it.languageTag == "en" }
-                ?: languages.firstOrNull()
-            val defaultTarget = languages.firstOrNull {
-                it.languageTag == settings.bookTranslationTargetLanguage && it != defaultSource
-            } ?: languages.firstOrNull {
-                it.languageTag == Locale.getDefault().language && it != defaultSource
-            } ?: languages.firstOrNull { it.languageTag == "ru" && it != defaultSource }
-            ?: languages.firstOrNull { it != defaultSource }
-            ?: defaultSource
-
             _state.update {
-                ReaderState(
-                    book = book,
-                    translationLanguages = languages,
-                    selectedSourceTranslationLanguage = defaultSource,
-                    selectedTargetTranslationLanguage = defaultTarget
-                )
+                ReaderState(book = book)
             }
 
             // ✅ Загрузим закладки и заметки
@@ -842,184 +701,6 @@ class ReaderModel @Inject constructor(
         viewModelScope.launch {
             noteRepository.observeNotesForBook(bookId).collect { noteList ->
                 _state.update { it.copy(notes = noteList) }
-            }
-        }
-    }
-
-    private fun startBookTranslation(
-        keepPartialOnCancel: Boolean
-    ) {
-        val currentState = _state.value
-        val sourceLanguage = currentState.selectedSourceTranslationLanguage
-        val targetLanguage = currentState.selectedTargetTranslationLanguage
-
-        if (sourceLanguage == null || targetLanguage == null) {
-            Log.w(BOOK_TRANSLATION_UI, "Cannot start translation: source or target language is null")
-            viewModelScope.launch {
-                _state.update {
-                    it.copy(bookTranslationError = UIText.StringValue("Выберите языки перевода"))
-                }
-            }
-            return
-        }
-
-        if (sourceLanguage == targetLanguage) {
-            Log.w(
-                BOOK_TRANSLATION_UI,
-                "Cannot start translation: same language ${sourceLanguage.languageTag}"
-            )
-            viewModelScope.launch {
-                _state.update {
-                    it.copy(bookTranslationError = UIText.StringValue("Исходный и целевой язык должны отличаться"))
-                }
-            }
-            return
-        }
-
-        translationJob?.cancel()
-        translationTimerJob?.cancel()
-        translationJob = viewModelScope.launch(Dispatchers.Main) {
-            val originalText = currentState.originalText.ifEmpty { currentState.text }
-            val startIndex = currentState.listState.firstVisibleItemIndex
-            Log.i(
-                BOOK_TRANSLATION_UI,
-                "Start book translation bookId=${currentState.book.id} source=${sourceLanguage.mlKitTag} target=${targetLanguage.mlKitTag} startIndex=$startIndex originalItems=${originalText.size} currentItems=${currentState.text.size}"
-            )
-            _state.update {
-                it.copy(
-                    showBookTranslationDialog = false,
-                    isBookTranslationRunning = true,
-                    bookTranslationProgress = 0f,
-                    bookTranslationStatus = BookTranslationStatus.CheckingModels,
-                    bookTranslationMessage = "Проверка языковых моделей",
-                    bookTranslationElapsedSeconds = 0L,
-                    bookTranslationError = null,
-                    bookTranslationNotice = null,
-                    keepPartialBookTranslationOnCancel = keepPartialOnCancel,
-                    translatedText = originalText,
-                    showTranslatedText = true,
-                    text = originalText
-                )
-            }
-
-            translationTimerJob?.cancel()
-            translationTimerJob = launch {
-                while (true) {
-                    delay(1000)
-                    _state.update {
-                        if (!it.isBookTranslationRunning) return@update it
-                        it.copy(bookTranslationElapsedSeconds = it.bookTranslationElapsedSeconds + 1)
-                    }
-                }
-            }
-
-            try {
-                val translated = translateBook.execute(
-                    bookId = currentState.book.id,
-                    filePath = currentState.book.filePath,
-                    text = originalText,
-                    sourceLanguage = sourceLanguage,
-                    targetLanguage = targetLanguage,
-                    startIndex = startIndex,
-                    onPartialTranslated = { index, item ->
-                        viewModelScope.launch(Dispatchers.Main) {
-                            _state.update { state ->
-                                val currentTranslated = state.translatedText
-                                    ?: state.originalText.ifEmpty { state.text }
-                                if (index !in currentTranslated.indices) return@update state
-
-                                val updated = currentTranslated.toMutableList().apply {
-                                    this[index] = item
-                                }
-
-                                state.copy(
-                                    translatedText = updated,
-                                    text = if (state.showTranslatedText) updated else state.text
-                                )
-                            }
-                        }
-                    },
-                    onCacheHit = {
-                        viewModelScope.launch(Dispatchers.Main) {
-                            _state.update {
-                                it.copy(
-                                    bookTranslationNotice = UIText.StringValue("Перевод загружен из кэша")
-                                )
-                            }
-                        }
-                    },
-                    onProgress = { progress ->
-                        Log.i(
-                            BOOK_TRANSLATION_UI,
-                            "Translation progress status=${progress.status} progress=${progress.progress}"
-                        )
-                        viewModelScope.launch(Dispatchers.Main) {
-                            _state.update {
-                                it.copy(
-                                    bookTranslationStatus = progress.status,
-                                    bookTranslationProgress = progress.progress,
-                                    bookTranslationMessage = progress.message
-                                )
-                            }
-                        }
-                    }
-                )
-
-                _state.update {
-                    it.copy(
-                        text = translated,
-                        translatedText = translated,
-                        showTranslatedText = true,
-                        isBookTranslationRunning = false,
-                        bookTranslationProgress = 1f,
-                        bookTranslationStatus = BookTranslationStatus.Idle,
-                        bookTranslationMessage = null,
-                        bookTranslationElapsedSeconds = 0L,
-                        bookTranslationError = null
-                    )
-                }
-                translationTimerJob?.cancel()
-                translationTimerJob = null
-                Log.i(BOOK_TRANSLATION_UI, "Book translation applied items=${translated.size}")
-                updateChapter(_state.value.listState.firstVisibleItemIndex)
-            } catch (_: kotlinx.coroutines.CancellationException) {
-                translationTimerJob?.cancel()
-                translationTimerJob = null
-                Log.w(BOOK_TRANSLATION_UI, "Book translation cancelled")
-                _state.update {
-                    val translatedText = it.translatedText
-                    it.copy(
-                        text = if (it.keepPartialBookTranslationOnCancel && translatedText != null) {
-                            translatedText
-                        } else {
-                            it.originalText
-                        },
-                        showTranslatedText = it.keepPartialBookTranslationOnCancel && translatedText != null,
-                        isBookTranslationRunning = false,
-                        bookTranslationProgress = 0f,
-                        bookTranslationStatus = BookTranslationStatus.Idle,
-                        bookTranslationMessage = null,
-                        bookTranslationElapsedSeconds = 0L
-                    )
-                }
-            } catch (e: Exception) {
-                translationTimerJob?.cancel()
-                translationTimerJob = null
-                Log.e(BOOK_TRANSLATION_UI, "Book translation failed", e)
-                _state.update {
-                    it.copy(
-                        text = it.originalText,
-                        showTranslatedText = false,
-                        isBookTranslationRunning = false,
-                        bookTranslationProgress = 0f,
-                        bookTranslationStatus = BookTranslationStatus.Idle,
-                        bookTranslationMessage = null,
-                        bookTranslationElapsedSeconds = 0L,
-                        bookTranslationError = UIText.StringValue(
-                            e.localizedMessage ?: "Не удалось перевести книгу"
-                        )
-                    )
-                }
             }
         }
     }
@@ -1217,10 +898,6 @@ class ReaderModel @Inject constructor(
     fun resetScreen() {
         resetJob = viewModelScope.launch(Dispatchers.Main) {
             eventJob.cancel()
-            translationJob?.cancel()
-            translationTimerJob?.cancel()
-            translationJob = null
-            translationTimerJob = null
             eventJob = SupervisorJob()
 
             yield()

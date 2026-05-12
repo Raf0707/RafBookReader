@@ -8,17 +8,11 @@
 package raf.console.chitalka.presentation.reader
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -31,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -57,12 +50,10 @@ import raf.console.chitalka.domain.util.BottomSheet
 import raf.console.chitalka.domain.util.Drawer
 import raf.console.chitalka.domain.util.HorizontalAlignment
 import raf.console.chitalka.presentation.reader.translator.TranslatorApp
-import raf.console.chitalka.presentation.reader.translator.DropdownSelector
 import raf.console.chitalka.ui.reader.ReaderEvent
 import raf.console.chitalka.ui.reader.ReaderModel
 import raf.console.chitalka.ui.reader.ReaderScreen
 import raf.console.chitalka.ui.settings.SettingsEvent
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun ReaderContent(
@@ -140,9 +131,6 @@ fun ReaderContent(
     onShowNotesDrawer: (ReaderEvent.OnShowChaptersDrawer) -> Unit,
     onStartTTS: () -> Unit,
     selectedTranslator: TranslatorApp,
-    bookTranslationProgressInBottomBar: Boolean,
-    bookTranslationPartialNotice: Boolean,
-    bookTranslationKeepPartialOnCancel: Boolean,
     bookmarks: List<Bookmark> = emptyList(),
     notes: List<Note> = emptyList(),
     onEvent: (ReaderEvent) -> Unit,
@@ -372,19 +360,6 @@ fun ReaderContent(
                         onShowNotesDrawer(ReaderEvent.OnShowChaptersDrawer)
                     },
                     onStartTTS = onStartTTS,
-                    isBookTranslationRunning = state.isBookTranslationRunning,
-                    bookTranslationStatus = state.bookTranslationStatus,
-                    bookTranslationProgress = state.bookTranslationProgress,
-                    bookTranslationMessage = state.bookTranslationMessage,
-                    bookTranslationElapsedSeconds = state.bookTranslationElapsedSeconds,
-                    bookTranslationProgressInBottomBar = bookTranslationProgressInBottomBar,
-                    bookTranslationPartialNotice = bookTranslationPartialNotice,
-                    cancelBookTranslation = {
-                        onEvent(ReaderEvent.OnCancelBookTranslation)
-                    },
-                    showBookTranslationDialog = {
-                        onEvent(ReaderEvent.OnShowBookTranslationDialog)
-                    },
                     selectedTranslator = selectedTranslator,
                     highlightedText = highlightedText,
                     onEvent = { event ->
@@ -421,64 +396,6 @@ fun ReaderContent(
             ReaderBackHandler(
                 leave = leave,
                 navigateBack = navigateBack
-            )
-
-            BookTranslationDialog(
-                show = state.showBookTranslationDialog,
-                languages = state.translationLanguages.map { it.displayName },
-                sourceIndex = state.translationLanguages
-                    .indexOf(state.selectedSourceTranslationLanguage)
-                    .coerceAtLeast(0),
-                targetIndex = state.translationLanguages
-                    .indexOf(state.selectedTargetTranslationLanguage)
-                    .coerceAtLeast(0),
-                hasTranslatedText = state.translatedText != null,
-                showTranslatedText = state.showTranslatedText,
-                error = state.bookTranslationError,
-                onShowOriginal = {
-                    onEvent(ReaderEvent.OnRestoreOriginalText)
-                },
-                onShowTranslated = {
-                    onEvent(ReaderEvent.OnShowTranslatedText)
-                },
-                onSourceSelected = { index ->
-                    state.translationLanguages.getOrNull(index)?.let {
-                        onEvent(ReaderEvent.OnSelectSourceBookTranslationLanguage(it))
-                    }
-                },
-                onTargetSelected = { index ->
-                    state.translationLanguages.getOrNull(index)?.let {
-                        onEvent(ReaderEvent.OnSelectTargetBookTranslationLanguage(it))
-                    }
-                },
-                onStart = {
-                    onEvent(
-                        ReaderEvent.OnStartBookTranslation(
-                            keepPartialOnCancel = bookTranslationKeepPartialOnCancel
-                        )
-                    )
-                },
-                onDismiss = {
-                    onEvent(ReaderEvent.OnDismissBookTranslationDialog)
-                }
-            )
-
-            BookTranslationErrorDialog(
-                show = state.bookTranslationError != null &&
-                        !state.showBookTranslationDialog &&
-                        !state.isBookTranslationRunning,
-                error = state.bookTranslationError,
-                onDismiss = {
-                    onEvent(ReaderEvent.OnDismissBookTranslationDialog)
-                }
-            )
-
-            BookTranslationNoticeDialog(
-                show = state.bookTranslationNotice != null,
-                notice = state.bookTranslationNotice,
-                onDismiss = {
-                    onEvent(ReaderEvent.OnDismissBookTranslationNotice)
-                }
             )
         }
     }
@@ -542,131 +459,6 @@ fun ReaderContent(
             }
         )
     }
-}
-
-@Composable
-private fun BookTranslationDialog(
-    show: Boolean,
-    languages: List<String>,
-    sourceIndex: Int,
-    targetIndex: Int,
-    hasTranslatedText: Boolean,
-    showTranslatedText: Boolean,
-    error: UIText?,
-    onShowOriginal: () -> Unit,
-    onShowTranslated: () -> Unit,
-    onSourceSelected: (Int) -> Unit,
-    onTargetSelected: (Int) -> Unit,
-    onStart: () -> Unit,
-    onDismiss: () -> Unit
-) {
-    if (!show) return
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Перевод книги") },
-        text = {
-            Column {
-                if (hasTranslatedText) {
-                    Text(
-                        text = "Отображение",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Row {
-                        TextButton(
-                            enabled = showTranslatedText,
-                            onClick = onShowOriginal
-                        ) {
-                            Text("Оригинал")
-                        }
-                        TextButton(
-                            enabled = !showTranslatedText,
-                            onClick = onShowTranslated
-                        ) {
-                            Text("Перевод")
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-
-                DropdownSelector(
-                    label = "Исходный язык",
-                    items = languages,
-                    selectedIndex = sourceIndex,
-                    onItemSelected = onSourceSelected
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                DropdownSelector(
-                    label = "Целевой язык",
-                    items = languages,
-                    selectedIndex = targetIndex,
-                    onItemSelected = onTargetSelected
-                )
-                error?.let {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = it.asString(),
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(
-                enabled = languages.isNotEmpty(),
-                onClick = onStart
-            ) {
-                Text("Перевести")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Отмена")
-            }
-        }
-    )
-}
-
-@Composable
-private fun BookTranslationNoticeDialog(
-    show: Boolean,
-    notice: UIText?,
-    onDismiss: () -> Unit
-) {
-    if (!show || notice == null) return
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Перевод книги") },
-        text = { Text(notice.asString()) },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("ОК")
-            }
-        }
-    )
-}
-
-@Composable
-private fun BookTranslationErrorDialog(
-    show: Boolean,
-    error: UIText?,
-    onDismiss: () -> Unit
-) {
-    if (!show || error == null) return
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Ошибка перевода") },
-        text = { Text(error.asString()) },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("ОК")
-            }
-        }
-    )
 }
 
 

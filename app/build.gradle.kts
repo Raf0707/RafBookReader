@@ -191,9 +191,6 @@ dependencies {
     // Markdown
     implementation("org.commonmark:commonmark:0.24.0")
 
-    // On-device translation
-    implementation("com.google.mlkit:translate:17.0.3")
-
     //implementation("dev.olshevski.compose:reorderable:0.9.6")
 
 
