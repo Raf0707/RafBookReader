@@ -8,7 +8,11 @@
 package raf.console.chitalka.data.parser.pdf
 
 import android.app.Application
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import android.util.Log
+import androidx.compose.ui.graphics.asImageBitmap
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
@@ -18,6 +22,8 @@ import raf.console.chitalka.data.parser.TextParser
 import raf.console.chitalka.domain.file.CachedFile
 import raf.console.chitalka.domain.reader.ReaderText
 import raf.console.chitalka.presentation.core.util.clearAllMarkdown
+import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 private const val PDF_TAG = "PDF Parser"
@@ -32,32 +38,60 @@ class PdfTextParser @Inject constructor(
 
         return try {
             yield()
-
             PDFBoxResourceLoader.init(application)
-
             yield()
 
-            val oldText: String
+            val readerText = mutableListOf<ReaderText>()
+            val pdfStripper = PDFTextStripper().apply {
+                paragraphStart = "</br>"
+            }
 
-            val pdfStripper = PDFTextStripper()
-            pdfStripper.paragraphStart = "</br>"
+            var extractedText = ""
 
-            PDDocument.load(cachedFile.openInputStream()).use {
-                oldText = pdfStripper.getText(it)
-                    .replace("\r", "")
+            // ---- Попытка извлечения текста ----
+            PDDocument.load(cachedFile.openInputStream()).use { doc ->
+                extractedText = pdfStripper.getText(doc).replace("\r", "")
             }
 
             yield()
 
-            val readerText = mutableListOf<ReaderText>()
-            val text = oldText.filterIndexed { index, c ->
-                yield()
+            // ---- Если текст не найден, переходим к изображённому PDF ----
+            if (extractedText.isBlank()) {
+                Log.w(PDF_TAG, "PDF has no text — trying to extract images as pages.")
 
-                if (c == ' ') {
-                    oldText[index - 1] != ' '
-                } else {
-                    true
+                try {
+                    val fd = application.contentResolver.openFileDescriptor(cachedFile.uri, "r")
+                        ?: throw IOException("Cannot open file descriptor for ${cachedFile.uri}")
+
+                    val pdfRenderer = PdfRenderer(fd)
+                    for (i in 0 until pdfRenderer.pageCount) {
+                        yield()
+                        pdfRenderer.openPage(i).use { page ->
+                            val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+                            page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                            readerText.add(
+                                ReaderText.Image(imageBitmap = bitmap.asImageBitmap())
+                            )
+                        }
+                    }
+
+                    pdfRenderer.close()
+                    fd.close()
+                    Log.i(PDF_TAG, "Extracted ${readerText.size} image pages from PDF.")
+                } catch (e: SecurityException) {
+                    Log.e(PDF_TAG, "Permission denied while opening PDF URI.", e)
+                } catch (e: Exception) {
+                    Log.e(PDF_TAG, "Error rendering image-only PDF.", e)
                 }
+
+                return readerText
+            }
+
+
+            // ---- Обработка текстового PDF ----
+            val text = extractedText.filterIndexed { index, c ->
+                yield()
+                if (c == ' ') extractedText.getOrNull(index - 1) != ' ' else true
             }
 
             yield()
@@ -71,45 +105,32 @@ class PdfTextParser @Inject constructor(
             unformattedLines.forEachIndexed { index, string ->
                 try {
                     yield()
-
                     val line = string.trim()
-
                     if (index == 0) {
                         lines.add(line)
                         return@forEachIndexed
                     }
 
-                    if (line.all { it.isDigit() }) {
-                        return@forEachIndexed
-                    }
+                    if (line.all { it.isDigit() }) return@forEachIndexed
 
-                    if (line.first().isLowerCase()) {
-                        val currentLine = lines[lines.lastIndex]
+                    val firstChar = line.firstOrNull() ?: return@forEachIndexed
 
-                        if (currentLine.last() == '-') {
-                            if (currentLine[currentLine.lastIndex - 1].isLowerCase()) {
-                                lines[lines.lastIndex] = currentLine.dropLast(1) + line
-                                return@forEachIndexed
+                    when {
+                        firstChar.isLowerCase() -> {
+                            val current = lines.last()
+                            lines[lines.lastIndex] = if (current.endsWith("-")) {
+                                current.dropLast(1) + line
+                            } else {
+                                "$current $line"
                             }
                         }
-
-                        lines[lines.lastIndex] += " $line"
-                        return@forEachIndexed
+                        firstChar.isUpperCase() || firstChar.isDigit() -> lines.add(line)
+                        firstChar.isLetter() -> {
+                            lines[lines.lastIndex] += " $line"
+                        }
                     }
-
-                    if (line.first().isUpperCase() || line.first().isDigit()) {
-                        lines.add(line)
-                        return@forEachIndexed
-                    }
-
-                    if (line.first().isLetter()) {
-                        lines[lines.lastIndex] += " $line"
-                        return@forEachIndexed
-                    }
-
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    return@forEachIndexed
                 }
             }
 
@@ -118,13 +139,9 @@ class PdfTextParser @Inject constructor(
             var chapterAdded = false
             lines.forEach { line ->
                 yield()
-
                 if (line.isNotBlank()) {
                     when (line) {
-                        "***", "---" -> readerText.add(
-                            ReaderText.Separator
-                        )
-
+                        "***", "---" -> readerText.add(ReaderText.Separator)
                         else -> {
                             if (!chapterAdded && line.clearAllMarkdown().isNotBlank()) {
                                 readerText.add(
@@ -134,11 +151,13 @@ class PdfTextParser @Inject constructor(
                                     )
                                 )
                                 chapterAdded = true
-                            } else readerText.add(
-                                ReaderText.Text(
-                                    line = markdownParser.parse(line)
+                            } else {
+                                readerText.add(
+                                    ReaderText.Text(
+                                        line = markdownParser.parse(line)
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
@@ -147,15 +166,17 @@ class PdfTextParser @Inject constructor(
             yield()
 
             if (
-                readerText.filterIsInstance<ReaderText.Text>().isEmpty() ||
-                readerText.filterIsInstance<ReaderText.Chapter>().isEmpty()
+                readerText.none { it is ReaderText.Text || it is ReaderText.Image || it is ReaderText.Chapter }
             ) {
-                Log.e(PDF_TAG, "Could not extract text from PDF.")
+                Log.e(PDF_TAG, "Could not extract any readable content from PDF.")
                 return emptyList()
             }
 
+            Log.i(PDF_TAG, "Successfully parsed PDF content (${readerText.size} items).")
+
             Log.i(PDF_TAG, "Successfully finished PDF parsing.")
             readerText
+
         } catch (e: Exception) {
             e.printStackTrace()
             emptyList()

@@ -238,7 +238,9 @@ fun ReaderContent(
                         }
                         else -> readerModel.onEvent(event)
                     }
-                } as (ReaderEvent) -> Any
+                },
+
+                readerModel = readerModel
 
 
             )
@@ -383,6 +385,7 @@ fun ReaderContent(
                             else -> readerModel.onEvent(event)
                         }
                     },
+                    bookmarks = bookmarks
                 )
             } else {
                 ReaderErrorPlaceholder(
@@ -460,44 +463,4 @@ fun ReaderContent(
         )
     }
 }
-
-
-
-
-/*fun findGlobalIndexForBookmarkLocal(
-    text: List<ReaderText>,
-    chapterIndex: Int,
-    offset: Int
-): Int {
-    var index = 0
-    var chapterCount = -1
-
-    while (index < text.size) {
-        val item = text[index]
-        if (item is ReaderText.Chapter) {
-            chapterCount++
-            if (chapterCount == chapterIndex) {
-                // Найдена нужная глава
-                var offsetCount = 0
-                var searchIndex = index + 1
-                while (searchIndex < text.size) {
-                    val current = text[searchIndex]
-                    if (current is ReaderText.Text) {
-                        if (offsetCount == offset) {
-                            return searchIndex
-                        }
-                        offsetCount++
-                    }
-                    if (current is ReaderText.Chapter) {
-                        break
-                    }
-                    searchIndex++
-                }
-                return searchIndex.coerceAtMost(text.lastIndex)
-            }
-        }
-        index++
-    }
-    return 0
-}*/
 

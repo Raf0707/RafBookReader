@@ -13,6 +13,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,11 +23,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import raf.console.chitalka.R
+import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.FontWithName
 import raf.console.chitalka.domain.reader.ReaderFontThickness
 import raf.console.chitalka.domain.reader.ReaderHorizontalGesture
@@ -50,6 +54,7 @@ import raf.console.chitalka.presentation.core.util.noRippleClickable
 import raf.console.chitalka.presentation.core.util.showToast
 import raf.console.chitalka.presentation.reader.translator.TranslatorApp
 import raf.console.chitalka.ui.reader.ReaderEvent
+
 
 @Composable
 fun ReaderLayout(
@@ -98,16 +103,13 @@ fun ReaderLayout(
     openTranslator: (ReaderEvent.OnOpenTranslator) -> Unit,
     openDictionary: (ReaderEvent.OnOpenDictionary) -> Unit,
     selectedTranslator: TranslatorApp,
-
-    // 🆕 новые аргументы:
     bookId: Long,
     currentChapterIndex: Int,
     currentOffset: Long,
     onEvent: (ReaderEvent) -> Unit,
     highlightedText: String?,
-
-    ) {
-
+    bookmarks: List<Bookmark>
+) {
     val activity = LocalActivity.current
 
     Column(
@@ -115,11 +117,11 @@ fun ReaderLayout(
             .fillMaxSize()
             .background(backgroundColor)
             .then(
-                if (!isLoading && showMenu.not()) {
+                if (!isLoading && !showMenu) {
                     Modifier.noRippleClickable {
                         menuVisibility(
                             ReaderEvent.OnMenuVisibility(
-                                show = !showMenu,
+                                show = true,
                                 fullscreenMode = fullscreenMode,
                                 saveCheckpoint = true,
                                 activity = activity
@@ -131,23 +133,21 @@ fun ReaderLayout(
             .padding(contentPadding)
             .padding(vertical = verticalPadding)
             .readerHorizontalGesture(
-                listState = listState,
-                horizontalGesture = horizontalGesture,
-                horizontalGestureScroll = horizontalGestureScroll,
-                horizontalGestureSensitivity = horizontalGestureSensitivity,
-                horizontalGestureAlphaAnim = horizontalGestureAlphaAnim,
-                horizontalGesturePullAnim = horizontalGesturePullAnim,
-                isLoading = isLoading
+                listState,
+                horizontalGesture,
+                horizontalGestureScroll,
+                horizontalGestureSensitivity,
+                horizontalGestureAlphaAnim,
+                horizontalGesturePullAnim,
+                isLoading
             )
     ) {
-
         SelectionContainer(
             selectedTranslator = selectedTranslator,
             bookId = bookId,
             getCurrentChapterIndex = { currentChapterIndex },
             getCurrentOffset = { currentOffset },
             onEvent = onEvent,
-
             onCopyRequested = {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                     activity.getString(R.string.copied).showToast(context = activity)
@@ -155,19 +155,10 @@ fun ReaderLayout(
             },
             onSoundRequested = {},
             listState = listState,
-            onShareRequested = {
-                openShareApp(ReaderEvent.OnOpenShareApp(it, activity))
-            },
-            onWebSearchRequested = {
-                openWebBrowser(ReaderEvent.OnOpenWebBrowser(it, activity))
-            },
-            onTranslateRequested = {
-                openTranslator(ReaderEvent.OnOpenTranslator(it, false, activity))
-            },
-            onDictionaryRequested = {
-                openDictionary(ReaderEvent.OnOpenDictionary(it, activity))
-            },
-
+            onShareRequested = { openShareApp(ReaderEvent.OnOpenShareApp(it, activity)) },
+            onWebSearchRequested = { openWebBrowser(ReaderEvent.OnOpenWebBrowser(it, activity)) },
+            onTranslateRequested = { openTranslator(ReaderEvent.OnOpenTranslator(it, false, activity)) },
+            onDictionaryRequested = { openDictionary(ReaderEvent.OnOpenDictionary(it, activity)) },
             content = { toolbarHidden ->
                 LazyColumnWithScrollbar(
                     state = listState,
@@ -176,10 +167,25 @@ fun ReaderLayout(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(
                         top = (WindowInsets.displayCutout.asPaddingValues().calculateTopPadding() + paragraphHeight).coerceAtLeast(18.dp),
-                        bottom = (WindowInsets.displayCutout.asPaddingValues().calculateBottomPadding() + paragraphHeight).coerceAtLeast(18.dp),
+                        bottom = (WindowInsets.displayCutout.asPaddingValues().calculateBottomPadding() + paragraphHeight).coerceAtLeast(18.dp)
                     )
                 ) {
-                    itemsIndexed(text, key = { index, _ -> index }) { index, entry ->
+                    var chapterIdx = -1
+                    var offsetInChapter = 0
+
+                    itemsIndexed(text) { index, entry ->
+                        if (entry is ReaderText.Chapter) {
+                            chapterIdx++
+                            offsetInChapter = 0
+                        }
+
+                        val isBookmarked = entry is ReaderText.Text && bookmarks.any { bookmark ->
+                            bookmark.chapterIndex.toInt() == chapterIdx &&
+                                    bookmark.offset.toInt() == offsetInChapter
+                        }
+
+                        if (entry is ReaderText.Text) offsetInChapter++
+
                         if (!images && entry is ReaderText.Image) return@itemsIndexed
 
                         SpacedItem(index = index, spacing = paragraphHeight) {
@@ -210,7 +216,8 @@ fun ReaderLayout(
                                 toolbarHidden = toolbarHidden,
                                 openTranslator = openTranslator,
                                 menuVisibility = menuVisibility,
-                                highlightedText = highlightedText // 👈 сюда добавляем новый аргумент
+                                highlightedText = highlightedText,
+                                isBookmarked = isBookmarked // ← правильная передача здесь!
                             )
                         }
                     }
@@ -218,7 +225,6 @@ fun ReaderLayout(
             },
             text = text
         )
-
 
         AnimatedVisibility(
             visible = !showMenu && progressBar,

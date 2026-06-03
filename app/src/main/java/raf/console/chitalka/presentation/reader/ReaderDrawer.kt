@@ -14,6 +14,7 @@ import raf.console.chitalka.ui.reader.ReaderEvent
 import raf.console.chitalka.ui.reader.ReaderScreen
 import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.Note
+import raf.console.chitalka.ui.reader.ReaderModel
 
 
 @Composable
@@ -31,6 +32,7 @@ fun ReaderDrawer(
     onDeleteNote: (Note) -> Unit,
     dismissDrawer: (ReaderEvent.OnDismissDrawer) -> Unit,
     onEvent: (ReaderEvent) -> Any,
+    readerModel: ReaderModel
 ) {
     ReaderChaptersDrawer(
         show = drawer == ReaderScreen.CHAPTERS_DRAWER,
@@ -45,6 +47,7 @@ fun ReaderDrawer(
         onDeleteBookmark = onDeleteBookmark,
         onDeleteNote = onDeleteNote,
         dismissDrawer = dismissDrawer,
-        onEvent = onEvent
+        onEvent = onEvent,
+        readerModel = readerModel
     )
 }

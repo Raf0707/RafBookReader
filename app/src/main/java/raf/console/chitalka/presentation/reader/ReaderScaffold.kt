@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import raf.console.chitalka.domain.library.book.Book
+import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.Checkpoint
 import raf.console.chitalka.domain.reader.FontWithName
 import raf.console.chitalka.domain.reader.ReaderFontThickness
@@ -119,6 +120,7 @@ fun ReaderScaffold(
     selectedTranslator: TranslatorApp,
     onEvent: (ReaderEvent) -> Unit, // ← добавлен
     highlightedText: String?,
+    bookmarks: List<Bookmark>,
     ) {
     Scaffold(
         Modifier
@@ -257,7 +259,8 @@ fun ReaderScaffold(
             currentChapterIndex = chapterOrdinalIndex,
             currentOffset = checkpoint.offset.toLong(),
             bookId = book.id.toLong(),
-            highlightedText = highlightedText
+            highlightedText = highlightedText,
+            bookmarks = bookmarks
         )
 
         ReaderPerceptionExpander(

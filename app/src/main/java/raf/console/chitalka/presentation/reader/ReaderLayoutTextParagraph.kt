@@ -8,20 +8,20 @@
 package raf.console.chitalka.presentation.reader
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -30,18 +30,15 @@ import raf.console.chitalka.domain.reader.FontWithName
 import raf.console.chitalka.domain.reader.ReaderFontThickness
 import raf.console.chitalka.domain.reader.ReaderText.Text
 import raf.console.chitalka.domain.reader.ReaderTextAlignment
-import raf.console.chitalka.presentation.core.components.common.StyledText
-import raf.console.chitalka.presentation.core.util.noRippleClickable
 import raf.console.chitalka.ui.reader.ReaderEvent
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.ui.text.style.TextDirection
 
 private val INLINE_REGEX = Regex("\\$([^$]+)\\$")
 
@@ -68,18 +65,28 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
     toolbarHidden: Boolean,
     openTranslator: (ReaderEvent.OnOpenTranslator) -> Unit,
     menuVisibility: (ReaderEvent.OnMenuVisibility) -> Unit,
-    highlightedText: String? // 👈 Добавляем сюда параметр для подсвечиваемого текста
+    highlightedText: String?,
+    isBookmarked: Boolean // ← Новый параметр для подсветки закладок
 ) {
     val rawText = paragraph.line.text
     val matches = INLINE_REGEX.findAll(rawText).toList()
 
-    // Если формул нет — используем обычный вывод
+    val baseModifier = Modifier
+        .animateItem(fadeInSpec = null, fadeOutSpec = null)
+        .fillMaxWidth()
+        .padding(horizontal = sidePadding)
+
+    val combinedModifier = if (isBookmarked) {
+        baseModifier
+            .border(2.dp, Color.Red, RectangleShape)
+            .padding(4.dp)
+    } else {
+        baseModifier
+    }
+
     if (matches.isEmpty() || !raf.console.chitalka.math.MathConfig.enabled) {
         Column(
-            modifier = Modifier
-                .animateItem(fadeInSpec = null, fadeOutSpec = null)
-                .fillMaxWidth()
-                .padding(horizontal = sidePadding),
+            modifier = combinedModifier,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = horizontalAlignment
         ) {
@@ -109,7 +116,8 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                     fontSize = fontSize,
                     lineHeight = lineHeight,
                     color = fontColor,
-                    lineBreak = LineBreak.Paragraph
+                    lineBreak = LineBreak.Paragraph,
+                    textDirection = TextDirection.ContentOrRtl
                 ),
                 onDoubleClick = {
                     openTranslator(
@@ -138,18 +146,13 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
         return
     }
 
-    // Логика с формулами
     @OptIn(ExperimentalLayoutApi::class)
     Column(
-        modifier = Modifier
-            .animateItem(fadeInSpec = null, fadeOutSpec = null)
-            .fillMaxWidth()
-            .padding(horizontal = sidePadding),
+        modifier = combinedModifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = horizontalAlignment
     ) {
         fun isLongFormula(latex: String): Boolean {
-            // Формулы с этими командами всегда выносим в отдельную строку
             val blockCommands = listOf(
                 "\\frac", "\\sum", "\\int", "\\prod", "\\lim",
                 "\\matrix", "\\pmatrix", "\\bmatrix", "\\cases",
@@ -158,63 +161,44 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
             return blockCommands.any { latex.contains(it) } || latex.length > 20
         }
 
-        // Анализируем структуру параграфа
         data class Segment(val content: String, val isFormula: Boolean, val isBlock: Boolean)
         val segments = mutableListOf<Segment>()
         var lastIndex = 0
 
         matches.forEach { match ->
-            // Текст до формулы
             if (match.range.first > lastIndex) {
                 val text = rawText.substring(lastIndex, match.range.first)
-                if (text.isNotEmpty()) {
-                    segments.add(Segment(text, false, false))
-                }
+                if (text.isNotEmpty()) segments.add(Segment(text, false, false))
             }
-
-            // Формула
             val formula = match.groupValues[1]
             val isBlock = isLongFormula(formula)
             segments.add(Segment(formula, true, isBlock))
-
             lastIndex = match.range.last + 1
         }
 
-        // Оставшийся текст
         if (lastIndex < rawText.length) {
             val text = rawText.substring(lastIndex)
-            if (text.isNotEmpty()) {
-                segments.add(Segment(text, false, false))
-            }
+            if (text.isNotEmpty()) segments.add(Segment(text, false, false))
         }
 
-        // Группируем сегменты по блокам
         val blocks = mutableListOf<List<Segment>>()
         var currentBlock = mutableListOf<Segment>()
 
         segments.forEach { segment ->
             if (segment.isBlock) {
-                // Сохраняем текущий блок если есть
                 if (currentBlock.isNotEmpty()) {
                     blocks.add(currentBlock.toList())
                     currentBlock.clear()
                 }
-                // Добавляем блочную формулу как отдельный блок
                 blocks.add(listOf(segment))
             } else {
                 currentBlock.add(segment)
             }
         }
+        if (currentBlock.isNotEmpty()) blocks.add(currentBlock.toList())
 
-        // Добавляем последний блок
-        if (currentBlock.isNotEmpty()) {
-            blocks.add(currentBlock.toList())
-        }
-
-        // Рендерим блоки
         blocks.forEachIndexed { blockIndex, block ->
             if (block.size == 1 && block[0].isBlock) {
-                // Блочная формула
                 ReaderLayoutMath(
                     latex = block[0].content,
                     fontColor = fontColor,
@@ -223,59 +207,53 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                     inline = false,
                     textAlign = textAlignment.textAlignment
                 )
-
-                // Вертикальный отступ после блочной формулы
                 if (blockIndex < blocks.size - 1) {
-                    val density = androidx.compose.ui.platform.LocalDensity.current
+                    val density = LocalDensity.current
                     Spacer(modifier = Modifier.height(with(density) { lineHeight.toDp() }))
                 }
             } else {
-                // Проверяем, есть ли в блоке формулы
                 val hasFormulas = block.any { it.isFormula }
-
                 if (!hasFormulas) {
-                    // Простой текст без формул
                     BasicText(
                         text = block.joinToString("") { it.content },
                         style = TextStyle(
                             fontFamily = fontFamily.font,
                             fontWeight = fontThickness.thickness,
-                            textAlign = textAlignment.textAlignment,
-                            textIndent = if (blockIndex == 0) TextIndent(firstLine = paragraphIndentation) else TextIndent.None,
+                            textAlign = TextAlign.Justify, // ✅ равномерное выравнивание по ширине
+                            textDirection = TextDirection.ContentOrRtl, // ✅ поддержка арабского RTL
+                            textIndent = if (blockIndex == 0)
+                                TextIndent(firstLine = paragraphIndentation)
+                            else TextIndent.None,
                             fontStyle = fontStyle,
                             letterSpacing = letterSpacing,
                             fontSize = fontSize,
                             lineHeight = lineHeight,
                             color = fontColor,
                             lineBreak = LineBreak.Paragraph
-                        )
+                        ),
+                        modifier = Modifier.fillMaxWidth() // ✅ важно, чтобы блок занимал всю ширину
                     )
                 } else {
-                    // Комбинированный контент - используем FlowRow для правильного переноса
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = when (textAlignment.textAlignment) {
-                            androidx.compose.ui.text.style.TextAlign.Center -> Arrangement.Center
-                            androidx.compose.ui.text.style.TextAlign.End -> Arrangement.End
+                            TextAlign.Center -> Arrangement.Center
+                            TextAlign.End -> Arrangement.End
                             else -> Arrangement.Start
                         },
                         verticalArrangement = Arrangement.Center,
-                        maxItemsInEachRow = Int.MAX_VALUE // Позволяем максимальное количество элементов в строке
+                        maxItemsInEachRow = Int.MAX_VALUE
                     ) {
-                        // Объединяем последовательные текстовые сегменты
                         var i = 0
                         while (i < block.size) {
                             val segment = block[i]
                             if (!segment.isFormula) {
-                                // Собираем все последовательные текстовые сегменты
                                 val textBuilder = StringBuilder(segment.content)
                                 var j = i + 1
                                 while (j < block.size && !block[j].isFormula) {
                                     textBuilder.append(block[j].content)
                                     j++
                                 }
-
-                                // Рендерим объединенный текст
                                 BasicText(
                                     text = textBuilder.toString(),
                                     style = TextStyle(
@@ -290,7 +268,6 @@ fun LazyItemScope.ReaderLayoutTextParagraph(
                                 )
                                 i = j
                             } else {
-                                // Рендерим формулу
                                 ReaderLayoutMath(
                                     latex = segment.content,
                                     fontColor = fontColor,
