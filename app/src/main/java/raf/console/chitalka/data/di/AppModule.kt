@@ -9,6 +9,7 @@ package raf.console.chitalka.data.di
 
 import android.app.Application
 import androidx.room.Room
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +33,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    @Singleton
+    fun provideGson(): Gson {
+        return Gson()
+    }
+
     @Provides
     @Singleton
     fun provideCommonmarkParser(): Parser {

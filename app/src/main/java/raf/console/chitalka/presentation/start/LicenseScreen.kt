@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +39,12 @@ fun LicenseScreen(
     navigateForward: () -> Unit,
 ) {
     val context = LocalContext.current
+    val licenseText = remember(context) {
+        context.resources.openRawResource(R.raw.license_text)
+            .bufferedReader()
+            .use { it.readText() }
+    }
+
     StartTelegramGroupScaffold(
         navigateForward = navigateForward,
     ) {
@@ -65,7 +72,7 @@ fun LicenseScreen(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(id = R.string.license_text),
+                text = licenseText,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
