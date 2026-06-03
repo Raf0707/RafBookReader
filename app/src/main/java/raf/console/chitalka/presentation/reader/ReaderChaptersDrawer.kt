@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.ArrowDropUp
@@ -31,23 +33,30 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import raf.console.chitalka.R
 import raf.console.chitalka.domain.reader.Bookmark
 import raf.console.chitalka.domain.reader.ExpandableChapter
@@ -60,6 +69,7 @@ import raf.console.chitalka.presentation.core.components.modal_drawer.ModalDrawe
 import raf.console.chitalka.presentation.core.util.calculateProgress
 import raf.console.chitalka.presentation.core.util.noRippleClickable
 import raf.console.chitalka.ui.reader.ReaderEvent
+import raf.console.chitalka.ui.reader.ReaderModel
 import raf.console.chitalka.ui.theme.ExpandingTransition
 
 
@@ -79,10 +89,66 @@ fun ReaderChaptersDrawer(
     scrollToNote: (Note) -> Unit,
     dismissDrawer: (ReaderEvent.OnDismissDrawer) -> Unit,
     onDeleteBookmark: (Bookmark) -> Unit,
-    onDeleteNote: (Note) -> Unit
+    onDeleteNote: (Note) -> Unit,
+    readerModel: ReaderModel
 ) {
-    val sections = listOf("Главы", "Закладки", "Заметки")
+    val sections = listOf("Содержание", "Закладки", "Заметки")
     var selectedSection by remember { mutableStateOf(0) }
+
+    var allBookmarksExpanded by remember { mutableStateOf(false) }
+    val bookmarkExpandedState = remember { mutableStateListOf<Boolean>() }
+    if (bookmarkExpandedState.size != bookmarks.size) {
+        bookmarkExpandedState.clear()
+        bookmarkExpandedState.addAll(List(bookmarks.size) { allBookmarksExpanded })
+    }
+
+    var allNotesExpanded by remember { mutableStateOf(true) }
+    val noteExpandedState = remember { mutableStateListOf<Boolean>() }
+    if (noteExpandedState.size != notes.size) {
+        noteExpandedState.clear()
+        noteExpandedState.addAll(List(notes.size) { allNotesExpanded })
+    }
+
+    // В начале файла, в ReaderChaptersDrawer:
+    /*val bookmarkExpandedStates = remember(bookmarks) {
+        mutableStateListOf<Boolean>().apply { repeat(bookmarks.size) { add(false) } }
+    }*/
+    //val bookmarksAllExpanded = remember { mutableStateOf(false) }
+
+    /*val noteExpandedStates = remember(notes) {
+        mutableStateListOf<Boolean>().apply { repeat(notes.size) { add(true) } }
+    }*/
+    //val notesAllExpanded = remember { mutableStateOf(true) }
+
+    var bookmarksAllExpanded = readerModel.bookmarksAllExpanded
+    val bookmarkExpandedStates = readerModel.bookmarkExpandedStates
+
+    var notesAllExpanded = readerModel.notesAllExpanded
+    val noteExpandedStates = readerModel.noteExpandedStates
+
+    val areAllBookmarksExpanded by remember {
+        derivedStateOf { bookmarkExpandedStates.all { it } }
+    }
+    val areAllNotesExpanded by remember {
+        derivedStateOf { noteExpandedStates.all { it } }
+    }
+
+
+    fun syncExpandedStates(currentBookmarks: List<Bookmark>, currentNotes: List<Note>) {
+        if (bookmarkExpandedStates.size != currentBookmarks.size) {
+            bookmarkExpandedStates.clear()
+            repeat(currentBookmarks.size) {
+                bookmarkExpandedStates.add(bookmarksAllExpanded)
+            }
+        }
+        if (noteExpandedStates.size != currentNotes.size) {
+            noteExpandedStates.clear()
+            repeat(currentNotes.size) {
+                noteExpandedStates.add(notesAllExpanded)
+            }
+        }
+    }
+
 
     val expandableChapters = remember(show, chapters, currentChapter) {
         mutableStateListOf<ExpandableChapter>().apply {
@@ -102,6 +168,7 @@ fun ReaderChaptersDrawer(
                         )
                         index += children.size + 1
                     }
+
                     true -> {
                         add(
                             ExpandableChapter(
@@ -123,12 +190,15 @@ fun ReaderChaptersDrawer(
         header = {
             Column {
                 ModalDrawerTitleItem(title = "Навигация")
-                TabRow(selectedTabIndex = selectedSection) {
+                ScrollableTabRow(
+                    selectedTabIndex = selectedSection,
+                    edgePadding = 8.dp // Можно уменьшить отступы
+                ) {
                     sections.forEachIndexed { index, title ->
                         Tab(
                             selected = selectedSection == index,
                             onClick = { selectedSection = index },
-                            text = { Text(title) }
+                            text = { Text(title, maxLines = 1) }
                         )
                     }
                 }
@@ -137,7 +207,23 @@ fun ReaderChaptersDrawer(
     ) {
         when (selectedSection) {
             0 -> { // Главы
+
+                item {
+                    OutlinedButton(
+                        onClick = {
+                            scrollToBookmark(ReaderEvent.OnScroll(1f))
+                            dismissDrawer(ReaderEvent.OnDismissDrawer)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    ) {
+                        Text("В конец")
+                    }
+                }
+
                 expandableChapters.forEach { expandableChapter ->
+
                     item {
                         ModalDrawerSelectableItem(
                             selected = expandableChapter.parent.id == currentChapter?.id,
@@ -207,15 +293,53 @@ fun ReaderChaptersDrawer(
 
                                     if (chapter == currentChapter) {
                                         Spacer(modifier = Modifier.width(18.dp))
-                                        StyledText(text = "${currentChapterProgress.calculateProgress(0)}%")
+                                        StyledText(
+                                            text = "${
+                                                currentChapterProgress.calculateProgress(
+                                                    0
+                                                )
+                                            }%"
+                                        )
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                item {
+                    OutlinedButton(
+                        onClick = {
+                            scrollToBookmark(ReaderEvent.OnScroll(0f))
+                            dismissDrawer(ReaderEvent.OnDismissDrawer)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    ) {
+                        Text("В начало")
+                    }
+                }
             }
-            1 -> { // Закладки
+
+            1 -> {
+                if (bookmarks.isNotEmpty()) {
+                    item {
+                        OutlinedButton(
+                            onClick = {
+                                val expand = !bookmarksAllExpanded
+                                bookmarksAllExpanded = expand
+                                bookmarkExpandedStates.indices.forEach { bookmarkExpandedStates[it] = expand }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                        ) {
+                            Text("Раскрыть/Свернуть все")
+                        }
+                    }
+                }
+
                 if (bookmarks.isEmpty()) {
                     item {
                         StyledText(
@@ -224,29 +348,80 @@ fun ReaderChaptersDrawer(
                         )
                     }
                 } else {
-                    items(bookmarks) { bookmark ->
-                        ModalDrawerSelectableItem(
-                            selected = false,
-                            onClick = {
-                                scrollToBookmark(
-                                    ReaderEvent.OnScroll(bookmark.progress ?: 0f)
+                    itemsIndexed(bookmarks) { index, bookmark ->
+                        if (bookmarkExpandedStates.getOrNull(index) == true) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.surface)
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .noRippleClickable {
+                                        scrollToBookmark(ReaderEvent.OnScroll(bookmark.progress ?: 0f))
+                                        dismissDrawer(ReaderEvent.OnDismissDrawer)
+                                    },
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = bookmark.label.orEmpty(),
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
-                                dismissDrawer(ReaderEvent.OnDismissDrawer)
+                                IconButton(onClick = { onDeleteBookmark(bookmark) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Удалить закладку")
+                                }
+                                IconButton(onClick = {
+                                    bookmarkExpandedStates[index] = false
+                                }) {
+                                    Icon(Icons.Outlined.ArrowDropUp, contentDescription = "Свернуть")
+                                }
                             }
-                        ) {
-                            StyledText(
-                                text = bookmark.label.orEmpty(),
-                                modifier = Modifier.weight(1f),
-                                maxLines = 2
-                            )
-                            IconButton(onClick = { onDeleteBookmark(bookmark) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Удалить закладку")
+                        } else {
+                            ModalDrawerSelectableItem(
+                                selected = false,
+                                onClick = {
+                                    scrollToBookmark(ReaderEvent.OnScroll(bookmark.progress ?: 0f))
+                                    dismissDrawer(ReaderEvent.OnDismissDrawer)
+                                }
+                            ) {
+                                StyledText(
+                                    text = bookmark.label.orEmpty(),
+                                    modifier = Modifier.weight(1f),
+                                    maxLines = 2
+                                )
+                                IconButton(onClick = { onDeleteBookmark(bookmark) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Удалить закладку")
+                                }
+                                IconButton(onClick = {
+                                    bookmarkExpandedStates[index] = true
+                                }) {
+                                    Icon(Icons.Outlined.ArrowDropUp, contentDescription = "Раскрыть", modifier = Modifier.rotate(180f))
+                                }
                             }
                         }
+                        HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
                     }
                 }
             }
-            2 -> { // Заметки
+
+
+            2 -> {
+                if (notes.isNotEmpty()) {
+                    item {
+                        OutlinedButton(
+                            onClick = {
+                                val expand = !notesAllExpanded
+                                notesAllExpanded = expand
+                                noteExpandedStates.indices.forEach { noteExpandedStates[it] = expand }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                        ) {
+                            Text("Раскрыть/Свернуть все")
+                        }
+                    }
+                }
+
                 if (notes.isEmpty()) {
                     item {
                         StyledText(
@@ -255,20 +430,18 @@ fun ReaderChaptersDrawer(
                         )
                     }
                 } else {
-                    items(notes) { note ->
+                    itemsIndexed(notes) { index, note ->
                         val clipboardManager = LocalClipboardManager.current
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .noRippleClickable {
-                                    // Копирование в буфер обмена будет через событие onEvent
-                                    clipboardManager.setText(AnnotatedString(note.content))
-                                }
-                        ) {
+
+                        if (noteExpandedStates.getOrNull(index) == true) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                    .background(MaterialTheme.colorScheme.surface)
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .noRippleClickable {
+                                        clipboardManager.setText(AnnotatedString(note.content))
+                                    },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
@@ -279,9 +452,35 @@ fun ReaderChaptersDrawer(
                                 IconButton(onClick = { onEvent(ReaderEvent.OnDeleteNote(note)) }) {
                                     Icon(Icons.Default.Delete, contentDescription = "Удалить заметку")
                                 }
+                                IconButton(onClick = {
+                                    noteExpandedStates[index] = false
+                                }) {
+                                    Icon(Icons.Outlined.ArrowDropUp, contentDescription = "Свернуть")
+                                }
                             }
-                            HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+                        } else {
+                            ModalDrawerSelectableItem(
+                                selected = false,
+                                onClick = {
+                                    clipboardManager.setText(AnnotatedString(note.content))
+                                }
+                            ) {
+                                StyledText(
+                                    text = note.content,
+                                    modifier = Modifier.weight(1f),
+                                    maxLines = 2
+                                )
+                                IconButton(onClick = { onEvent(ReaderEvent.OnDeleteNote(note)) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Удалить заметку")
+                                }
+                                IconButton(onClick = {
+                                    noteExpandedStates[index] = true
+                                }) {
+                                    Icon(Icons.Outlined.ArrowDropUp, contentDescription = "Раскрыть", modifier = Modifier.rotate(180f))
+                                }
+                            }
                         }
+                        HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
                     }
                 }
 
@@ -302,11 +501,6 @@ fun ReaderChaptersDrawer(
                     }
                 }
             }
-
-
-
-
-
         }
     }
 }

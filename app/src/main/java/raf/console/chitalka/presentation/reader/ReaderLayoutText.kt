@@ -8,15 +8,26 @@
 package raf.console.chitalka.presentation.reader
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import raf.console.chitalka.domain.reader.FontWithName
 import raf.console.chitalka.domain.reader.ReaderFontThickness
 import raf.console.chitalka.domain.reader.ReaderText
@@ -51,11 +62,13 @@ fun LazyItemScope.ReaderLayoutText(
     highlightedReadingThickness: FontWeight,
     toolbarHidden: Boolean,
     highlightedText: String?,
+    isBookmarked: Boolean = false, // добавили этот параметр с дефолтным значением
     openTranslator: (ReaderEvent.OnOpenTranslator) -> Unit,
-    menuVisibility: (ReaderEvent.OnMenuVisibility) -> Unit
+    menuVisibility: (ReaderEvent.OnMenuVisibility) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     when (entry) {
-        is ReaderText.Image -> {
+        /*is ReaderText.Image -> {
             ReaderLayoutTextImage(
                 entry = entry,
                 sidePadding = sidePadding,
@@ -64,7 +77,38 @@ fun LazyItemScope.ReaderLayoutText(
                 imagesWidth = imagesWidth,
                 imagesColorEffects = imagesColorEffects
             )
+        }*/
+
+        // 🔽 Новый блок для PDF-страниц и картинок
+        is ReaderText.Image -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth() // ✅ заполняем всю ширину экрана
+                    .padding(horizontal = sidePadding)
+                    .clip(RoundedCornerShape(imagesCornersRoundness))
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(imagesCornersRoundness)
+                    )
+                    .background(Color.Transparent)
+                    .padding(4.dp),
+                contentAlignment = when (imagesAlignment) {
+                    HorizontalAlignment.CENTER -> Alignment.Center
+                    HorizontalAlignment.START -> Alignment.CenterStart
+                    HorizontalAlignment.END -> Alignment.CenterEnd
+                }
+            ) {
+                androidx.compose.foundation.Image(
+                    bitmap = entry.imageBitmap,
+                    contentDescription = null,
+                    colorFilter = imagesColorEffects,
+                    modifier = Modifier.fillMaxWidth(), // ✅ РАСТЯГИВАЕТ картинку
+                    contentScale = ContentScale.FillWidth // ✅ РАСТЯГИВАЕМ по ширине
+                )
+            }
         }
+
 
         is ReaderText.Separator -> {
             ReaderLayoutTextSeparator(
@@ -107,9 +151,13 @@ fun LazyItemScope.ReaderLayoutText(
                 toolbarHidden = toolbarHidden,
                 openTranslator = openTranslator,
                 menuVisibility = menuVisibility,
-                highlightedText = highlightedText
+                highlightedText = highlightedText,
+                isBookmarked = isBookmarked, // ← передача значения здесь
             )
         }
+
+
+
 
         is ReaderText.Math -> {
             ReaderLayoutMath(

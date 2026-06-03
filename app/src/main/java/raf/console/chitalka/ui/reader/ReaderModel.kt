@@ -17,6 +17,7 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
@@ -104,6 +105,13 @@ class ReaderModel @Inject constructor(
     private val _bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
     val bookmarks: StateFlow<List<Bookmark>> = _bookmarks
 
+    val bookmarkExpandedStates = mutableStateListOf<Boolean>()
+    var bookmarksAllExpanded = false
+        private set
+
+    val noteExpandedStates = mutableStateListOf<Boolean>()
+    var notesAllExpanded = true
+        private set
 
     /*private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes*/
@@ -633,7 +641,7 @@ class ReaderModel @Inject constructor(
                     //observeNotes(event.bookId)
                 }
 
-                is ReaderEvent.OnAddBookmark -> {
+                /*is ReaderEvent.OnAddBookmark -> {
                     val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
                     val currentProgress = state.value.book.progress
 
@@ -650,6 +658,26 @@ class ReaderModel @Inject constructor(
                             )
                         )
                     }
+                }*/
+
+                is ReaderEvent.OnAddBookmark -> {
+                    val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
+                    val currentProgress = state.value.book.progress
+
+                    viewModelScope.launch {
+                        bookmarkRepository.insertBookmark(
+                            Bookmark(
+                                id = 0L,
+                                bookId = currentBookId,
+                                chapterIndex = event.chapterIndex,
+                                offset = event.offset,
+                                label = event.text.takeIf { it.isNotBlank() },
+                                createdAt = System.currentTimeMillis(),
+                                progress = currentProgress
+                            )
+                        )
+                        bookmarkExpandedStates.add(bookmarksAllExpanded)
+                    }
                 }
 
                 is ReaderEvent.OnScrollToBookmark -> {
@@ -665,7 +693,7 @@ class ReaderModel @Inject constructor(
                     }
                 }
 
-                is ReaderEvent.OnAddNote -> {
+                /*is ReaderEvent.OnAddNote -> {
                     val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
                     viewModelScope.launch {
                         println("✅ ADD NOTE: bookId=${event.bookId}, content=${event.content}")
@@ -680,6 +708,28 @@ class ReaderModel @Inject constructor(
                             )
                         )
                         //observeNotesIfNeeded(currentBookId)
+                        noteRepository.getNotesForBook(event.bookId).collect { notes ->
+                            println("🔥 NOTES OBSERVED: $notes")
+                            _state.update { it.copy(notes = notes) }
+                        }
+                    }
+                }*/
+
+                is ReaderEvent.OnAddNote -> {
+                    val currentBookId: Long = state.value.book.id.toLong() ?: return@launch
+                    viewModelScope.launch {
+                        noteRepository.insertNote(
+                            Note(
+                                bookId = currentBookId,
+                                chapterIndex = event.chapterIndex,
+                                offsetStart = event.offsetStart,
+                                offsetEnd = event.offsetEnd,
+                                content = event.content,
+                                createdAt = System.currentTimeMillis()
+                            )
+                        )
+                        noteExpandedStates.add(notesAllExpanded)
+
                         noteRepository.getNotesForBook(event.bookId).collect { notes ->
                             println("🔥 NOTES OBSERVED: $notes")
                             _state.update { it.copy(notes = notes) }
@@ -810,7 +860,7 @@ class ReaderModel @Inject constructor(
     }
 
 
-    fun observeNotes(bookId: Long) {
+    /*fun observeNotes(bookId: Long) {
         notesJob?.cancel()
         notesJob = viewModelScope.launch {
             noteRepository.getNotesForBook(bookId).collect { notes ->
@@ -818,7 +868,7 @@ class ReaderModel @Inject constructor(
                 _state.update { it.copy(notes = notes) }
             }
         }
-    }
+    }*/
 
     fun observeNotesIfNeeded(bookId: Long) {
         if (notesJob != null) return // чтобы не запускать повторно
@@ -830,13 +880,41 @@ class ReaderModel @Inject constructor(
         }
     }
 
-    fun loadBookmarks(bookId: Long) {
+    /*fun loadBookmarks(bookId: Long) {
         viewModelScope.launch {
             bookmarkRepository.observeBookmarksForBook(bookId).collect { bookmarkList ->
                 _state.update { it.copy(bookmarks = bookmarkList) }
             }
         }
+    }*/
+    fun loadBookmarks(bookId: Long) {
+        viewModelScope.launch {
+            bookmarkRepository.observeBookmarksForBook(bookId).collect { bookmarkList ->
+                _state.update { it.copy(bookmarks = bookmarkList) }
+                syncBookmarkExpandedStates(bookmarkList)
+            }
+        }
     }
+
+    /*fun observeNotes(bookId: Long) {
+        notesJob?.cancel()
+        notesJob = viewModelScope.launch {
+            noteRepository.getNotesForBook(bookId).collect { notes ->
+                _state.update { it.copy(notes = notes) }
+                syncNoteExpandedStates(notes)
+            }
+        }
+    }*/
+    fun observeNotes(bookId: Long) {
+        notesJob?.cancel()
+        notesJob = viewModelScope.launch {
+            noteRepository.getNotesForBook(bookId).collect { notes ->
+                _state.update { it.copy(notes = notes) }
+                syncNoteExpandedStates(notes)
+            }
+        }
+    }
+
 
     fun loadNotes(bookId: Long) {
         viewModelScope.launch {
@@ -1274,7 +1352,44 @@ class ReaderModel @Inject constructor(
     }
 
 
+    fun isBookmarkExpanded(index: Int): Boolean = bookmarkExpandedStates.getOrNull(index) ?: false
+    fun isNoteExpanded(index: Int): Boolean = noteExpandedStates.getOrNull(index) ?: true
 
+    fun toggleBookmarkExpanded(index: Int) {
+        if (index in bookmarkExpandedStates.indices) {
+            bookmarkExpandedStates[index] = !bookmarkExpandedStates[index]
+        }
+    }
+
+    fun toggleNoteExpanded(index: Int) {
+        if (index in noteExpandedStates.indices) {
+            noteExpandedStates[index] = !noteExpandedStates[index]
+        }
+    }
+
+    fun toggleAllBookmarks() {
+        bookmarksAllExpanded = !bookmarksAllExpanded
+        for (i in bookmarkExpandedStates.indices) {
+            bookmarkExpandedStates[i] = bookmarksAllExpanded
+        }
+    }
+
+    fun toggleAllNotes() {
+        notesAllExpanded = !notesAllExpanded
+        for (i in noteExpandedStates.indices) {
+            noteExpandedStates[i] = notesAllExpanded
+        }
+    }
+
+    fun syncBookmarkExpandedStates(newBookmarks: List<Bookmark>) {
+        bookmarkExpandedStates.clear()
+        bookmarkExpandedStates.addAll(List(newBookmarks.size) { bookmarksAllExpanded })
+    }
+
+    fun syncNoteExpandedStates(newNotes: List<Note>) {
+        noteExpandedStates.clear()
+        noteExpandedStates.addAll(List(newNotes.size) { notesAllExpanded })
+    }
 
 
     fun onBlinkingHighlight(index: Int) {

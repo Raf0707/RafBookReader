@@ -103,7 +103,7 @@ class BookRepositoryImpl @Inject constructor(
     }
 
     /**
-     * Loads text from the book. Already formatted.
+     * Loads text or images from the book (depending on file type).
      */
     override suspend fun getBookText(bookId: Int): List<ReaderText> {
         if (bookId == -1) return emptyList()
@@ -120,23 +120,30 @@ class BookRepositoryImpl @Inject constructor(
         )
 
         if (cachedFile == null || !cachedFile.canAccess()) {
-            Log.e(GET_TEXT, "File [$bookId] does not exist")
+            Log.e(GET_TEXT, "File [$bookId] does not exist.")
             return emptyList()
         }
 
         val readerText = textParser.parse(cachedFile)
 
-        if (
-            readerText.filterIsInstance<ReaderText.Text>().isEmpty() ||
-            readerText.filterIsInstance<ReaderText.Chapter>().isEmpty()
-        ) {
-            Log.e(GET_TEXT, "Could not load text from [$bookId].")
+        // ✅ Теперь проверяем, есть ли хоть какой-то контент
+        if (readerText.none { it is ReaderText.Text || it is ReaderText.Image || it is ReaderText.Chapter }) {
+            Log.e(GET_TEXT, "Could not load readable content from [$bookId].")
             return emptyList()
         }
 
-        Log.i(GET_TEXT, "Successfully loaded text of [$bookId] with markdown.")
+        // ✅ Отдельные логи для наглядности
+        val types = readerText.groupBy { it::class.simpleName }
+        Log.i(
+            GET_TEXT,
+            "Successfully loaded [${readerText.size}] items for [$bookId]: ${
+                types.keys.joinToString(", ")
+            }"
+        )
+
         return readerText
     }
+
 
     /**
      * Inserts book in database.

@@ -39,4 +39,5 @@ sealed class ReaderText {
      */
     @Immutable
     data class Math(val latex: String) : ReaderText()
+
 }

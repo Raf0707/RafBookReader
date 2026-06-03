@@ -250,7 +250,9 @@ fun ReaderContent(
                         }
                         else -> readerModel.onEvent(event)
                     }
-                } as (ReaderEvent) -> Any
+                },
+
+                readerModel = readerModel
 
 
             )
@@ -408,6 +410,7 @@ fun ReaderContent(
                             else -> readerModel.onEvent(event)
                         }
                     },
+                    bookmarks = bookmarks
                 )
             } else {
                 ReaderErrorPlaceholder(
